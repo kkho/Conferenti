@@ -1,0 +1,43 @@
+{
+  "name": "conferenti-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "build": "next build --turbopack",
+    "build:dev": "NODE_ENV=development next build",
+    "build:test": "NODE_ENV=test next build",
+    "build:prod": "NODE_ENV=production next build",
+    "start": "next start",
+    "lint": "eslint",
+    "lint:fix": "next lint --fix",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^4.10.0",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.4.8",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.4",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
