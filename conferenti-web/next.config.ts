@@ -3,10 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'standalone',
-  nx: {
-    svgr: false,
-  },
-  webpack(config) {
+  webpack(config, { dev }) {
     // Grab the existing rule that handles SVG imports
     const fileLoaderRule = config.module.rules.find((rule: { test: RegExp }) => rule.test?.test?.('.svg'));
 
@@ -28,8 +25,10 @@ const nextConfig: NextConfig = {
     // Modify the file loader rule to ignore *.svg, since we have it handled now.
     fileLoaderRule.exclude = /\.svg$/i;
 
-    // Disable webpack cache to eliminate serialization warnings
-    config.cache = false;
+    // Don't disable cache in development for better performance
+    if (!dev) {
+      config.cache = false;
+    }
 
     return config;
   },
@@ -39,5 +38,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-module.exports = nextConfig;

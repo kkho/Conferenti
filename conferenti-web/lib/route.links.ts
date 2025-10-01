@@ -4,10 +4,12 @@ export function resolveHref(
   slug?: string
 ): string | undefined {
   switch (documentType) {
+    case "":
+      return '/';
     case "sessions":
-      return slug ? `/sessions/${slug}` : undefined;
+      return slug ? `/sessions/${slug}` : '/sessions';
     case "speakers":
-      return slug ? `/speakers/${slug}` : undefined;
+      return slug ? `/speakers/${slug}` : '/speakers';
     case "faq":
       return '/faq/';
     default:

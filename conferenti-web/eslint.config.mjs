@@ -20,6 +20,14 @@ const eslintConfig = [
       "next-env.d.ts",
     ],
   },
+  {
+    rules: {
+      // Allow debugger statements in development
+      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+      // Allow console statements in development  
+      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+    },
+  },
 ];
 
 export default eslintConfig;
