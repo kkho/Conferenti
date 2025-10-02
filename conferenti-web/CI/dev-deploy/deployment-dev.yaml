@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conferenti-web
+  namespace: conferenti
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: conferenti-web
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: conferenti-web
+      annotations:
+        prometheus.io/scrape: 'false'
+    spec:
+      containers:
+      - name: conferenti-web
+        image: conferentiregistry.azurecr.io/conferenti/conferenti-web-dev:__BUILD_NUMBER__
+        imagePullPolicy: Always
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+        ports:
+        - containerPort: 8080

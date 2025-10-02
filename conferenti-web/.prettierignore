@@ -1,0 +1,9 @@
+node_modules
+.cache
+build
+dist
+coverage
+*min.js
+public/uploads
+yarn.lock
+package-lock.json
