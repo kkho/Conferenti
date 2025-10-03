@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 
 export const useGetSpeakers = (filter: string) => {
-  useQuery<Speaker[]>({
+  return useQuery<Speaker[]>({
     queryKey: ['speakers', filter],
     queryFn: async () => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/speakers?filter=${filter}`, {
