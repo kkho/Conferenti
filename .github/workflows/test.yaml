@@ -41,7 +41,7 @@ jobs:
         continue-on-error: true # Since you have ignoreBuildErrors: true
 
       - name: Run tests
-        run: npm test -- --coverage --watchAll=false
+        run: npm run test:ci
         working-directory: ./conferenti-web
         env:
           CI: true
