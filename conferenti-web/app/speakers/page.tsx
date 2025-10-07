@@ -3,12 +3,12 @@
 import { Content } from '@/components/content-module';
 import { FilterBarContent } from '@/components/filter-bar-content';
 import { Speaker } from '@/types';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SpeakerModal from '@/app/speakers/speaker-modal/speaker-modal';
 
-export default function SpeakersPage() {
+function SpeakersContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
@@ -133,5 +133,19 @@ export default function SpeakersPage() {
         )}
       </div>
     </>
+  );
+}
+
+export default function SpeakersPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center min-h-screen">
+          Loading speakers...
+        </div>
+      }
+    >
+      <SpeakersContent />
+    </Suspense>
   );
 }
