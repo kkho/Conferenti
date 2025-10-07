@@ -21,13 +21,20 @@
     "@auth0/nextjs-auth0": "^4.10.0",
     "@headlessui/react": "^2.2.9",
     "@heroicons/react": "^2.2.0",
+    "@material-tailwind/react": "^2.1.10",
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-query": "^5.90.2",
+    "classnames": "^2.5.1",
     "cross-env": "^10.1.0",
+    "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "next": "15.5.4",
+    "npm": "^11.6.1",
     "react": "19.1.0",
-    "react-dom": "19.1.0"
+    "react-dom": "19.1.0",
+    "react-icons": "^5.5.0",
+    "run": "^1.5.0",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

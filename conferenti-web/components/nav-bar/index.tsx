@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { resolveHref } from '../route.links';
+import { resolveHref } from '../../lib/route.links';
 import {
   Disclosure,
   DisclosureButton,
