@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { Navbar } from './index';
+import Navbar from '.';
 import { MenuItemData } from '@/types';
 
 // Mock the route resolver
-jest.mock('../route.links', () => ({
+jest.mock('../../lib/route.links', () => ({
   resolveHref: (type: string, _slug: string) => {
     if (type === 'sessions') return '/sessions';
     if (type === 'speakers') return '/speakers';

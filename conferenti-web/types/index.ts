@@ -8,6 +8,8 @@ export interface MenuItemData {
 }
 
 export interface Speaker {
+  id: string;
+  imageUrl: string;
   name?: string;
   position?: string;
   company?: string;

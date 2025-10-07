@@ -72,12 +72,12 @@ describe('resolveHref', () => {
   describe('faq routes', () => {
     it('should return faq route regardless of slug', () => {
       const result = resolveHref('faq', undefined);
-      expect(result).toBe('/faq/');
+      expect(result).toBe('/faq');
     });
 
     it('should return faq route even with slug provided', () => {
       const result = resolveHref('faq', 'some-question');
-      expect(result).toBe('/faq/');
+      expect(result).toBe('/faq');
     });
   });
 
