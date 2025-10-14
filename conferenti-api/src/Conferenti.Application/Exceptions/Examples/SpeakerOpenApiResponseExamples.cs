@@ -1,0 +1,408 @@
+﻿namespace Conferenti.Application.Exceptions.Examples;
+
+public static class SpeakerOpenApiResponseExamples
+{
+    public const string SpeakersOkResponse
+        = """
+          [
+            {
+              "id": "12345",
+              "name": "Khiem-Kim Xuan Ho",
+              "position": "Senior Software Engineer",
+              "company": "Peer Consulting AS",
+              "bio": "Khiem-Kim Xuan Ho is a Senior Software Engineer at Peer Consulting AS, specializing in building scalable web applications. With over 8 years of experience in the tech industry, he has a deep understanding of JavaScript, React, and Node.js. Khiem-Kim is passionate about open-source contributions and enjoys sharing his knowledge through tech blogs and community meetups.",
+              "photoUrl": "https://avatars.githubusercontent.com/u/1107128?v=4",
+              "sessions": [
+                {
+                  "sessionId": "1",
+                  "title": "Building Scalable Web Applications with React and Node.js",
+                  "slug": "building-scalable-web-applications-with-react-and-nodejs",
+                  "tags": ["React", "Node.js", "Web Development"],
+                  "description": "In this session, we will explore best practices for building scalable web applications using React for the frontend and Node.js for the backend. We will cover architecture patterns, performance optimization, and deployment strategies.",
+                  "startTime": "2024-09-15T10:00:00Z",
+                  "endTime": "2024-09-15T11:00:00Z",
+                  "room": "Main Hall",
+                  "level": "Intermediate",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "stark-001",
+              "name": "Tony Stark",
+              "position": "Chief Technology Officer",
+              "company": "Stark Industries",
+              "bio": "Tony Stark is a genius inventor and entrepreneur, leading technological innovation at Stark Industries. With expertise in AI, robotics, and clean energy solutions, Tony has revolutionized multiple industries. He's particularly passionate about building intelligent systems that can adapt and learn, with a focus on creating technology that serves humanity.",
+              "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "2",
+                  "title": "Building AI-Powered Applications with Machine Learning",
+                  "slug": "building-ai-powered-applications-with-machine-learning",
+                  "tags": ["AI", "Machine Learning", "Python", "TensorFlow"],
+                  "description": "Discover how to integrate artificial intelligence into your applications. We'll explore practical machine learning implementations, neural network architectures, and real-world AI deployment strategies.",
+                  "startTime": "2024-09-15T11:30:00Z",
+                  "endTime": "2024-09-15T12:30:00Z",
+                  "room": "Innovation Lab",
+                  "level": "Advanced",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "banner-002",
+              "name": "Dr. Bruce Banner",
+              "position": "Senior Data Scientist",
+              "company": "Gamma Research Institute",
+              "bio": "Dr. Bruce Banner is a renowned data scientist and researcher specializing in big data analytics and scientific computing. With a Ph.D. in Computer Science and years of experience in data-driven research, Bruce excels at transforming complex datasets into actionable insights. He's passionate about using data science to solve global challenges.",
+              "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "3",
+                  "title": "Big Data Analytics: From Chaos to Insights",
+                  "slug": "big-data-analytics-from-chaos-to-insights",
+                  "tags": ["Big Data", "Analytics", "Python", "Apache Spark"],
+                  "description": "Learn how to handle massive datasets and extract meaningful insights. We'll cover data processing pipelines, distributed computing, and visualization techniques for big data analytics.",
+                  "startTime": "2024-09-15T14:00:00Z",
+                  "endTime": "2024-09-15T15:00:00Z",
+                  "room": "Data Center",
+                  "level": "Intermediate",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "rogers-003",
+              "name": "Steve Rogers",
+              "position": "DevOps Team Lead",
+              "company": "Shield Technologies",
+              "bio": "Steve Rogers leads the DevOps transformation at Shield Technologies, focusing on building reliable, scalable infrastructure. With extensive experience in cloud platforms, containerization, and CI/CD pipelines, Steve champions best practices in software delivery and system reliability. He believes in teamwork and continuous improvement.",
+              "photoUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "4",
+                  "title": "Mastering Kubernetes: Container Orchestration at Scale",
+                  "slug": "mastering-kubernetes-container-orchestration-at-scale",
+                  "tags": ["Kubernetes", "DevOps", "Docker", "Cloud"],
+                  "description": "Deep dive into Kubernetes fundamentals and advanced patterns. Learn how to deploy, scale, and manage containerized applications in production environments with confidence.",
+                  "startTime": "2024-09-15T15:30:00Z",
+                  "endTime": "2024-09-15T16:30:00Z",
+                  "room": "Cloud Hall",
+                  "level": "Intermediate",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "romanoff-004",
+              "name": "Natasha Romanoff",
+              "position": "Cybersecurity Architect",
+              "company": "Black Widow Security",
+              "bio": "Natasha Romanoff is a leading cybersecurity expert specializing in threat detection, incident response, and security architecture. With her strategic approach to information security, she has helped organizations build robust defense systems against cyber threats. Natasha is passionate about making security accessible and understandable to developers.",
+              "photoUrl": "https://images.unsplash.com/photo-1494790108755-2616b612b5b0?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "5",
+                  "title": "Web Application Security: Defense Strategies for Modern Apps",
+                  "slug": "web-application-security-defense-strategies-for-modern-apps",
+                  "tags": ["Security", "Web Development", "OWASP", "Penetration Testing"],
+                  "description": "Explore essential security practices for web applications. Learn about common vulnerabilities, security testing methodologies, and how to build secure-by-design applications.",
+                  "startTime": "2024-09-16T09:00:00Z",
+                  "endTime": "2024-09-16T10:00:00Z",
+                  "room": "Security Hub",
+                  "level": "Intermediate",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "parker-005",
+              "name": "Peter Parker",
+              "position": "Frontend Developer",
+              "company": "Daily Bugle Digital",
+              "bio": "Peter Parker is a creative frontend developer with a keen eye for user experience and modern web technologies. Specializing in React, TypeScript, and responsive design, Peter loves creating intuitive interfaces that users enjoy. He's always eager to learn new technologies and share his knowledge with the developer community.",
+              "photoUrl": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "6",
+                  "title": "Modern Frontend Development with React and TypeScript",
+                  "slug": "modern-frontend-development-with-react-and-typescript",
+                  "tags": ["React", "TypeScript", "Frontend", "CSS"],
+                  "description": "Dive into modern frontend development practices using React and TypeScript. Learn about component patterns, state management, performance optimization, and building maintainable user interfaces.",
+                  "startTime": "2024-09-16T10:30:00Z",
+                  "endTime": "2024-09-16T11:30:00Z",
+                  "room": "UI/UX Studio",
+                  "level": "Beginner",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "strange-006",
+              "name": "Dr. Stephen Strange",
+              "position": "Principal Software Architect",
+              "company": "Sanctum Systems",
+              "bio": "Dr. Stephen Strange is a visionary software architect with expertise in complex system design and emerging technologies. With a background in both medicine and computer science, Stephen brings a unique perspective to software architecture. He specializes in microservices, distributed systems, and API design patterns.",
+              "photoUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "7",
+                  "title": "Microservices Architecture: Design Patterns and Best Practices",
+                  "slug": "microservices-architecture-design-patterns-and-best-practices",
+                  "tags": ["Microservices", "Architecture", "API Design", "Distributed Systems"],
+                  "description": "Master the art of microservices architecture. Learn about service decomposition, communication patterns, data consistency, and how to avoid common pitfalls in distributed systems.",
+                  "startTime": "2024-09-16T14:00:00Z",
+                  "endTime": "2024-09-16T15:00:00Z",
+                  "room": "Architecture Lab",
+                  "level": "Advanced",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "maximoff-007",
+              "name": "Wanda Maximoff",
+              "position": "Full Stack Developer",
+              "company": "Scarlet Web Solutions",
+              "bio": "Wanda Maximoff is a versatile full stack developer with expertise in both frontend and backend technologies. She excels at creating seamless user experiences while building robust server-side applications. Wanda is passionate about clean code, testing practices, and mentoring junior developers in the art of full stack development.",
+              "photoUrl": "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "8",
+                  "title": "Full Stack Development: From Database to User Interface",
+                  "slug": "full-stack-development-from-database-to-user-interface",
+                  "tags": ["Full Stack", "Node.js", "React", "Database Design"],
+                  "description": "Journey through the complete web development stack. Learn how to build applications from the ground up, including database design, API development, and frontend implementation.",
+                  "startTime": "2024-09-16T15:30:00Z",
+                  "endTime": "2024-09-16T16:30:00Z",
+                  "room": "Full Stack Arena",
+                  "level": "Intermediate",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "danvers-008",
+              "name": "Carol Danvers",
+              "position": "Cloud Solutions Architect",
+              "company": "Marvel Cloud Systems",
+              "bio": "Carol Danvers is a distinguished cloud solutions architect with expertise in designing and implementing scalable cloud infrastructure. With her military background and technical prowess, she excels at building resilient, high-performance systems that can handle enterprise-scale workloads. Carol is passionate about cloud-native technologies and infrastructure as code.",
+              "photoUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "9",
+                  "title": "Cloud-Native Architecture: Building for Scale and Resilience",
+                  "slug": "cloud-native-architecture-building-for-scale-and-resilience",
+                  "tags": ["Cloud Computing", "AWS", "Azure", "Infrastructure"],
+                  "description": "Explore cloud-native design patterns and learn how to build applications that leverage the full power of cloud platforms. We'll cover auto-scaling, fault tolerance, and cost optimization strategies.",
+                  "startTime": "2024-09-17T09:00:00Z",
+                  "endTime": "2024-09-17T10:00:00Z",
+                  "room": "Cloud Summit",
+                  "level": "Advanced",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "tchalla-009",
+              "name": "T'Challa",
+              "position": "Mobile Development Lead",
+              "company": "Wakanda Technologies",
+              "bio": "T'Challa leads mobile development initiatives at Wakanda Technologies, specializing in cutting-edge mobile applications and cross-platform development. With expertise in React Native, Flutter, and native iOS/Android development, he creates innovative mobile experiences that push the boundaries of what's possible on mobile devices.",
+              "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "10",
+                  "title": "Cross-Platform Mobile Development with React Native",
+                  "slug": "cross-platform-mobile-development-with-react-native",
+                  "tags": ["React Native", "Mobile Development", "iOS", "Android"],
+                  "description": "Master the art of cross-platform mobile development. Learn how to build high-performance mobile apps that work seamlessly on both iOS and Android using React Native and modern mobile development practices.",
+                  "startTime": "2024-09-17T10:30:00Z",
+                  "endTime": "2024-09-17T11:30:00Z",
+                  "room": "Mobile Lab",
+                  "level": "Intermediate",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "thor-010",
+              "name": "Thor Odinson",
+              "position": "Performance Engineering Manager",
+              "company": "Asgard Performance Solutions",
+              "bio": "Thor Odinson is a performance engineering expert who brings the power of thunder to application optimization. With deep knowledge of performance profiling, load testing, and system optimization, Thor ensures applications can handle massive scale and deliver lightning-fast user experiences. He's passionate about making applications as powerful as Mjolnir.",
+              "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "11",
+                  "title": "Performance Optimization: Making Your Apps Lightning Fast",
+                  "slug": "performance-optimization-making-your-apps-lightning-fast",
+                  "tags": ["Performance", "Optimization", "Load Testing", "Monitoring"],
+                  "description": "Unleash the power of performance optimization. Learn advanced techniques for profiling, monitoring, and optimizing applications to achieve maximum performance and scalability.",
+                  "startTime": "2024-09-17T14:00:00Z",
+                  "endTime": "2024-09-17T15:00:00Z",
+                  "room": "Performance Arena",
+                  "level": "Advanced",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "barton-011",
+              "name": "Clint Barton",
+              "position": "Quality Assurance Engineer",
+              "company": "Hawkeye Testing Solutions",
+              "bio": "Clint Barton is a precision-focused QA engineer who never misses a bug. With his sharp eye for detail and systematic approach to testing, Clint has mastered automated testing frameworks, test-driven development, and quality assurance processes. He believes that perfect aim in testing leads to flawless software delivery.",
+              "photoUrl": "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "12",
+                  "title": "Automated Testing Strategies: Never Miss a Bug",
+                  "slug": "automated-testing-strategies-never-miss-a-bug",
+                  "tags": ["Testing", "Automation", "Jest", "Cypress"],
+                  "description": "Perfect your testing accuracy with comprehensive automated testing strategies. Learn about unit testing, integration testing, end-to-end testing, and building robust test suites that catch every bug.",
+                  "startTime": "2024-09-17T15:30:00Z",
+                  "endTime": "2024-09-17T16:30:00Z",
+                  "room": "Testing Center",
+                  "level": "Intermediate",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "wilson-012",
+              "name": "Sam Wilson",
+              "position": "Site Reliability Engineer",
+              "company": "Falcon Monitoring Systems",
+              "bio": "Sam Wilson soars high as a site reliability engineer, ensuring systems stay airborne and operational. With expertise in monitoring, alerting, and incident response, Sam builds robust observability solutions that keep applications flying smoothly. He specializes in distributed tracing, metrics collection, and automated remediation.",
+              "photoUrl": "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "13",
+                  "title": "Observability and Monitoring: Keeping Your Systems Airborne",
+                  "slug": "observability-and-monitoring-keeping-your-systems-airborne",
+                  "tags": ["SRE", "Monitoring", "Observability", "Prometheus"],
+                  "description": "Master the art of system observability. Learn how to implement comprehensive monitoring, alerting, and observability practices that ensure your systems stay reliable and performant.",
+                  "startTime": "2024-09-18T09:00:00Z",
+                  "endTime": "2024-09-18T10:00:00Z",
+                  "room": "Reliability Hub",
+                  "level": "Advanced",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "lang-013",
+              "name": "Scott Lang",
+              "position": "Microservices Developer",
+              "company": "Ant-Man Micro Solutions",
+              "bio": "Scott Lang specializes in the smallest details of microservices architecture. With his ability to think small and scale big, Scott excels at breaking down monolithic applications into efficient, manageable microservices. He's passionate about containerization, service mesh technologies, and building systems that can shrink complexity while expanding capabilities.",
+              "photoUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "14",
+                  "title": "Microservices at Scale: Small Services, Big Impact",
+                  "slug": "microservices-at-scale-small-services-big-impact",
+                  "tags": ["Microservices", "Docker", "Service Mesh", "Istio"],
+                  "description": "Shrink your architectural complexity while expanding your capabilities. Learn advanced microservices patterns, service mesh implementation, and strategies for managing distributed systems at scale.",
+                  "startTime": "2024-09-18T10:30:00Z",
+                  "endTime": "2024-09-18T11:30:00Z",
+                  "room": "Micro Lab",
+                  "level": "Advanced",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "rhodes-014",
+              "name": "James Rhodes",
+              "position": "Enterprise Solutions Architect",
+              "company": "War Machine Enterprise Systems",
+              "bio": "James Rhodes is a battle-tested enterprise solutions architect who brings military precision to complex system integrations. With extensive experience in enterprise software, legacy system modernization, and large-scale transformations, Rhodes builds robust solutions that can withstand the pressures of enterprise environments.",
+              "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "15",
+                  "title": "Enterprise Integration Patterns: Battle-Tested Solutions",
+                  "slug": "enterprise-integration-patterns-battle-tested-solutions",
+                  "tags": ["Enterprise Architecture", "Integration", "API Gateway", "ESB"],
+                  "description": "Deploy enterprise integration solutions that stand the test of time. Learn about integration patterns, API gateways, message queues, and strategies for connecting complex enterprise systems.",
+                  "startTime": "2024-09-18T14:00:00Z",
+                  "endTime": "2024-09-18T15:00:00Z",
+                  "room": "Enterprise Hall",
+                  "level": "Advanced",
+                  "format": "Presentation",
+                  "language": "English"
+                }
+              ]
+            },
+            {
+              "id": "murdock-015",
+              "name": "Matt Murdock",
+              "position": "Accessibility Engineer",
+              "company": "Daredevil Digital Accessibility",
+              "bio": "Matt Murdock is a passionate accessibility engineer who ensures digital experiences are inclusive for everyone. With his heightened sensitivity to user needs, Matt specializes in web accessibility standards, assistive technologies, and creating applications that work seamlessly for users with disabilities. He believes technology should be accessible to all.",
+              "photoUrl": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face",
+              "sessions": [
+                {
+                  "sessionId": "16",
+                  "title": "Web Accessibility: Building Inclusive Digital Experiences",
+                  "slug": "web-accessibility-building-inclusive-digital-experiences",
+                  "tags": ["Accessibility", "WCAG", "Inclusive Design", "Assistive Technology"],
+                  "description": "Navigate the world of web accessibility with precision. Learn how to build applications that are truly accessible to all users, including best practices for WCAG compliance and assistive technology support.",
+                  "startTime": "2024-09-18T15:30:00Z",
+                  "endTime": "2024-09-18T16:30:00Z",
+                  "room": "Accessibility Center",
+                  "level": "Intermediate",
+                  "format": "Workshop",
+                  "language": "English"
+                }
+              ]
+            }
+          ]
+          
+          """;
+
+    public const string UpsertSpeakersRequestBody
+        = """"
+          [
+          {
+            "id": "Id of speaker",
+            "name": "Speakers name",
+            "position": "Speakers position",
+            "company": "Speakers company where they work",
+            "bio": "Speakers bio info",
+            "photoUrl": "Image url",
+            "sessions": [
+              {
+                "sessionId": "Id of session",
+                "title": "Title of session",
+                "slug": "Session slug",
+                "tags": ["Relevant tags for the session"],
+                "description": "Description of the session",
+                "startTime": "2024-09-15T10:00:00Z",
+                "endTime": "2024-09-15T11:00:00Z",
+                "room": "Name of room",
+                "level": "Level of session",
+                "format": "What type of format the session is",
+                "language": "Language of the session"
+              }
+            ]
+          },
+          ]
+          """";
+}
