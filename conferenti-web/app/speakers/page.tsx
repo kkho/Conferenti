@@ -10,7 +10,6 @@ import SpeakerModal from '@/app/speakers/speaker-modal/speaker-modal';
 import dynamic from 'next/dynamic';
 // TODO: Uncomment when Auth0 is configured
 // import { useUser } from '@auth0/nextjs-auth0/client';
-import { useAccessToken } from '@/hooks/useAccessToken';
 import { useGetSpeakers } from '@/hooks/speakers';
 
 

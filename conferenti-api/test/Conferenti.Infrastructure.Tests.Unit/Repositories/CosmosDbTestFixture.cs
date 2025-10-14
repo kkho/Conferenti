@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using DotNet.Testcontainers.Builders;
 using DotNet.Testcontainers.Configurations;
@@ -47,7 +49,13 @@ public class CosmosDbTestFixture : IAsyncLifetime
             },
             ConnectionMode = ConnectionMode.Gateway, // Gateway mode is more stable with emulator
             LimitToEndpoint = true,
-            RequestTimeout = TimeSpan.FromSeconds(60) // Increase timeout for emulator
+            RequestTimeout = TimeSpan.FromSeconds(60), // Increase timeout for emulator
+            UseSystemTextJsonSerializerWithOptions = new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Example: CamelCase property names
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Example: Ignore null properties
+                // Add other System.Text.Json.JsonSerializerOptions as needed
+            }
         });
 
         // Retry database and container creation with exponential backoff

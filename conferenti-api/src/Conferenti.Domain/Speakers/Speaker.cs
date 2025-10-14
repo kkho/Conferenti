@@ -48,5 +48,5 @@ public class Speaker
     /// Speaker sessions associated with the event.
     /// </summary>
     [JsonPropertyName("sessions")]
-    public Session[] Sessions { get; set; }
+    public Session[] SpeakerSessions { get; set; }
 }

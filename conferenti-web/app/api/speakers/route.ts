@@ -12,13 +12,12 @@ const httpsAgent = new https.Agent({
 });
 
 export async function GET(request: NextRequest) {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
   try {
     // Extract Bearer token from Authorization header
     const authHeader = request.headers.get('Authorization');
     
     if (authHeader) {
-      console.log('Auth Header Present:', authHeader.substring(0, 20) + '...');
+      console.log('Auth Header Present:', authHeader);
     }
 
     const apiUrl = `${API_BASE_URL}/v1/speakers`;

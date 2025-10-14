@@ -49,7 +49,7 @@ public class SpeakerRepositoryTests : IClassFixture<CosmosDbTestFixture>
             Company = "Tech Corp",
             Position = "Senior Developer",
             PhotoUrl = "http://someurl.com",
-            Sessions = []
+            SpeakerSessions = []
         };
 
         // Act
@@ -75,7 +75,7 @@ public class SpeakerRepositoryTests : IClassFixture<CosmosDbTestFixture>
             Company = "Tech Corp",
             Position = "Senior Developer",
             PhotoUrl = "http://someurl.com",
-            Sessions = []
+            SpeakerSessions = []
         };
 
         // Act

@@ -18,7 +18,6 @@ public class GetSpeakers : IEndpoint
             .WithTags(ApiConstants.SpeakerApiTag)
             .WithSummary("Fetch speakers")
             .MapToApiVersion(ApiVersions.V1)
-            .RequireAuthorization()
             .WithOpenApi(op =>
             {
                 op.Responses["200"] = new OpenApiResponse

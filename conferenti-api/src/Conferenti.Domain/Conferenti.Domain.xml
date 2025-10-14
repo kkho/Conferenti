@@ -112,7 +112,7 @@
             Url of speaker. Usually stored in CDN. 
             </summary>
         </member>
-        <member name="P:Conferenti.Domain.Speakers.Speaker.Sessions">
+        <member name="P:Conferenti.Domain.Speakers.Speaker.SpeakerSessions">
             <summary>
             Speaker sessions associated with the event.
             </summary>

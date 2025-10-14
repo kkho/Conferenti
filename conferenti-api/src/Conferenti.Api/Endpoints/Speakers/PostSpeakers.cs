@@ -109,12 +109,12 @@ public class PostSpeakers : IEndpoint
         BadRequest<ProblemDetails>,
         NotFound<ProblemDetails>,
         InternalServerError<ProblemDetails>>> UpsertSpeakersAsync(
-        [FromBody] List<Speaker> speakers,
+        [FromBody] Speaker[] speakers,
         ICommandHandler<PostSpeakerCommand, List<Speaker>> handler,
         HttpContext httpContext,
         CancellationToken cancellationToken)
     {
-        var command = new PostSpeakerCommand(speakers);
+        var command = new PostSpeakerCommand(speakers.ToList());
         var result = await handler.Handle(command, cancellationToken);
 
         if (result.IsSuccess)

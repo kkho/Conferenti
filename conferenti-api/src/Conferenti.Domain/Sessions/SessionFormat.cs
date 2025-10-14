@@ -10,5 +10,6 @@ public enum SessionFormat
     Lecture,
     Workshop,
     Panel,
-    Keynote
+    Keynote,
+    Presentation
 }
