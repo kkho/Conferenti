@@ -67,3 +67,6 @@ LocalSettings.json
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+*.Development.json
+*.Migration.json
