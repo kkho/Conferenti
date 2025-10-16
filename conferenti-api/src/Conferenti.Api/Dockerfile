@@ -1,7 +1,14 @@
 # This stage is used when running from VS in fast mode (Default for Debug configuration)
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 LABEL maintainer="conferenti@converenti.com"
-USER $APP_UID
+
+# Add non-root user and group
+RUN addgroup application-group --gid 1001 \
+    && adduser application-user --uid 1001 \
+    --ingroup application-group \
+    --disabled-password
+
+USER application-user 
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
@@ -35,4 +42,5 @@ RUN dotnet publish "./Conferenti.Api.csproj" -c $BUILD_CONFIGURATION -o /app/pub
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+RUN chown --recursive application-user .
 ENTRYPOINT ["dotnet", "Conferenti.Api.dll"]
