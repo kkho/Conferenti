@@ -4,7 +4,7 @@
 
 - Built with .NET 9 Minimal APIs
 - Features: API versioning, JWT authentication, OpenAPI/Swagger, Azure Key Vault integration, Application Insights telemetry
-- [API README & Source](https://github.com/kkho/Conferenti/tree/main/converenti-api)
+- [API README & Source](https://github.com/kkho/Conferenti/tree/main/conferenti-api)
 
 ### Conferenti Single Page Application (SPA)
 
@@ -31,31 +31,35 @@
 ## Getting Started
 
 1. **Clone the repository**
-    ```sh
-    git clone https://github.com/kkho/Conferenti.git
-    cd Conferenti
-    ```
+
+   ```sh
+   git clone https://github.com/kkho/Conferenti.git
+   cd Conferenti
+   ```
 
 2. **Restore and build the solution**
-    ```sh
-    dotnet restore
-    dotnet build
-    ```
+
+   ```sh
+   dotnet restore
+   dotnet build
+   ```
 
 3. **Run the distributed application with Aspire**
-    ```sh
-    cd Conferenti.AppHost/Conferenti.AppHost.AppHost
-    dotnet run
-    ```
 
-    This will:
-    - Start the API backend
-    - Start the Next.js frontend (with `npm install` and `npm run dev`)
-    - Launch the Key Vault emulator
+   ```sh
+   cd Conferenti.AppHost/Conferenti.AppHost.AppHost
+   dotnet run
+   ```
+
+   This will:
+
+   - Start the API backend
+   - Start the Next.js frontend (with `npm install` and `npm run dev`)
+   - Launch the Key Vault emulator
 
 4. **Access the applications**
-    - **API**: [http://localhost:5000/swagger](http://localhost:5000/swagger) (or the port assigned by Aspire)
-    - **Frontend**: [http://localhost:3000](http://localhost:3000) (or the port assigned by Aspire)
+   - **API**: [http://localhost:5000/swagger](http://localhost:5000/swagger) (or the port assigned by Aspire)
+   - **Frontend**: [http://localhost:3000](http://localhost:3000) (or the port assigned by Aspire)
 
 ---
 

@@ -1,0 +1,72 @@
+# Visual Studio 2022
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# NuGet
+*.nupkg
+*.snupkg
+*.dll.config
+*.pdb
+*.cache
+packages/
+.nuget/
+project.lock.json
+
+# Resharper
+*.resharper
+*.dotSettings
+*.dotSettings.user
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Project files
+*.csproj.user
+*.csproj.DotSettings
+*.vbproj.user
+*.vbproj.DotSettings
+*.fsproj.user
+*.fsproj.DotSettings
+
+# Test Results
+TestResults/
+
+# Publish Folders
+Publish/
+[Pp]ublish/
+
+# Local settings
+LocalSettings.json
+
+# Generated files
+*.min.js
+*.min.css
+
+# Miscellaneous
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+*.Development.json
+*.Migration.json

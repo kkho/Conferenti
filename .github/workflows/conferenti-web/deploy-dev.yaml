@@ -1,0 +1,46 @@
+name: Deploy to Dev
+
+permissions:
+  contents: read
+  packages: write
+
+on:
+  workflow_run:
+    workflows:
+      - "Test Suite"
+      - "Playwright Tests"
+    types:
+      - completed
+    branches:
+      - main
+
+jobs:
+  deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for all required checks
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          check-name: "test" # Job name from both test.yaml and e2e.yaml
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
+      - name: Log deployment trigger
+        run: |
+          echo "Deploying after successful completion of all tests"
+
+      - name: Build and push Docker image
+        run: |
+          docker build -t conferentiregistry.azurecr.io/conferenti/conferenti-web-dev:${{ github.run_number }} .
+          docker push conferentiregistry.azurecr.io/conferenti/conferenti-web-dev:${{ github.run_number }}
+
+      - name: Deploy to Kubernetes Cluster Dev
+        run: |
+          envsubst < CI/dev-deploy/deployment-dev.yaml | kubectl apply -f -
+        env:
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
