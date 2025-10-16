@@ -1,26 +1,19 @@
 import { Speaker } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 
-export const useGetSpeaker = (speakerId: number) => {
-  
-}
-
-export const useGetSpeakers = (filter: string) => {
+export const useGetSpeakers = () => {
   return useQuery<Speaker[]>({
-    queryKey: ['speakers', filter],
+    queryKey: ['speakers'],
     queryFn: async () => {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/speakers?filter=${filter}`,
-        {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
+      const response = await fetch('/api/speakers', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
         }
-      );
+      });
 
-      if (response.status === 401) {
-        return null;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       return response.json();

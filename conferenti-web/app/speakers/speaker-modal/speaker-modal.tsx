@@ -58,13 +58,13 @@ export default function SpeakerModal({ speaker, isOpen, onClose }: SpeakerModalP
               </div>
             )}
 
-            {speaker.speakerSessions && speaker.speakerSessions.length > 0 && (
+            {speaker.sessions && speaker.sessions.length > 0 && (
               <div>
                 <h4 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
                   Sessions
                 </h4>
                 <ul className="space-y-2">
-                  {speaker.speakerSessions.map((session, index) => (
+                  {speaker.sessions.map((session, index) => (
                     <li
                       key={session.sessionId || index}
                       className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3"

@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Conferenti.Domain</name>
+    </assembly>
+    <members>
+        <member name="T:Conferenti.Domain.Sessions.Session">
+            <summary>
+            Detailed information about a session given by a speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.SessionId">
+            <summary>
+            The Session id used to get session details
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Title">
+            <summary>
+            Title of the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Slug">
+            <summary>
+            Slug of the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Tags">
+            <summary>
+            Tags associated with the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Description">
+            <summary>
+            Description of the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.StartTime">
+            <summary>
+            Start time of the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.EndTime">
+            <summary>
+            End time of the session
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Room">
+            <summary>
+            Room where the session is held
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Level">
+            <summary>
+            Level of the session (e.g., Beginner, Intermediate, Advanced)
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Format">
+            <summary>
+            Format of the session (e.g., Workshop, Lecture, Panel)
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.Language">
+            <summary>
+            Language in which the session is conducted
+            </summary>
+        </member>
+        <member name="T:Conferenti.Domain.Sessions.SessionFormat">
+            <summary>
+            Represents the format of a session in an event or conference.
+            </summary>
+            <remarks>This enumeration defines the possible types of sessions, such as lectures, workshops, panels, and
+            keynotes. It can be used to categorize or filter sessions based on their format.</remarks>
+        </member>
+        <member name="T:Conferenti.Domain.Sessions.SessionLevel">
+            <summary>
+            Represents the skill or experience level of a session.
+            </summary>
+            <remarks>This enumeration is typically used to categorize sessions based on their intended audience.</remarks>
+        </member>
+        <member name="T:Conferenti.Domain.Speakers.Speaker">
+            <summary>
+            Response model for speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Id">
+            <summary>
+            The Speaker id used to get session details
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Name">
+            <summary>
+            Full name of the speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Position">
+            <summary>
+            Position of the speaker in the company
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Company">
+            <summary>
+            Company associated with the speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Bio">
+            <summary>
+            The biography of the speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.PhotoUrl">
+            <summary>
+            Url of speaker. Usually stored in CDN. 
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.SpeakerSessions">
+            <summary>
+            Speaker sessions associated with the event.
+            </summary>
+        </member>
+    </members>
+</doc>

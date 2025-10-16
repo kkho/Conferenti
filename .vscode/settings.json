@@ -1,0 +1,33 @@
+{
+    "rest-client.environmentVariables" : {
+        // Legger inn disse som System variables:
+        // AUTH0_CLIENT_ID, AUTH0_CLIENT_SECRET på din lokal PC. Henter fra Vault for forskjellige miljø
+        "$shared": {
+            "tokenEndpoint": "https://kkho.eu.auth0.com/oauth/token"
+        },
+        "api-local": {
+            "tokenEndpoint": "{{$shared tokenEndpoint}}",
+            "clientid" : "AUTH0_CLIENT_ID",
+            "clientsecret": "AUTH0_CLIENT_SECRET",
+            "baseurl": "https://localhost:7027"
+        },
+        "api-dev": {
+            "tokenEndpoint": "{{$shared tokenEndpoint}}",
+            "clientid" : "AUTH0_CLIENT_ID",
+            "clientsecret": "AUTH0_CLIENT_SECRET",
+            "baseurl": "https://conferenti-dev.io"
+        },
+        "api-test": {
+            "tokenEndpoint": "{{$shared tokenEndpoint}}",
+            "clientid" : "AUTH0_CLIENT_ID",
+            "clientsecret": "AUTH0_CLIENT_SECRET",
+            "baseurl": "https://conferenti-test.io"
+        },
+        "api-prod": {
+            "tokenEndpoint": " {{$shared tokenEndpoint}}",
+            "clientid" : "AUTH0_CLIENT_ID",
+            "clientsecret": "AUTH0_CLIENT_SECRET",
+            "baseurl": "https://conferenti.io"
+        }
+    }
+}

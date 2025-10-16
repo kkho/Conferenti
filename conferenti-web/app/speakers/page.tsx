@@ -3,10 +3,15 @@
 import { Content } from '@/components/content-module';
 import { FilterBarContent } from '@/components/filter-bar-content';
 import { Speaker } from '@/types';
-import { useEffect, useState, Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SpeakerModal from '@/app/speakers/speaker-modal/speaker-modal';
+import dynamic from 'next/dynamic';
+// TODO: Uncomment when Auth0 is configured
+// import { useUser } from '@auth0/nextjs-auth0/client';
+ import { useGetSpeakers } from '@/hooks/speakers';
+
 
 function SpeakersContent() {
   const router = useRouter();
@@ -14,14 +19,19 @@ function SpeakersContent() {
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
   const [filterText, setFilterText] = useState<string>('');
-  const [isError, setIsError] = useState<boolean>(false);
+
 
   // Check URL for speaker modal
   const speakerId = searchParams?.get('speaker');
+  
+  const { data: publicData, error } = useGetSpeakers();
 
-  const filteredSpeakers = speakers.filter((speaker) =>
-    speaker.name?.toLowerCase().includes(filterText.toLowerCase())
-  );
+  const filteredSpeakers =
+    speakers &&
+    Array.isArray(speakers) &&
+    speakers.filter((speaker) =>
+      speaker.name?.toLowerCase().includes(filterText.toLowerCase())
+    );
 
   const filterChangeHandler = (typedText: string) => {
     setFilterText(typedText);
@@ -52,23 +62,10 @@ function SpeakersContent() {
   }, [speakerId, speakers]);
 
   useEffect(() => {
-    setIsError(false);
-    fetch('data/speakers.json')
-      .then((response) => response.json())
-      .then((fetchedData) => setSpeakers(fetchedData))
-      .catch((error) => {
-        setIsError(true);
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
-  // TODO: Will use the uncommented code below to fetch from API when ready
-  // const { data: apiSpeakers, isLoading, error } = useGetSpeakers(''); // Remove filter from API call
-  // useEffect(() => {
-  //   if (apiSpeakers) {
-  //     setSpeakers(apiSpeakers);
-  //   }
-  // }, [apiSpeakers]);
+    if (publicData) {
+      setSpeakers(publicData);
+    }
+  }, [publicData]);
 
   return (
     <>
@@ -117,8 +114,7 @@ function SpeakersContent() {
               </li>
             ))}
         </ul>
-
-        {isError && (
+        {error && (
           <p className="mt-6 text-lg/8 text-gray-400" aria-live="polite">
             Error retrieving speakers
           </p>
@@ -136,16 +132,15 @@ function SpeakersContent() {
   );
 }
 
+const DynamicSpeakersContent = dynamic(() => Promise.resolve(SpeakersContent), {
+  ssr: false,
+  loading: () => (
+    <div className="flex justify-center items-center min-h-screen">
+      Loading speakers...
+    </div>
+  )
+});
+
 export default function SpeakersPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex justify-center items-center min-h-screen">
-          Loading speakers...
-        </div>
-      }
-    >
-      <SpeakersContent />
-    </Suspense>
-  );
+  return <DynamicSpeakersContent />;
 }

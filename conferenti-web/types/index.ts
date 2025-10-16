@@ -9,16 +9,15 @@ export interface MenuItemData {
 
 export interface Speaker {
   id: string;
-  imageUrl: string;
   name?: string;
   position?: string;
   company?: string;
   bio?: string;
   photoUrl?: string;
-  speakerSessions?: SpeakerSession[];
+  sessions?: Session[];
 }
 
-export interface SpeakerSession {
+export interface Session {
   sessionId?: string;
   title?: string;
   slug?: string;
@@ -33,7 +32,7 @@ export interface SpeakerSession {
 }
 
 export interface SpeakerSessionDetails {
-  speakerSession: SpeakerSession;
+  session: Session;
   speakers: Speaker[];
 }
 

@@ -1,0 +1,48 @@
+# @name tokenrequest
+POST {{tokenEndpoint}} HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials
+&client_id={{$processEnv %clientid}}
+&client_secret={{$processEnv %clientsecret}}
+
+### Set token variable
+@token = {{tokenrequest.response.body.access_token}}
+
+### GET /speakers
+# @name /api/v1/speakers
+GET {{baseurl}}/api/v1/speakers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+### POST /speakers
+# @name /api/v1/speakers
+POST {{baseurl}}/api/v1/speakers HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+[
+  {
+    "id": "stark-001",
+    "name": "Tony Stark",
+    "position": "Chief Technology Officer",
+    "company": "Stark Industries",
+    "bio": "Tony Stark is a genius inventor and entrepreneur, leading technological innovation at Stark Industries. With expertise in AI, robotics, and clean energy solutions, Tony has revolutionized multiple industries. He's particularly passionate about building intelligent systems that can adapt and learn, with a focus on creating technology that serves humanity.",
+    "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
+    "sessions": [
+      {
+        "sessionId": "2",
+        "title": "Building AI-Powered Applications with Machine Learning",
+        "slug": "building-ai-powered-applications-with-machine-learning",
+        "tags": ["AI", "Machine Learning", "Python", "TensorFlow"],
+        "description": "Discover how to integrate artificial intelligence into your applications. We'll explore practical machine learning implementations, neural network architectures, and real-world AI deployment strategies.",
+        "startTime": "2024-09-15T11:30:00Z",
+        "endTime": "2024-09-15T12:30:00Z",
+        "room": "Innovation Lab",
+        "level": "Advanced",
+        "format": "Workshop",
+        "language": "English"
+      }
+    ]
+  }
+]
