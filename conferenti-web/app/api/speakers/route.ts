@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import https from 'https';
-// Commenting out Auth0 until it's properly configured
-// import { getAccessToken } from '@auth0/nextjs-auth0';
 
 const API_BASE_URL =
   process.env['services__conferenti-api__https__0'] || 'https://localhost:7027';
@@ -13,15 +11,8 @@ const httpsAgent = new https.Agent({
 
 export async function GET(request: NextRequest) {
   try {
-    // Extract Bearer token from Authorization header
-    const authHeader = request.headers.get('Authorization');
-    
-    if (authHeader) {
-      console.log('Auth Header Present:', authHeader);
-    }
-
+    const authHeader = request.headers.get('Authorization');    
     const apiUrl = `${API_BASE_URL}/v1/speakers`;
-    console.log('Fetching from:', apiUrl);
     
     const response = await fetch(apiUrl, {
       method: 'GET',
