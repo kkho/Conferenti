@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Conferenti.Application.Speakers.PostSpeakers;
 
-internal sealed class PostSpeakerCommandHandler(ISpeakerRepository speakerRepository, ILogger<PostSpeakerCommandHandler> logger) : ICommandHandler<PostSpeakerCommand, List<Speaker>>
+public class PostSpeakerCommandHandler(ISpeakerRepository speakerRepository, ILogger<PostSpeakerCommandHandler> logger) : ICommandHandler<PostSpeakerCommand, List<Speaker>>
 {
 
     public async Task<Result<List<Speaker>>> Handle(PostSpeakerCommand command, CancellationToken cancellationToken)

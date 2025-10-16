@@ -12,7 +12,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Net.Mime;
 using System.Reflection;
 using Azure.Identity;
 using AzureKeyVaultEmulator.Aspire.Client;
@@ -96,11 +95,11 @@ public static class DependencyInjection
         return app;
     }
 
-    public static async Task ConfigureOpenTelemetry(this WebApplicationBuilder builder, SecretClient secretClient, TelemetrySettings settings)
+    public static async Task ConfigureOpenTelemetry(this WebApplicationBuilder builder, SecretClient? secretClient, TelemetrySettings settings)
     {
         var useLocal = settings.UseLocal;
 
-        if (!useLocal)
+        if (!useLocal && secretClient != null)
         {
             var appInsightsConnectionString = await secretClient.GetSecretAsync(Constants.AppInsightsConnectionString);
             builder.Services.AddSingleton<TelemetryConfiguration>(sp =>
@@ -156,6 +155,11 @@ public static class DependencyInjection
 
     public static void AddVaultService(this IServiceCollection service, IConfiguration configuration, KeyVaultSettings vaultSettings)
     {
+        if (vaultSettings.BypassKeyVault)
+        {
+            return;
+        }
+
         if (vaultSettings.UseEmulator)
         {
             var vaultUri = configuration.GetConnectionString("keyvault") ?? string.Empty;

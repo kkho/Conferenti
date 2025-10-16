@@ -16,7 +16,7 @@ export const useAuthStore = create<AuthStore>()(
       clearAccessToken: () => set({ accessToken: null })
     }),
     {
-      name: 'auth-storage', // localStorage key
+      name: 'auth-storage',
       // Optional: Only persist in browser, not during SSR
       skipHydration: true
     }

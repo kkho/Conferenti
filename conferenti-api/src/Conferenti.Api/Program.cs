@@ -1,10 +1,7 @@
-using System.Configuration;
 using System.Reflection;
 using System.Security.Claims;
 using Asp.Versioning.ApiExplorer;
-using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
-using AzureKeyVaultEmulator.Aspire.Client;
 using Conferenti.Api;
 using Conferenti.Api.Endpoints;
 using Conferenti.Api.ExceptionHandlers;
@@ -31,22 +28,34 @@ builder.Logging.ClearProviders();
 
 var telemetrySettings = builder.Configuration.GetSection("TelemetrySettings").Get<TelemetrySettings>();
 var keyVaultSettings = builder.Configuration.GetSection("KeyVaultSettings").Get<KeyVaultSettings>();
+var auth0Settings = builder.Configuration.GetSection("Auth0Settings").Get<Auth0Settings>();
 var allowedOrigins = builder.Configuration.GetValue<string>("CorsSettings:AllowedOrigins")?.Split(";");
 
 builder.Services.AddVaultService(builder.Configuration, keyVaultSettings!);
 
+SecretClient? secretClient = null;
+
+#pragma warning disable ASP0000
+// Only get SecretClient if Key Vault is not bypassed
+if (!keyVaultSettings!.BypassKeyVault)
+{
+    await using var tempProvider = builder.Services.BuildServiceProvider();
+    secretClient = tempProvider.GetRequiredService<SecretClient>();
+}
+#pragma warning restore ASP0000
+
+builder.Services.AddApplicationInsightsTelemetry(options =>
+{
+    options.EnableAdaptiveSampling = false;
+    options.EnableDebugLogger = true;
+    // Do not set ConnectionString or InstrumentationKey for local development
+});
+
+await builder.ConfigureOpenTelemetry(secretClient, telemetrySettings!);
+
 #pragma warning disable ASP0000
 await using (var tempProvider = builder.Services.BuildServiceProvider())
 {
-    var secretClient = tempProvider.GetRequiredService<SecretClient>();
-    builder.Services.AddApplicationInsightsTelemetry(options =>
-        {
-            options.EnableAdaptiveSampling = false;
-            options.EnableDebugLogger = true;
-            // Do not set ConnectionString or InstrumentationKey for local development
-        });
-
-    await builder.ConfigureOpenTelemetry(secretClient!, telemetrySettings!);
     builder.Host.UseSerilog((context, services, configuration) => configuration
         .ReadFrom.Configuration(context.Configuration)
         .ReadFrom.Services(services)
@@ -115,8 +124,8 @@ builder.Services.AddAuthorization(options =>
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.Authority = "https://kkho.eu.auth0.com/";
-        options.Audience = "https://conferenti.com/api/";
+        options.Authority = auth0Settings!.Authority;
+        options.Audience = auth0Settings!.Audience;
 #pragma warning disable CA5404
         options.TokenValidationParameters.ValidateAudience = false;
         options.TokenValidationParameters.ValidateIssuer = false;
@@ -149,8 +158,6 @@ app.UseStatusCodePages();
 
 
 await app.RunAsync();
-return;
-
 
 #pragma warning disable IDE0061
 
@@ -158,3 +165,6 @@ static bool IsCreateOrganizationScope(ClaimsPrincipal user) => user.HasClaim(cla
 
 static bool IsReadShowScope(ClaimsPrincipal user) => user.HasClaim(claim => claim.Type == "scope" && claim.Value.Contains(Constants.ReadShowsScope));
 #pragma warning restore IDE0061
+
+
+public partial class Program { }

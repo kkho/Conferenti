@@ -3,12 +3,11 @@ using Conferenti.Application.Abstractions.Messaging;
 using Conferenti.Application.Helpers;
 using Conferenti.Domain.Abstractions;
 using Conferenti.Domain.Speakers;
-using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Logging;
 
 namespace Conferenti.Application.Speakers.GetSpeakers;
 
-internal sealed class GetSpeakerQueryHandler(
+public class GetSpeakerQueryHandler(
     ISpeakerRepository speakerRepository,
     ILogger<GetSpeakerQueryHandler> logger)
     : IQueryHandler<GetSpeakersQuery, List<Speaker>>

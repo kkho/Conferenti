@@ -35,18 +35,15 @@ export function useAccessToken(enabled: boolean = true) {
     retry: 1
   });
 
-  // Sync React Query data with Zustand store
   useEffect(() => {
     if (data) {
       setAccessToken(data);
-      console.log('✅ Access token retrieved and stored in Zustand');
     }
   }, [data, setAccessToken]);
 
   // Clear token on error
   useEffect(() => {
     if (error) {
-      console.error('❌ Error fetching access token:', error);
       clearAccessToken();
     }
   }, [error, clearAccessToken]);
@@ -92,10 +89,8 @@ export function useRefreshToken() {
     try {
       const token = await refreshToken();
       setAccessToken(token);
-      console.log('✅ Access token refreshed');
       return token;
     } catch (error) {
-      console.error('❌ Error refreshing access token:', error);
       clearAccessToken();
       throw error;
     }
