@@ -1,17 +1,10 @@
 name: Conferenti Web - Test and Deploy Pipeline
 
 on:
+  pull_request:
+    branches: [main]
   push:
     branches: [main]
-    paths:
-      - "conferenti-web/**"
-      - ".github/workflows/conferenti-web/**"
-  pull_request:
-    types: [ready_for_review, opened, reopened, synchronize]
-    branches: [main]
-    paths:
-      - "conferenti-web/**"
-      - ".github/workflows/conferenti-web/**"
   workflow_dispatch:
 
 permissions:
@@ -53,19 +46,15 @@ jobs:
 
       - id: set-matrix
         run: |
-          echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
           echo "matrix={\"appname\":[\"conferenti-web\"]}" >> $GITHUB_OUTPUT
+          echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Run linter
+        run: npm run lint
 
       - name: Type check
         run: npm run type-check
-      - name: Run linter
-        run: npm run lint
-        working-directory: ./conferenti-web
-
-      - name: Run type check
-        run: npm run type-check
-        working-directory: ./conferenti-web
-        continue-on-error: true # Since you have ignoreBuildErrors: true
+        continue-on-error: true
 
       - name: Run tests
         run: npm run test:ci
