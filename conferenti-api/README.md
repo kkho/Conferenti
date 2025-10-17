@@ -13,6 +13,7 @@ This repository contains the **Conferenti API** (.NET 9, Minimal APIs) and its d
 - **Application Insights**: Telemetry and monitoring.
 
 ## Project Structure
+
 - `src/Conferenti.Api`: Main API project (Minimal APIs, OpenAPI, Auth, versioning)
 - `src/Conferenti.Domain`: Domain models (e.g., `Speaker`, `Session`)
 - `src/Conferenti.Application`: Application logic, CQRS handlers, commands/queries
@@ -37,16 +38,19 @@ This repository contains the **Conferenti API** (.NET 9, Minimal APIs) and its d
 ## Getting Started
 
 1. **Clone the repository**
+
 ```
-git clone https://github.com/your-org/conferenti.git cd conferenti
+git clone https://github.com/your-org/conferenti.gi && cd conferenti
 ```
 
 2. **Restore and build the solution**
+
 ```
 dotnet restore && dotnet build
-````
+```
 
 3. **Run the distributed application with Aspire**
+
 ```
 cd Conferenti.AppHost/Conferenti.AppHost.AppHost && dotnet run
 ```
@@ -54,4 +58,3 @@ cd Conferenti.AppHost/Conferenti.AppHost.AppHost && dotnet run
 ## License
 
 This project is licensed under the [Apache License 2.0](LICENSE).
-
