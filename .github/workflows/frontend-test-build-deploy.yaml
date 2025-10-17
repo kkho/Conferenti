@@ -6,10 +6,12 @@ on:
     branches: [main]
     paths:
       - "conferenti-web/**"
+      - ".github/workflows/frontend-test-build-deploy.yaml"
   push:
     branches: [main]
     paths:
       - "conferenti-web/**"
+      - ".github/workflows/frontend-test-build-deploy.yaml"
   workflow_dispatch:
 
 permissions:
