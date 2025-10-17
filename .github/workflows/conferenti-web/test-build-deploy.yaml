@@ -46,6 +46,7 @@ jobs:
 
       - id: set-matrix
         run: |
+<<<<<<< HEAD
           echo "matrix={\"appname\":[\"conferenti-web\"]}" >> $GITHUB_OUTPUT
           echo "changed=true" >> $GITHUB_OUTPUT
 
@@ -55,6 +56,21 @@ jobs:
       - name: Type check
         run: npm run type-check
         continue-on-error: true
+=======
+          echo "matrix={\"appname\":$(yarn --silent run matrix)}" >> $GITHUB_OUTPUT
+          echo "matrix={\"appname\":[\"conferenti-web\"]}" >> $GITHUB_OUTPUT
+
+      - name: Type check
+        run: npm run type-check
+      - name: Run linter
+        run: npm run lint
+        working-directory: ./conferenti-web
+
+      - name: Run type check
+        run: npm run type-check
+        working-directory: ./conferenti-web
+        continue-on-error: true # Since you have ignoreBuildErrors: true
+>>>>>>> 18a877276af8beaee90a2f1028994138b37cbec9
 
       - name: Run tests
         run: npm run test:ci
