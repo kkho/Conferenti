@@ -6,20 +6,12 @@ on:
     paths:
       - "conferenti-web/**"
       - ".github/workflows/conferenti-web/**"
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
-      - "conferenti-api/**"
   pull_request:
     types: [ready_for_review, opened, reopened, synchronize]
     branches: [main]
     paths:
       - "conferenti-web/**"
       - ".github/workflows/conferenti-web/**"
-    paths-ignore:
-      - "README.md"
-      - "LICENSE"
-      - "conferenti-api/**"
   workflow_dispatch:
 
 permissions:
