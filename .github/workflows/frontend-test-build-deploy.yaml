@@ -136,6 +136,7 @@ jobs:
       system_name: conferenti
       environment: development
       dockerfile: ./conferenti-web/Dockerfile
+      docker-build-context: ./conferenti-web
       tags: |
         ${{ vars.CONTAINER_REGISTRY }}/conferenti/conferenti-web-dev:${{ github.run_number }}
     secrets:
