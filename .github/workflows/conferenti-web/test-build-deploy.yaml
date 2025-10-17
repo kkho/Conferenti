@@ -5,21 +5,21 @@ on:
     branches: [main]
     paths:
       - "conferenti-web/**"
-      - ".github/conferenti-web/**"
+      - ".github/workflows/conferenti-web/**"
     paths-ignore:
       - "README.md"
       - "LICENSE"
-      - "conferenti-api/*"
+      - "conferenti-api/**"
   pull_request:
     types: [ready_for_review, opened, reopened, synchronize]
     branches: [main]
     paths:
       - "conferenti-web/**"
-      - ".github/conferenti-web/**"
+      - ".github/workflows/conferenti-web/**"
     paths-ignore:
       - "README.md"
       - "LICENSE"
-      - "conferenti-api/*"
+      - "conferenti-api/**"
   workflow_dispatch:
 
 permissions:
@@ -149,54 +149,54 @@ jobs:
       tags: |
         ${{container_registry}}/conferenti/conferenti-web-dev:${{ github.run_number }}
 
-  deploy:
-    needs: [build-dev]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
+  # deploy:
+  #   needs: [build-dev]
+  #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #     id-token: write
+  #   steps:
+  #     - uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+  #     - name: Set up Docker Buildx
+  #       uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Azure Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: conferentiregistry.azurecr.io
-          username: ${{ secrets.ACR_USERNAME }}
-          password: ${{ secrets.ACR_PASSWORD }}
+  #     - name: Log in to Azure Container Registry
+  #       uses: docker/login-action@v3
+  #       with:
+  #         registry: conferentiregistry.azurecr.io
+  #         username: ${{ secrets.ACR_USERNAME }}
+  #         password: ${{ secrets.ACR_PASSWORD }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./conferenti-web
-          push: true
-          tags: |
-            ghcr.io/conferenti/conferenti-web-dev:${{ github.run_number }}
-            ghcr.io/conferenti/conferenti-web-dev:latest
-          cache-from: type=registry,ref=ghcr.io/conferenti/conferenti-web-dev:buildcache
-          cache-to: type=registry,ref=ghcr.io/conferenti/conferenti-web-dev:buildcache,mode=max
+  #     - name: Build and push Docker image
+  #       uses: docker/build-push-action@v5
+  #       with:
+  #         context: ./conferenti-web
+  #         push: true
+  #         tags: |
+  #           ghcr.io/conferenti/conferenti-web-dev:${{ github.run_number }}
+  #           ghcr.io/conferenti/conferenti-web-dev:latest
+  #         cache-from: type=registry,ref=ghcr.io/conferenti/conferenti-web-dev:buildcache
+  #         cache-to: type=registry,ref=ghcr.io/conferenti/conferenti-web-dev:buildcache,mode=max
 
-      - name: Deploy to Kubernetes (Dev)
-        run: |
-          echo "Deploying to Kubernetes..."
-          # Install kubectl if needed
-          # Set up kubeconfig
-          # Apply deployment
-          envsubst < conferenti-web/CI/dev-deploy/deployment-dev.yaml | kubectl apply -f -
-          envsubst < conferenti-web/CI/dev-deploy/service-dev.yaml | kubectl apply -f -
-          envsubst < conferenti-web/CI/dev-deploy/ingress-dev.yaml | kubectl apply -f -
-        env:
-          GITHUB_RUN_NUMBER: ${{ github.run_number }}
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+  #     - name: Deploy to Kubernetes (Dev)
+  #       run: |
+  #         echo "Deploying to Kubernetes..."
+  #         # Install kubectl if needed
+  #         # Set up kubeconfig
+  #         # Apply deployment
+  #         envsubst < conferenti-web/CI/dev-deploy/deployment-dev.yaml | kubectl apply -f -
+  #         envsubst < conferenti-web/CI/dev-deploy/service-dev.yaml | kubectl apply -f -
+  #         envsubst < conferenti-web/CI/dev-deploy/ingress-dev.yaml | kubectl apply -f -
+  #       env:
+  #         GITHUB_RUN_NUMBER: ${{ github.run_number }}
+  #         KUBECONFIG: ${{ secrets.KUBECONFIG }}
 
-      - name: Deployment summary
-        run: |
-          echo "### 🎉 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Image:** \`conferentiregistry.azurecr.io/conferenti/conferenti-web-dev:${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**Environment:** Dev" >> $GITHUB_STEP_SUMMARY
-          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+  #     - name: Deployment summary
+  #       run: |
+  #         echo "### 🎉 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+  #         echo "" >> $GITHUB_STEP_SUMMARY
+  #         echo "**Image:** \`conferentiregistry.azurecr.io/conferenti/conferenti-web-dev:${{ github.run_number }}\`" >> $GITHUB_STEP_SUMMARY
+  #         echo "**Environment:** Dev" >> $GITHUB_STEP_SUMMARY
+  #         echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
