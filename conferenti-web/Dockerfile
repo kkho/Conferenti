@@ -17,11 +17,40 @@ RUN npm ci
 
 COPY . .
 
+# Build arguments for environment variables
 ARG NODE_ENV=development
+ARG LOCAL=false
+ARG CONFERENTI_BASE_URL=""
+ARG APP_BASE_URL=""
+ARG AUTH0_DOMAIN=""
+ARG AUTH0_CLIENT_ID=""
+ARG AUTH0_AUDIENCE=""
+ARG AUTH0_SCOPE="openid profile email read:shows"
+
+# Set environment variables
 ENV NODE_ENV=$NODE_ENV
+ENV LOCAL=$LOCAL
+ENV CONFERENTI_BASE_URL=$CONFERENTI_BASE_URL
+ENV APP_BASE_URL=$APP_BASE_URL
+ENV AUTH0_DOMAIN=$AUTH0_DOMAIN
+ENV AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID
+ENV AUTH0_AUDIENCE=$AUTH0_AUDIENCE
+ENV AUTH0_SCOPE=$AUTH0_SCOPE
+
 # Set environment for build
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build
+
+# Use secret mounts instead of build args for sensitive data
+RUN --mount=type=secret,id=AUTH0_SECRET \
+  --mount=type=secret,id=AUTH0_CLIENT_SECRET \
+  # Read secrets securely
+  AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET) && \
+  AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET) && \
+  # Export as environment variables for the build
+  export AUTH0_SECRET && \
+  export AUTH0_CLIENT_SECRET && \
+  # Build the application with secrets available
+  npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
