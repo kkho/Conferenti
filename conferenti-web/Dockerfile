@@ -47,7 +47,7 @@ RUN --mount=type=secret,id=AUTH0_SECRET \
   AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET) && \
   export AUTH0_SECRET && \
   export AUTH0_CLIENT_SECRET && \
-  npm run build
+  npm run build:no-turbopack
 
 # Production image, copy all the files and run next
 FROM base AS runner

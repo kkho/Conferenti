@@ -10,7 +10,7 @@
     "test:ci": "jest --coverage --watchAll=false --ci",
     "type-check": "tsc --noEmit",
     "build": "next build --turbopack",
-    "build:development": "NODE_ENV=development next build",
+    "build:no-turbopack": "next build",
     "build:test": "NODE_ENV=test next build",
     "build:production": "NODE_ENV=production next build",
     "start": "next start",
