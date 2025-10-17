@@ -7,8 +7,8 @@ permissions:
 on:
   workflow_run:
     workflows:
-      - "Test Suite"
-      - "Playwright Tests"
+      - "Test Conferenti Web"
+      - "End 2 End Test Conferenti Web"
     types:
       - completed
     branches:
@@ -20,14 +20,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Wait for all required checks
         uses: lewagon/wait-on-check-action@v1.3.4
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           check-name: "test" # Job name from both test.yaml and e2e.yaml
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          repo-token: ${{ secrets.GH_TOKEN }}
           wait-interval: 10
 
       - name: Log deployment trigger
@@ -44,3 +47,5 @@ jobs:
           envsubst < CI/dev-deploy/deployment-dev.yaml | kubectl apply -f -
         env:
           GITHUB_RUN_NUMBER: ${{ github.run_number }}
+  build:
+    name: Build image for $ {{}}
