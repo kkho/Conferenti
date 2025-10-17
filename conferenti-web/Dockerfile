@@ -43,13 +43,10 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Use secret mounts instead of build args for sensitive data
 RUN --mount=type=secret,id=AUTH0_SECRET \
   --mount=type=secret,id=AUTH0_CLIENT_SECRET \
-  # Read secrets securely
   AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET) && \
   AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET) && \
-  # Export as environment variables for the build
   export AUTH0_SECRET && \
   export AUTH0_CLIENT_SECRET && \
-  # Build the application with secrets available
   npm run build
 
 # Production image, copy all the files and run next
