@@ -137,6 +137,8 @@ jobs:
       environment: development
       dockerfile: ./conferenti-web/Dockerfile
       docker-build-context: ./conferenti-web
+      build-args: |
+        NODE_ENV=development
       tags: |
         ${{ vars.CONTAINER_REGISTRY }}/conferenti/conferenti-web-dev:${{ github.run_number }}
     secrets:

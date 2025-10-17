@@ -21,7 +21,12 @@ ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 # Set environment for build
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build:${NODE_ENV}
+
+# Map NODE_ENV values to correct script names
+RUN if [ "$NODE_ENV" = "development" ]; then npm run build:dev; \
+  elif [ "$NODE_ENV" = "production" ]; then npm run build:prod; \
+  elif [ "$NODE_ENV" = "test" ]; then npm run build:test; \
+  else npm run build; fi
 
 # Production image, copy all the files and run next
 FROM base AS runner
