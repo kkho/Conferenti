@@ -26,6 +26,8 @@ ARG AUTH0_DOMAIN=""
 ARG AUTH0_CLIENT_ID=""
 ARG AUTH0_AUDIENCE=""
 ARG AUTH0_SCOPE="openid profile email read:shows"
+ARG AUTH0_SECRET=""
+ARG AUTH0_CLIENT_SECRET=""
 
 # Set environment variables
 ENV NODE_ENV=$NODE_ENV
@@ -36,18 +38,14 @@ ENV AUTH0_DOMAIN=$AUTH0_DOMAIN
 ENV AUTH0_CLIENT_ID=$AUTH0_CLIENT_ID
 ENV AUTH0_AUDIENCE=$AUTH0_AUDIENCE
 ENV AUTH0_SCOPE=$AUTH0_SCOPE
+ENV AUTH0_SECRET=$AUTH0_SECRET
+ENV AUTH0_CLIENT_SECRET=$AUTH0_CLIENT_SECRET
 
 # Set environment for build
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# Use secret mounts instead of build args for sensitive data
-RUN --mount=type=secret,id=AUTH0_SECRET \
-  --mount=type=secret,id=AUTH0_CLIENT_SECRET \
-  AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET) && \
-  AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET) && \
-  export AUTH0_SECRET && \
-  export AUTH0_CLIENT_SECRET && \
-  npm run build:no-turbopack
+# Build the application with all environment variables available
+RUN npm run build:no-turbopack
 
 # Production image, copy all the files and run next
 FROM base AS runner
