@@ -42,9 +42,7 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 ENV LOCAL=${LOCAL}
 ENV CONFERENTI_BASE_URL=${CONFERENTI_BASE_URL}
 ENV APP_BASE_URL=${APP_BASE_URL}
-ENV AUTH0_DOMAIN=${AUTH0_DOMAIN}
 ENV AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
-ENV AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
 ENV AUTH0_SCOPE=${AUTH0_SCOPE}
 
 # Set environment for build
@@ -53,8 +51,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Build the application with secrets mounted securely
 RUN --mount=type=secret,id=AUTH0_SECRET \
   --mount=type=secret,id=AUTH0_CLIENT_SECRET \
-  AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") \
-  AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") \
+  --mount=type=secret,id=AUTH0_DOMAIN \
+  --mount=type=secret,id=AUTH0_AUDIENCE \
+  export AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_DOMAIN=$(cat /run/secrets/AUTH0_DOMAIN 2>/dev/null || echo "") && \
+  export AUTH0_AUDIENCE=$(cat /run/secrets/AUTH0_AUDIENCE 2>/dev/null || echo "") && \
   npm run build:no-turbopack
 
 # Production image, copy all the files and run next
