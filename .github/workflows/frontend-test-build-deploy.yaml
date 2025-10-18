@@ -64,7 +64,7 @@ jobs:
         run: npm run test:ci
         env:
           CI: true
-          NODE_ENV: test
+          ENVIRONMENT: test
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
@@ -138,7 +138,8 @@ jobs:
       dockerfile: ./conferenti-web/Dockerfile
       docker-build-context: ./conferenti-web
       build-args: |
-        NODE_ENV=development
+        NODE_ENV=production
+        ENVIRONMENT=development
         LOCAL=${{ vars.LOCAL || 'false' }}
         CONFERENTI_BASE_URL=${{ vars.CONFERENTI_BASE_URL || 'http://localhost:7027' }}
         APP_BASE_URL=${{ vars.APP_BASE_URL || 'http://localhost:3000' }}
