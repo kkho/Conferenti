@@ -34,6 +34,8 @@ ARG AUTH0_CLIENT_ID=""
 ARG AUTH0_AUDIENCE=""
 ARG AUTH0_SCOPE="openid profile email read:shows"
 
+ENV NEXT_TELEMETRY_DISABLED=1
+
 # Set environment variables (excluding secrets)
 ENV NODE_ENV=$NODE_ENV
 ENV ENVIRONMENT=$ENVIRONMENT
@@ -59,9 +61,7 @@ RUN --mount=type=secret,id=AUTH0_SECRET \
 FROM base AS runner
 WORKDIR /app
 
-ARG NODE_ENV=development
-ENV NODE_ENV=$NODE_ENV
-ENV NEXT_TELEMETRY_DISABLED=1
+
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
