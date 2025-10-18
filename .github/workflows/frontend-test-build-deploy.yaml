@@ -108,7 +108,7 @@ jobs:
         run: npm ci
         working-directory: ./conferenti-web
       - name: Build application
-        run: npm run build
+        run: npm run build:no-turbopack
         working-directory: ./conferenti-web
         env:
           CI: true
