@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development NODE_OPTIONS='--inspect' next dev",
+    "dev": "NODE_ENV=development NODE_OPTIONS='--inspect' next dev --experimental-https",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
