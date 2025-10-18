@@ -141,7 +141,7 @@ jobs:
       build-args: |
         NODE_ENV=production
         ENVIRONMENT=development
-        LOCAL=${{ vars.LOCAL || 'false' }}
+        LOCAL=${{ vars.LOCAL || false }}
         CONFERENTI_BASE_URL=${{ vars.CONFERENTI_BASE_URL || 'http://localhost:7027' }}
         APP_BASE_URL=${{ vars.APP_BASE_URL || 'http://localhost:3000' }}
         AUTH0_SCOPE=${{ vars.AUTH0_SCOPE || '' }}
