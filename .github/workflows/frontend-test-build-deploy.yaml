@@ -147,7 +147,7 @@ jobs:
         AUTH0_DOMAIN=${{ vars.AUTH0_DOMAIN || '' }}
         AUTH0_CLIENT_ID=${{ vars.AUTH0_CLIENT_ID || '' }}
         AUTH0_AUDIENCE=${{ vars.AUTH0_AUDIENCE || '' }}
-        AUTH0_SCOPE=${{ vars.AUTH0_SCOPE || 'openid profile email read:shows' }}
+        AUTH0_SCOPE=${{ vars.AUTH0_SCOPE || '' }}
       tags: |
         ${{ vars.CONTAINER_REGISTRY }}/${{ github.actor }}/conferenti/conferenti-web-development:${{ github.run_number }}
     secrets:
