@@ -148,7 +148,7 @@ jobs:
         AUTH0_AUDIENCE=${{ vars.AUTH0_AUDIENCE || '' }}
         AUTH0_SCOPE=${{ vars.AUTH0_SCOPE || 'openid profile email read:shows' }}
       tags: |
-        ${{ vars.CONTAINER_REGISTRY }}/conferenti/conferenti-web-dev:${{ github.run_number }}
+        ${{ vars.CONTAINER_REGISTRY }}/${{ github.actor }}conferenti/conferenti-web-dev:${{ github.run_number }}
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
