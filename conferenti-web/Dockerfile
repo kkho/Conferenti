@@ -29,9 +29,6 @@ ARG ENVIRONMENT=development
 ARG LOCAL=false
 ARG CONFERENTI_BASE_URL=""
 ARG APP_BASE_URL=""
-ARG AUTH0_DOMAIN=""
-ARG AUTH0_CLIENT_ID=""
-ARG AUTH0_AUDIENCE=""
 ARG AUTH0_SCOPE="openid profile email read:shows"
 
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -42,7 +39,6 @@ ENV ENVIRONMENT=${ENVIRONMENT}
 ENV LOCAL=${LOCAL}
 ENV CONFERENTI_BASE_URL=${CONFERENTI_BASE_URL}
 ENV APP_BASE_URL=${APP_BASE_URL}
-ENV AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
 ENV AUTH0_SCOPE=${AUTH0_SCOPE}
 
 # Set environment for build
@@ -50,10 +46,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 # Build the application with secrets mounted securely
 RUN --mount=type=secret,id=AUTH0_SECRET \
+  --mount=type=secret,id=AUTH0_CLIENT_ID \
   --mount=type=secret,id=AUTH0_CLIENT_SECRET \
   --mount=type=secret,id=AUTH0_DOMAIN \
   --mount=type=secret,id=AUTH0_AUDIENCE \
   export AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_ID=$(cat /run/secrets/AUTH0_CLIENT_ID 2>/dev/null || echo "") && \
   export AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") && \
   export AUTH0_DOMAIN=$(cat /run/secrets/AUTH0_DOMAIN 2>/dev/null || echo "") && \
   export AUTH0_AUDIENCE=$(cat /run/secrets/AUTH0_AUDIENCE 2>/dev/null || echo "") && \
