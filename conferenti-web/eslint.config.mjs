@@ -23,9 +23,9 @@ const eslintConfig = [
   {
     rules: {
       // Allow debugger statements in development
-      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off",
+      "no-debugger": process.env.ENVIRONMENT === "production" ? "error" : "off",
       // Allow console statements in development  
-      "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
+      "no-console": process.env.ENVIRONMENT === "production" ? "warn" : "off",
     },
   },
 ];
