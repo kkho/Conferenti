@@ -24,7 +24,8 @@ RUN npm ci
 COPY . .
 
 # Build arguments for environment variables
-ARG NODE_ENV=production
+ARG NODE_ENV=development
+ARG ENVIRONMENT=development
 ARG LOCAL=false
 ARG CONFERENTI_BASE_URL=""
 ARG APP_BASE_URL=""
@@ -37,6 +38,7 @@ ARG AUTH0_CLIENT_SECRET=""
 
 # Set environment variables
 ENV NODE_ENV=$NODE_ENV
+ENV ENVIRONMENT=development
 ENV LOCAL=$LOCAL
 ENV CONFERENTI_BASE_URL=$CONFERENTI_BASE_URL
 ENV APP_BASE_URL=$APP_BASE_URL
@@ -57,7 +59,7 @@ RUN npm run build:no-turbopack
 FROM base AS runner
 WORKDIR /app
 
-ARG NODE_ENV=production
+ARG NODE_ENV=development
 ENV NODE_ENV=$NODE_ENV
 ENV NEXT_TELEMETRY_DISABLED=1
 
