@@ -48,7 +48,7 @@ jobs:
     steps:
       - uses: kkho/workflows/unittest@main
         with:
-          checkout: true
+          checkout: false
           collect-coverage: true
           dotnet-version: '9.x'
           working-directory: '.'
