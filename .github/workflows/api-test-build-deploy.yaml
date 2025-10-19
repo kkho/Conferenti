@@ -49,6 +49,7 @@ jobs:
       - uses: kkho/workflows/unittest@main
         with:
           checkout: true
+          collect-coverage: true
           dotnet-version: '9.x'
           working-directory: '.'
           solution-path: './conferenti-api/Conferenti.Api.sln'
