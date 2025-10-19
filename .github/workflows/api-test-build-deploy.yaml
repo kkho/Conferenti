@@ -1,0 +1,85 @@
+name: Conferenti Api - Test and Deploy Pipeline
+
+on:
+  pull_request:
+    types: [ready_for_review, opened, reopened, synchronize]
+    branches: [main]
+    paths:
+    - "conferenti-api/**"
+    - ".github/workflows/api-test-build-deploy.yaml"
+  push:
+    branches: [main]
+    paths:
+    - "conferenti-api/**"
+    - ".github/workflows/api-test-build-deploy.yaml"
+  workflow_dispatch:
+  
+permissions:
+  contents: read
+  packages: write
+
+env:
+  SYSTEM_NAME: 'conferenti'
+  APPLICATION_NAME: 'conferenti-api'
+  PROJECT_FILE: './conferenti-api/Conferenti.Api.csproj'
+
+jobs:
+  setup-dotnet:
+    name: Setup .NET
+    runs-on: ubuntu-latest
+    outputs:
+      dotnet-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
+    steps:
+      - name: Setup .NET 9.x
+        id: setup-dotnet
+        uses: kkho/workflows/setup-dotnet@main
+        with:
+          dotnet-version: '9.x'
+          solution-path: './Conferenti.sln'
+  unit-tests:
+    needs: setup-dotnet
+    name: Unit test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      issues: read
+      pull-requests: write
+    steps:
+      - uses: kkho/workflows/unittest@main
+        with:
+          checkout: false
+          dotnet-version: '9.x'
+          working-directory: './conferenti-api'
+          solution-path: 'Conferenti.sln'
+          test-projects: '**/*Tests/*.csproj'
+
+  integration-test-dev:
+    needs: [setup-dotnet, unit-tests]
+    name: Integration test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      issues: read
+      pull-requests: write
+    steps:
+      - uses: kkho/workflows/integrationtest@main
+        with:
+          checkout: false
+          dotnet-version: '9.x'
+          system_name: 'conferenti'
+          working-directory: './conferenti-api'
+          solution-path: 'Conferenti.sln'
+          test-projects: '**/*Integration.csproj'
+          environment: 'dev'
+  notify-failed-integrationtest:
+    needs: [integration-test-dev] 
+    if: ${{ always() }}
+    uses: kkho/workflows/.github/workflows/slack-message.yaml@main
+    with:
+      channel: "#build-dev"
+      message: "Test results: ${{ needs.test.result }}"
+      color: ${{ needs.test.result == 'success' && 'good' || 'danger' }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
