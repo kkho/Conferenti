@@ -30,11 +30,6 @@ jobs:
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      - name: Echo current path
-        run: |
-          echo "Current directory: $(pwd)"
-          echo "Directory contents:"
-          ls -la
       - name: Setup .NET 9.x
         id: setup-dotnet
         uses: kkho/workflows/setup-dotnet@main
@@ -53,7 +48,7 @@ jobs:
     steps:
       - uses: kkho/workflows/unittest@main
         with:
-          checkout: false
+          checkout: true
           dotnet-version: '9.x'
           working-directory: '.'
           solution-path: './conferenti-api/Conferenti.Api.sln'
@@ -71,7 +66,7 @@ jobs:
     steps:
       - uses: kkho/workflows/integrationtest@main
         with:
-          checkout: false
+          checkout: true
           dotnet-version: '9.x'
           system_name: 'conferenti'
           working-directory: '.'
