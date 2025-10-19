@@ -74,6 +74,7 @@ jobs:
           solution-path: './conferenti-api/Conferenti.Api.sln'
           test-projects: '**/*Integration.csproj'
           environment: 'dev'
+
   build-dev:
     name: Build image for conferenti-api-dev
     needs: [integration-test-dev]
