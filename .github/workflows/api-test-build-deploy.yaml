@@ -25,12 +25,17 @@ jobs:
     outputs:
       dotnet-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
     steps:
+      - name: Echo current path
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -la
       - name: Setup .NET 9.x
         id: setup-dotnet
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: '9.x'
-          solution-path: 'conferenti-api/Conferenti.Api.sln'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
   unit-tests:
     needs: setup-dotnet
     name: Unit test
@@ -45,8 +50,8 @@ jobs:
         with:
           checkout: false
           dotnet-version: '9.x'
-          working-directory: './conferenti-api'
-          solution-path: 'conferenti-api/Conferenti.Api.sln'
+          working-directory: '.'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
           test-projects: '**/*Tests/*.csproj'
 
   integration-test-dev:
@@ -64,8 +69,8 @@ jobs:
           checkout: false
           dotnet-version: '9.x'
           system_name: 'conferenti'
-          working-directory: './conferenti-api'
-          solution-path: 'conferenti-api/Conferenti.Api.sln'
+          working-directory: '.'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
           test-projects: '**/*Integration.csproj'
           environment: 'dev'
   build-dev:
