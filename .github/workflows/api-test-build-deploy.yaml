@@ -18,11 +18,6 @@ permissions:
   contents: read
   packages: write
 
-env:
-  SYSTEM_NAME: 'conferenti'
-  APPLICATION_NAME: 'conferenti-api'
-  PROJECT_FILE: './conferenti-api/Conferenti.Api.csproj'
-
 jobs:
   setup-dotnet:
     name: Setup .NET
@@ -78,7 +73,7 @@ jobs:
     needs: [integration-test-dev]
     uses: kkho/workflows/.github/workflows/build-push-backend.yaml@main
     with:
-      app_name: ${{ env.APPLICATION_NAME }}
+      app_name: conferenti-api
       system_name: conferenti
       environment: development
       dockerfile: ./conferenti-api/Dockerfile
