@@ -73,6 +73,22 @@ jobs:
           solution-path: 'Conferenti.sln'
           test-projects: '**/*Integration.csproj'
           environment: 'dev'
+  build-dev:
+    name: Build image for conferenti-api-dev
+    needs: [integration-test-dev]
+    uses: kkho/workflows/.github/workflows/build-push-backend.yaml@main
+    with:
+      app_name: ${{ env.APPLICATION_NAME }}
+      system_name: conferenti
+      environment: development
+      dockerfile: ./conferenti-api/Dockerfile
+      docker-build-context: ./conferenti-api
+      push-image: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+      tags: |
+        ${{ vars.CONTAINER_REGISTRY }}/${{ github.actor }}/conferenti/conferenti-api-development:${{ github.run_number }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   notify-failed-integrationtest:
     needs: [integration-test-dev] 
     if: ${{ always() }}

@@ -130,7 +130,7 @@ jobs:
     if: ${{ needs.unit-tests.outputs.changed != '[]' }}
     strategy:
       matrix: ${{fromJSON(needs.unit-tests.outputs.matrix)}}
-    uses: kkho/workflows/.github/workflows/build-push.yaml@main
+    uses: kkho/workflows/.github/workflows/build-push-frontend.yaml@main
     with:
       app_name: ${{ matrix.appname }}
       system_name: conferenti
