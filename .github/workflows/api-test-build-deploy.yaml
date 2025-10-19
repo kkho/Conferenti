@@ -30,7 +30,7 @@ jobs:
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: '9.x'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
+          solution-path: './conferenti-api'
   unit-tests:
     needs: setup-dotnet
     name: Unit test
@@ -46,7 +46,7 @@ jobs:
           checkout: false
           dotnet-version: '9.x'
           working-directory: './conferenti-api'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
+          solution-path: './conferenti-api'
           test-projects: '**/*Tests/*.csproj'
 
   integration-test-dev:
@@ -65,7 +65,7 @@ jobs:
           dotnet-version: '9.x'
           system_name: 'conferenti'
           working-directory: './conferenti-api'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
+          solution-path: './conferenti-api'
           test-projects: '**/*Integration.csproj'
           environment: 'dev'
   build-dev:
