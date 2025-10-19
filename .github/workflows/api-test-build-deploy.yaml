@@ -74,6 +74,7 @@ jobs:
           test-projects: './conferenti-api/test/**/*Integration.csproj'
           environment: 'dev'
 
+
   build-dev:
     name: Build image for conferenti-api-dev
     needs: [integration-test-dev]
