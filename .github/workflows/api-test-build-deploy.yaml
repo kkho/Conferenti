@@ -25,17 +25,12 @@ jobs:
     outputs:
       dotnet-version: ${{ steps.setup-dotnet.outputs.dotnet-version }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          # We need to fetch all branches and commits so that Nx affected has a base to compare against.
-          fetch-depth: 0
       - name: Setup .NET 9.x
         id: setup-dotnet
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: '9.x'
-          solution-path: './conferenti-api/Conferenti.sln'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
   unit-tests:
     needs: setup-dotnet
     name: Unit test
@@ -51,7 +46,7 @@ jobs:
           checkout: false
           dotnet-version: '9.x'
           working-directory: './conferenti-api'
-          solution-path: './conferenti-api/Conferenti.sln'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
           test-projects: '**/*Tests/*.csproj'
 
   integration-test-dev:
@@ -70,7 +65,7 @@ jobs:
           dotnet-version: '9.x'
           system_name: 'conferenti'
           working-directory: './conferenti-api'
-          solution-path: './conferenti-api/Conferenti.sln'
+          solution-path: './conferenti-api/Conferenti.Api.sln'
           test-projects: '**/*Integration.csproj'
           environment: 'dev'
   build-dev:
@@ -95,7 +90,7 @@ jobs:
     uses: kkho/workflows/.github/workflows/slack-message.yaml@main
     with:
       channel: "#build-dev"
-      message: "Test results: ${{ needs.integration-test-dev.result }}"
-      color: ${{ needs.integration-test-dev.result == 'success' && 'good' || 'danger' }}
+      message: "Test results: ${{ needs.test.result }}"
+      color: ${{ needs.test.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
