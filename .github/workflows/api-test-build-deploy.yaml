@@ -70,7 +70,7 @@ jobs:
       app_name: conferenti-api
       system_name: conferenti
       environment: development
-      dockerfile: ./conferenti-api/Dockerfile
+      dockerfile: ./conferenti-api/Conferenti.Api/Dockerfile
       docker-build-context: ./conferenti-api
       push-image: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       tags: |
