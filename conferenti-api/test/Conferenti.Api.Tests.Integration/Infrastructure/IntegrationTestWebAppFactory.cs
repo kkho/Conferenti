@@ -4,6 +4,8 @@ using Azure.Security.KeyVault.Secrets;
 using Conferenti.Api.Settings;
 using Conferenti.Application.Speakers.GetSpeakers;
 using Conferenti.Application.Speakers.PostSpeakers;
+using Conferenti.Domain.Speakers;
+using Conferenti.Infrastructure.Repositories;
 using Conferenti.TestUtil;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -41,7 +43,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
                 ["KeyVaultSettings:UseEmulator"] = "false",
                 ["KeyVaultSettings:VaultEndPoint"] = "https://localhost:8081",
                 // Use local telemetry
-                ["TelemetrySettings:UseLocal"] = "true"
+                ["TelemetrySettings:UseLocal"] = "true",
+                ["CosmosDbSettings:IntegrationTest"] = "true"
             }!);
         });
 
@@ -52,6 +55,11 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
             // Remove any Key Vault services that might have been registered
             services.RemoveAll<SecretClient>();
+            services.RemoveAll<CosmosClient>();
+            services.RemoveAllKeyed<Container>("speakers");
+            services.RemoveAllKeyed<Container>("sessions");
+            services.RemoveAll<ISpeakerRepository>();
+
 
             services.AddOpenTelemetry()
                 .WithTracing(tracingBuilder =>
@@ -66,6 +74,11 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
                     metricsBuilder.AddAspNetCoreInstrumentation();
                     metricsBuilder.AddConsoleExporter(); // Simulate metrics
                 });
+
+            // Register CosmosClient pointing to the test container
+            services.AddSingleton<CosmosClient>(provider => CosmosClient);
+            services.AddKeyedSingleton<Container>("speakers", Container);
+            services.AddScoped<ISpeakerRepository, SpeakerRepository>();
         });
 
 
@@ -73,6 +86,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
 
     public async Task InitializeAsync()
     {
+        Environment.SetEnvironmentVariable($"CosmosDbSettings:IntegrationTest", "true");
+
         await _cosmosDbContainer.StartAsync();
 
         // Wait for Cosmos DB emulator to be fully ready
