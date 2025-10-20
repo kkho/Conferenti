@@ -3,4 +3,9 @@
 .git/
 build/
 node_modules/
+.next/
 data/
+*.log
+coverage/
+.env*.local
+.swc/

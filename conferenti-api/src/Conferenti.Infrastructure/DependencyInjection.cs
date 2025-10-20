@@ -18,8 +18,18 @@ public static class DependencyInjection
     {
         var cosmosDbSettings = configuration.GetSection("CosmosDbSettings").Get<CosmosDbSettings>();
 
-        await services.AddCosmosDbService(cosmosDbSettings, CancellationToken.None);
-        services.AddScoped<ISpeakerRepository, SpeakerRepository>();
+        try
+        {
+            await services.AddCosmosDbService(cosmosDbSettings, CancellationToken.None);
+            services.AddScoped<ISpeakerRepository, SpeakerRepository>();
+        }
+        catch (Exception ex)
+        {
+            if (cosmosDbSettings is { IntegrationTest: false })
+            {
+                throw new Exception("Failed to connect to Cosmos DB. Please ensure that the Cosmos DB emulator is running if using local settings.", ex);
+            }
+        }
         services.AddHttpClient();
         services.AddMemoryCache();
         services.AddResponseCompression();

@@ -3,6 +3,9 @@ FROM node:22-alpine AS base
 
 # Install dependencies only when needed
 FROM base AS deps
+# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
+RUN apk add --no-cache libc6-compat python3 make g++
+
 WORKDIR /app
 
 # Copy package files
@@ -11,25 +14,54 @@ RUN npm ci --include=optional
 
 # Rebuild the source code only when needed
 FROM base AS builder
+# Install build dependencies for native modules
+RUN apk add --no-cache libc6-compat python3 make g++
+
 WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm ci
 
 COPY . .
 
+# Build arguments for environment variables
 ARG NODE_ENV=development
-ENV NODE_ENV=$NODE_ENV
+ARG ENVIRONMENT=development
+ARG LOCAL=false
+ARG CONFERENTI_BASE_URL=""
+ARG APP_BASE_URL=""
+ARG AUTH0_SCOPE="openid profile email read:shows"
+
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Set environment variables (excluding secrets)
+ENV NODE_ENV=${NODE_ENV}
+ENV ENVIRONMENT=${ENVIRONMENT}
+ENV LOCAL=${LOCAL}
+ENV CONFERENTI_BASE_URL=${CONFERENTI_BASE_URL}
+ENV APP_BASE_URL=${APP_BASE_URL}
+ENV AUTH0_SCOPE=${AUTH0_SCOPE}
+
 # Set environment for build
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN npm run build:${NODE_ENV}
+
+# Build the application with secrets mounted securely
+RUN --mount=type=secret,id=AUTH0_SECRET \
+  --mount=type=secret,id=AUTH0_CLIENT_ID \
+  --mount=type=secret,id=AUTH0_CLIENT_SECRET \
+  --mount=type=secret,id=AUTH0_DOMAIN \
+  --mount=type=secret,id=AUTH0_AUDIENCE \
+  export AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_ID=$(cat /run/secrets/AUTH0_CLIENT_ID 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_DOMAIN=$(cat /run/secrets/AUTH0_DOMAIN 2>/dev/null || echo "") && \
+  export AUTH0_AUDIENCE=$(cat /run/secrets/AUTH0_AUDIENCE 2>/dev/null || echo "") && \
+  npm run build:no-turbopack
 
 # Production image, copy all the files and run next
 FROM base AS runner
 WORKDIR /app
 
-ARG NODE_ENV=development
-ENV NODE_ENV=$NODE_ENV
-ENV NEXT_TELEMETRY_DISABLED=1
+
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
