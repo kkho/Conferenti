@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api", "src\Conferenti.Api\Conferenti.Api.csproj", "{E98E1A56-0637-4A32-BF41-B9D2039C7B9F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+	ProjectSection(SolutionItems) = preProject
+		src\Conferenti.Api\Conferenti.Api.xml = src\Conferenti.Api\Conferenti.Api.xml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{324D9C46-9EC5-43F0-A31C-6AD9B6589CC2}"
 EndProject
@@ -25,7 +28,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain", "src\Co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
 		..\.github\dependabot.yaml = ..\.github\dependabot.yaml
+		Dockerfile = Dockerfile
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain.Tests.Unit", "test\Conferenti.Domain.Tests.Unit\Conferenti.Domain.Tests.Unit.csproj", "{61B67852-37F6-4BED-ACBA-957BE44FEDE3}"
