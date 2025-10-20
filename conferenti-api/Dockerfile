@@ -29,6 +29,20 @@ RUN dotnet restore \
     --output ./out \
     --configuration Release
 
+# Workaround
+# Unhandled exception. System.NotSupportedException: Globalization Invariant Mode is not supported.
+# https://github.com/dotnet/SqlClient/issues/220
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
+ENV COMPlus_EnableDiagnostics=0
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
+
+# Workaround
+# crit: Microsoft.AspNetCore.Server.Kestrel[0]
+#       Unable to start Kestrel.
+# System.Net.Sockets.SocketException (13): Permission denied
+# https://github.com/dotnet/aspnetcore/issues/4699
+ENV ASPNETCORE_URLS=http://*:8080
+
 # Add non-root user and group
 RUN addgroup application-group --gid 1001 \
     && adduser application-user --uid 1001 \
@@ -40,4 +54,7 @@ FROM base AS final
 WORKDIR /app
 COPY --from=build /src/out .
 RUN chown --recursive application-user .
+User application-user
+EXPOSE 8080
+EXPOSE 8081
 ENTRYPOINT ["dotnet", "Conferenti.Api.dll"]
