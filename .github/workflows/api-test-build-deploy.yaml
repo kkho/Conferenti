@@ -67,10 +67,8 @@ jobs:
     steps:
       - uses: kkho/workflows/integrationtest@main
         with:
-          checkout: false
+          checkout: true
           system_name: "conferenti"
-          working-directory: "."
-          solution-path: "./conferenti-api/Conferenti.Api.sln"
           test-projects: "./conferenti-api/test/**/*Integration.csproj"
           environment: "dev"
 
@@ -96,7 +94,12 @@ jobs:
     uses: kkho/workflows/.github/workflows/slack-message.yaml@main
     with:
       channel: "#build-dev"
-      message: "Test results: ${{ needs.integration-test-dev.result }}"
+      message: |
+        Test results: ${{ needs.integration-test-dev.result }}"
+        Status: ${{ needs.integration-test-dev.result == 'success' && '✅ Success' || '❌ Failed' }}
+        Repository: ${{ github.repository }}
+        Commit: ${{ github.sha }}
+        Url: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
       color: ${{ needs.integration-test-dev.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
