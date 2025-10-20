@@ -36,7 +36,7 @@ jobs:
         with:
           dotnet-version: "9.x"
           solution-path: "./conferenti-api/Conferenti.Api.sln"
-  unit-tests:
+  tests:
     needs: setup-dotnet
     name: Unit test
     runs-on: ubuntu-latest
@@ -53,18 +53,7 @@ jobs:
           dotnet-version: "9.x"
           working-directory: "."
           solution-path: "./conferenti-api/Conferenti.Api.sln"
-          test-projects: "./conferenti-api/test/**/*Tests*.csproj"
-
-  integration-test-dev:
-    needs: [setup-dotnet, unit-tests]
-    name: Integration test
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      checks: write
-      issues: read
-      pull-requests: write
-    steps:
+          test-projects: "./conferenti-api/test/**/*Tests*csproj"
       - uses: kkho/workflows/integrationtest@main
         with:
           checkout: true
@@ -75,7 +64,7 @@ jobs:
 
   build-dev:
     name: Build image for conferenti-api-dev
-    needs: [integration-test-dev]
+    needs: [tests]
     uses: kkho/workflows/.github/workflows/build-push-backend.yaml@main
     with:
       app_name: conferenti-api
@@ -89,18 +78,18 @@ jobs:
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-  notify-failed-integrationtest:
-    needs: [integration-test-dev]
+  notify-failed-tests:
+    needs: [tests]
     if: ${{ always() }}
     uses: kkho/workflows/.github/workflows/slack-message.yaml@main
     with:
       channel: "#build-dev"
       message: |
-        Test results: ${{ needs.integration-test-dev.result }} for Conferenti Api Integration Tests (Development)
-        Status: ${{ needs.integration-test-dev.result == 'success' && '✅ Success' || '❌ Failed' }}
+        Test results: ${{ needs.tests.result }} for Conferenti Api Tests (Development)
+        Status: ${{ needs.tests.result == 'success' && '✅ Success' || '❌ Failed' }}
         Repository: ${{ github.repository }}
         Commit: ${{ github.sha }}
         Url: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-      color: ${{ needs.integration-test-dev.result == 'success' && 'good' || 'danger' }}
+      color: ${{ needs.tests.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
