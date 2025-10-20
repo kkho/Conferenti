@@ -70,7 +70,7 @@ jobs:
           checkout: true
           solution-path: "./conferenti-api/Conferenti.Api.sln"
           system_name: "conferenti"
-          test-projects: "./conferenti-api/test/**/*Integration.csproj"
+          test-projects: "./conferenti-api/test/**/*Integration*.csproj"
           environment: "dev"
 
   build-dev:
@@ -96,7 +96,7 @@ jobs:
     with:
       channel: "#build-dev"
       message: |
-        Test results: ${{ needs.integration-test-dev.result }}
+        Test results: ${{ needs.integration-test-dev.result }} for Conferenti Api Integration Tests (Development)
         Status: ${{ needs.integration-test-dev.result == 'success' && '✅ Success' || '❌ Failed' }}
         Repository: ${{ github.repository }}
         Commit: ${{ github.sha }}
