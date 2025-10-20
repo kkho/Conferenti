@@ -23,7 +23,7 @@ public static class DependencyInjection
             await services.AddCosmosDbService(cosmosDbSettings, CancellationToken.None);
             services.AddScoped<ISpeakerRepository, SpeakerRepository>();
         }
-        catch (HttpRequestException ex)
+        catch (Exception ex)
         {
             if (cosmosDbSettings is { IntegrationTest: false })
             {
