@@ -96,7 +96,7 @@ jobs:
     with:
       channel: "#build-dev"
       message: |
-        Test results: ${{ needs.integration-test-dev.result }}"
+        Test results: ${{ needs.integration-test-dev.result }}
         Status: ${{ needs.integration-test-dev.result == 'success' && '✅ Success' || '❌ Failed' }}
         Repository: ${{ github.repository }}
         Commit: ${{ github.sha }}
