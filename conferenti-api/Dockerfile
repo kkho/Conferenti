@@ -38,6 +38,6 @@ RUN dotnet restore \
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build /src/out .
 RUN chown --recursive application-user .
 ENTRYPOINT ["dotnet", "Conferenti.Api.dll"]
