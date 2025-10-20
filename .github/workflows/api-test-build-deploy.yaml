@@ -68,6 +68,7 @@ jobs:
       - uses: kkho/workflows/integrationtest@main
         with:
           checkout: true
+          solution-path: "./conferenti-api/Conferenti.Api.sln"
           system_name: "conferenti"
           test-projects: "./conferenti-api/test/**/*Integration.csproj"
           environment: "dev"
