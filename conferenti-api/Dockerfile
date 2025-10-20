@@ -2,12 +2,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 LABEL maintainer="conferenti@converenti.com"
 
-# Add non-root user and group
-RUN addgroup application-group --gid 1001 \
-    && adduser application-user --uid 1001 \
-    --ingroup application-group \
-    --disabled-password
-
 USER application-user 
 WORKDIR /app
 EXPOSE 8080
@@ -34,6 +28,12 @@ RUN dotnet restore \
     ./src/Conferenti.Api/Conferenti.Api.csproj \
     --output ./out \
     --configuration Release
+
+# Add non-root user and group
+RUN addgroup application-group --gid 1001 \
+    && adduser application-user --uid 1001 \
+    --ingroup application-group \
+    --disabled-password
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
