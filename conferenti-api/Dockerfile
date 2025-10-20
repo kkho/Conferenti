@@ -27,11 +27,11 @@ RUN rm -rf /var/cache/apt/archives
 WORKDIR /src
 COPY . .
 RUN dotnet restore \
-    ./src/Conferenti.Api.csproj \
+    ./src/Conferenti.Api/Conferenti.Api.csproj \
     && dotnet build \
-    ./src/Conferenti.Api.csproj \
+    ./src/Conferenti.Api/Conferenti.Api.csproj \
     && dotnet publish \
-    ./src/Conferenti.Api.csproj \
+    ./src/Conferenti.Api/Conferenti.Api.csproj \
     --output ./out \
     --configuration Release
 
