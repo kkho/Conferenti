@@ -36,8 +36,20 @@ public class CosmosDbTestFixture : IAsyncLifetime
         // Wait for Cosmos DB emulator to be fully ready
         await CosmosDbContainer.WaitForCosmosDbReadiness();
 
+        // Get connection string with retry logic to ensure it's available
+        string connectionString = null;
+        await CosmosDbContainerExtensions.RetryAsync(async () =>
+        {
+            connectionString = CosmosDbContainer.GetConnectionString();
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Connection string not yet available");
+            }
+            await Task.CompletedTask;
+        }, maxRetries: 10, delayMs: 1000);
+
         var port = CosmosDbContainer.GetMappedPublicPort(8081);
-        CosmosClient = new CosmosClient(CosmosDbContainer.GetConnectionString(), new CosmosClientOptions
+        CosmosClient = new CosmosClient(connectionString, new CosmosClientOptions
         {
             HttpClientFactory = () =>
             {
@@ -48,14 +60,13 @@ public class CosmosDbTestFixture : IAsyncLifetime
 
                 return new HttpClient(httpMessageHandler);
             },
-            ConnectionMode = ConnectionMode.Gateway, // Gateway mode is more stable with emulator
+            ConnectionMode = ConnectionMode.Gateway,
             LimitToEndpoint = true,
-            RequestTimeout = TimeSpan.FromSeconds(60), // Increase timeout for emulator
+            RequestTimeout = TimeSpan.FromSeconds(60),
             UseSystemTextJsonSerializerWithOptions = new JsonSerializerOptions()
             {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Example: CamelCase property names
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Example: Ignore null properties
-                // Add other System.Text.Json.JsonSerializerOptions as needed
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             }
         });
 
@@ -63,7 +74,6 @@ public class CosmosDbTestFixture : IAsyncLifetime
         await CosmosDbContainerExtensions.RetryAsync(async () =>
         {
             Database = await CosmosClient.CreateDatabaseIfNotExistsAsync("testdb");
-            // Use /id (lowercase) to match the JSON property name
             Container = await Database.CreateContainerIfNotExistsAsync("testcontainer", "/id");
         }, maxRetries: 5, delayMs: 2000);
     }

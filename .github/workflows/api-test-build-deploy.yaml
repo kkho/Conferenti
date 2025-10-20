@@ -5,15 +5,15 @@ on:
     types: [ready_for_review, opened, reopened, synchronize]
     branches: [main]
     paths:
-    - "conferenti-api/**"
-    - ".github/workflows/api-test-build-deploy.yaml"
+      - "conferenti-api/**"
+      - ".github/workflows/api-test-build-deploy.yaml"
   push:
     branches: [main]
     paths:
-    - "conferenti-api/**"
-    - ".github/workflows/api-test-build-deploy.yaml"
+      - "conferenti-api/**"
+      - ".github/workflows/api-test-build-deploy.yaml"
   workflow_dispatch:
-  
+
 permissions:
   contents: read
   packages: write
@@ -34,8 +34,8 @@ jobs:
         id: setup-dotnet
         uses: kkho/workflows/setup-dotnet@main
         with:
-          dotnet-version: '9.x'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
+          dotnet-version: "9.x"
+          solution-path: "./conferenti-api/Conferenti.Api.sln"
   unit-tests:
     needs: setup-dotnet
     name: Unit test
@@ -50,10 +50,10 @@ jobs:
         with:
           checkout: true
           collect-coverage: true
-          dotnet-version: '9.x'
-          working-directory: '.'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
-          test-projects: './conferenti-api/test/**/*Tests*.csproj'
+          dotnet-version: "9.x"
+          working-directory: "."
+          solution-path: "./conferenti-api/Conferenti.Api.sln"
+          test-projects: "./conferenti-api/test/**/*Tests*.csproj"
 
   integration-test-dev:
     needs: [setup-dotnet, unit-tests]
@@ -67,13 +67,12 @@ jobs:
     steps:
       - uses: kkho/workflows/integrationtest@main
         with:
-          checkout: true
-          system_name: 'conferenti'
-          working-directory: '.'
-          solution-path: './conferenti-api/Conferenti.Api.sln'
-          test-projects: './conferenti-api/test/**/*Integration.csproj'
-          environment: 'dev'
-
+          checkout: false
+          system_name: "conferenti"
+          working-directory: "."
+          solution-path: "./conferenti-api/Conferenti.Api.sln"
+          test-projects: "./conferenti-api/test/**/*Integration.csproj"
+          environment: "dev"
 
   build-dev:
     name: Build image for conferenti-api-dev
@@ -92,12 +91,12 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   notify-failed-integrationtest:
-    needs: [integration-test-dev] 
+    needs: [integration-test-dev]
     if: ${{ always() }}
     uses: kkho/workflows/.github/workflows/slack-message.yaml@main
     with:
       channel: "#build-dev"
-      message: "Test results: ${{ needs.test.result }}"
-      color: ${{ needs.test.result == 'success' && 'good' || 'danger' }}
+      message: "Test results: ${{ needs.integration-test-dev.result }}"
+      color: ${{ needs.integration-test-dev.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

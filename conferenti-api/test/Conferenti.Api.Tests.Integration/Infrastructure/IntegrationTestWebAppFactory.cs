@@ -39,7 +39,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
                 // Bypass Key Vault entirely for integration tests
                 ["KeyVaultSettings:BypassKeyVault"] = "true",
                 ["KeyVaultSettings:UseEmulator"] = "false",
-                ["KeyVaultSettings:VaultEndPoint"] = "",
+                ["KeyVaultSettings:VaultEndPoint"] = "https://localhost:8081",
                 // Use local telemetry
                 ["TelemetrySettings:UseLocal"] = "true"
             }!);
