@@ -73,7 +73,7 @@ function SpeakersContent() {
         <Content
           title="Speakers"
           description="Meet our speakers for this years conference."
-          imageUrl="https://storage.googleapis.com/cloudnext-assets/event-assets/25/speakers/hero/background.2025-01-21.webp"
+          imageUrl="Peer_Hexagon_Lys.svg"
         />
         <FilterBarContent
           placeHolder={'Filter by speakers...'}

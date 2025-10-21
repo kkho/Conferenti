@@ -21,8 +21,8 @@ export const Content = (props: Props) => {
           src={imageUrl}
           alt={title}
           className="mt-6 rounded-lg"
-          width={600}
-          height={400}
+          width={200}
+          height={200}
         />
       </div>
     </>
