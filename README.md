@@ -1,4 +1,24 @@
+# Conferenti – The intelligent platform for modern conferences
+
+Conferenti is a modern open-source platform developed to revolutionize the way conferences and events are organized and executed.
+The goal of the project is to provide a flexible, scalable, and user-friendly solution that can be used by all stakeholders – from small seminars to large international conferences – without the limitations that characterize many of today’s solutions.
+
+The platform is built on modern technology: a Next.js application with React v18+ (using React Hooks, Zustand and React Query for optimized API calls) for the frontend, a robust .NET 9 API backend, and a reliable infrastructure running in Kubernetes. The entire development process is automated through an agile CI/CD framework, ensuring frequent, stable, and high-quality deliveries.
+
+The work is organized according to Kanban methodology, with focusing on their respective areas of responsibility within infrastructure, backend, mobile, and frontend. This way of working provides both high development speed and great flexibility, while also facilitating continuous improvements.
+
+Through the open-source principle, Conferenti invites collaboration and further development from the community. In this way, a solution is created that not only meets today’s needs but is also continuously shaped to address the challenges and opportunities of tomorrow.
+
+<img width="1643" height="1020" alt="image" src="https://github.com/user-attachments/assets/febcbf70-5843-4dfb-a731-0e9cc1c713c3" />
+
+I would like to thank my company Peer Consulting for sponsoring this project, it would have never been possible without them!
+
+
 ## Components
+---
+[![Conferenti Api - Test and Deploy Pipeline](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml)
+
+[![Conferenti Web - Test and Deploy Pipeline](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml)
 
 ### Conferenti API
 
