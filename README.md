@@ -1,13 +1,16 @@
 # Conferenti – The intelligent platform for modern conferences
 
+<p align="center">
+      <img src="public/Peer_Hexagon_Lys.svg" alt="peer consulting logo" width="50" height="50" style="text-align:center;"/>
+   </p>
+
+I would like to thank my company [Peer Consulting](https://peerconsulting.no/) for sponsoring this project, it would have never been possible without them!
 
 | Api 1 |  Frontend |
 |---|---|
 | [![Api](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml) | [![Frontend](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml) |
 
-   <p align="center">
-      <img src="public/Peer_Hexagon_Lys.svg" alt="peer consulting logo" width="100" height="100" style="text-align:center;"/>
-   </p>
+
 
 <p style="margin-bottom: '32px'">
 Conferenti is a modern open-source platform developed to revolutionize the way conferences and events are organized and executed.
@@ -20,7 +23,6 @@ The work is organized according to Kanban methodology, with focusing on their re
 Through the open-source principle, Conferenti invites collaboration and further development from the community. In this way, a solution is created that not only meets today’s needs but is also continuously shaped to address the challenges and opportunities of tomorrow.
 </p>
 
-I would like to thank my company [Peer Consulting](https://peerconsulting.no/) for sponsoring this project, it would have never been possible without them!
 
 <img width="1643" height="1020" alt="image" src="https://github.com/user-attachments/assets/febcbf70-5843-4dfb-a731-0e9cc1c713c3" />
 
