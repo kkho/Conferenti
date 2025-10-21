@@ -1,5 +1,15 @@
 # Conferenti – The intelligent platform for modern conferences
 
+
+| Api 1 |  Frontend |
+|---|---|
+| [![Api](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml) | [![Frontend](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml) |
+
+   <p align="center">
+      <img src="public/Peer_Hexagon_Lys.svg" alt="peer consulting logo" width="100" height="100" style="text-align:center;"/>
+   </p>
+
+<p style="margin-bottom: '32px'">
 Conferenti is a modern open-source platform developed to revolutionize the way conferences and events are organized and executed.
 The goal of the project is to provide a flexible, scalable, and user-friendly solution that can be used by all stakeholders – from small seminars to large international conferences – without the limitations that characterize many of today’s solutions.
 
@@ -8,17 +18,13 @@ The platform is built on modern technology: a Next.js application with React v18
 The work is organized according to Kanban methodology, with focusing on their respective areas of responsibility within infrastructure, backend, mobile, and frontend. This way of working provides both high development speed and great flexibility, while also facilitating continuous improvements.
 
 Through the open-source principle, Conferenti invites collaboration and further development from the community. In this way, a solution is created that not only meets today’s needs but is also continuously shaped to address the challenges and opportunities of tomorrow.
+</p>
+
+I would like to thank my company [Peer Consulting](https://peerconsulting.no/) for sponsoring this project, it would have never been possible without them!
 
 <img width="1643" height="1020" alt="image" src="https://github.com/user-attachments/assets/febcbf70-5843-4dfb-a731-0e9cc1c713c3" />
 
-I would like to thank my company Peer Consulting for sponsoring this project, it would have never been possible without them!
-
-
 ## Components
----
-[![Conferenti Api - Test and Deploy Pipeline](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml)
-
-[![Conferenti Web - Test and Deploy Pipeline](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml)
 
 ### Conferenti API
 
