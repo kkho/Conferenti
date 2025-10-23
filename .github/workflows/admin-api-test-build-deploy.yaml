@@ -35,14 +35,14 @@ jobs:
         with:
           go-version-file: "./conferenti-admin-api/go.mod"
 
-      - name: Install dependencies
-        run: "make deps"
+      - name: Download dependencies
+        run: "go mod download"
 
-      - name: Install test dependencies
-        run: "make test-deps"
+      - name: Tidy dependencies
+        run: "go mod tidy"
 
-      - name: Run tests
-        run: "make test-unit"
+      - name: Run test target
+        run: make test
   build-dev:
     name: Build image for conferenti-admin-api-dev
     needs: [test]
