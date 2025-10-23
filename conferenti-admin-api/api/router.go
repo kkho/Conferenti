@@ -57,6 +57,20 @@ func NewRouter(deps *Dependencies, cfg *config.Config) *mux.Router {
 	api.HandleFunc("/health", deps.HealthHandler.Check).Methods("GET")
 
 	// Session routes
+	sessionRoutes := api.PathPrefix("/sessions").Subrouter()
+	sessionRoutes.Use(authMiddleware.CheckJWT) // All session routes need auth
+	sessionRoutes.Handle("",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SessionHandler.CreateSession))).Methods("POST")
+	sessionRoutes.Handle("",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SessionHandler.GetSessions))).Methods("GET")
+	sessionRoutes.Handle("/{id}",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SessionHandler.GetSessionById))).Methods("GET")
+	sessionRoutes.Handle("/{id}",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SessionHandler.DeleteSession))).Methods("DELETE")
 
 	// Speaker routes
 	speakerRoutes := api.PathPrefix("/speakers").Subrouter()
@@ -67,6 +81,12 @@ func NewRouter(deps *Dependencies, cfg *config.Config) *mux.Router {
 	speakerRoutes.Handle("",
 		middleware.RequireScope("admin:execute")(
 			http.HandlerFunc(deps.SpeakerHandler.GetSpeakers))).Methods("GET")
+	speakerRoutes.Handle("/{id}",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SpeakerHandler.GetSpeakerById))).Methods("GET")
+	speakerRoutes.Handle("/{id}",
+		middleware.RequireScope("admin:execute")(
+			http.HandlerFunc(deps.SpeakerHandler.DeleteSpeaker))).Methods("DELETE")
 
 	return router
 }

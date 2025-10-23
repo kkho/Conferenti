@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	"github.com/kkho/conferenti/conferenti-admin-api/helpers"
 	"github.com/kkho/conferenti/conferenti-admin-api/models"
 	"github.com/kkho/conferenti/conferenti-admin-api/models/dto"
@@ -33,6 +34,39 @@ func (h *SpeakerHandler) GetSpeakers(w http.ResponseWriter, r *http.Request) {
 		Data:    speakers,
 	}
 
+	helpers.RespondJSON(w, http.StatusOK, response)
+}
+
+// GetSpeakerById handles GET /api/v1/speakers/{id}
+func (h *SpeakerHandler) GetSpeakerById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	speakerId := vars["id"]
+	
+	if speakerId == "" {
+		response := dto.ErrorResponse{
+			Success: false,
+			Error:   "Speaker ID is required",
+			Code:    http.StatusBadRequest,
+		}
+		helpers.RespondJSON(w, http.StatusBadRequest, response)
+		return
+	}
+
+	speaker, err := h.service.GetById(r.Context(), speakerId)
+	if err != nil {
+		response := dto.ErrorResponse{
+			Success: false,
+			Error:   err.Error(),
+			Code:    http.StatusNotFound,
+		}
+		helpers.RespondJSON(w, http.StatusNotFound, response)
+		return
+	}
+
+	response := dto.ApiResponse{
+		Success: true,
+		Data:    speaker,
+	}
 	helpers.RespondJSON(w, http.StatusOK, response)
 }
 
@@ -71,4 +105,38 @@ func (h *SpeakerHandler) CreateSpeaker(w http.ResponseWriter, r *http.Request) {
 		Data:    created,
 	}
 	helpers.RespondJSON(w, http.StatusCreated, response)
+}
+
+// DeleteSpeaker handles DELETE /api/v1/speakers/{id}
+func (h *SpeakerHandler) DeleteSpeaker(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	speakerId := vars["id"]
+
+	if speakerId == "" {
+		response := dto.ErrorResponse{
+			Success: false,
+			Error:   "Speaker ID is required",
+			Code:    http.StatusBadRequest,
+		}
+		helpers.RespondJSON(w, http.StatusBadRequest, response)
+		return
+	}
+
+	deletedId, err := h.service.Delete(r.Context(), speakerId)
+	if err != nil {
+		response := dto.ErrorResponse{
+			Success: false,
+			Error:   err.Error(),
+			Code:    http.StatusNotFound,
+		}
+		helpers.RespondJSON(w, http.StatusNotFound, response)
+		return
+	}
+
+	response := dto.ApiResponse{
+		Success: true,
+		Message: "Speaker deleted successfully",
+		Data:    map[string]string{"deletedId": deletedId},
+	}
+	helpers.RespondJSON(w, http.StatusOK, response)
 }

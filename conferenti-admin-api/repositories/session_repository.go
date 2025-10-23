@@ -67,6 +67,22 @@ func (repository *SessionRepository) GetAll(ctx context.Context) ([]*models.Sess
 	return sessions, nil
 }
 
+func (repository *SessionRepository) GetById(ctx context.Context, id string) (*models.Session, error) {
+	partitionKey := azcosmos.NewPartitionKeyString(id)
+
+	itemResponse, err := repository.container.ReadItem(ctx, partitionKey, id, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get session by id: %w", err)
+	}
+
+	var session models.Session
+	if err := json.Unmarshal(itemResponse.Value, &session); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal session: %w", err)
+	}
+
+	return &session, nil
+}
+
 func (repository *SessionRepository) Update(ctx context.Context, session *models.Session) (*models.Session, error) {
 	sessionJSON, err := json.Marshal(session)
 	if err != nil {

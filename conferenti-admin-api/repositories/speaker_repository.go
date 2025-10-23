@@ -68,6 +68,22 @@ func (repository *SpeakerRepository) GetAll(ctx context.Context) ([]*models.Spea
 	return speakers, nil
 }
 
+func (repository *SpeakerRepository) GetById(ctx context.Context, id string) (*models.Speaker, error) {
+	partitionKey := azcosmos.NewPartitionKeyString(id)
+
+	itemResponse, err := repository.container.ReadItem(ctx, partitionKey, id, nil)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get speaker by id: %w", err)
+	}
+
+	var speaker models.Speaker
+	if err := json.Unmarshal(itemResponse.Value, &speaker); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal speaker: %w", err)
+	}
+
+	return &speaker, nil
+}
+
 func (repository *SpeakerRepository) Update(ctx context.Context, speaker *models.Speaker) (*models.Speaker, error) {
 	speakerJSON, err := json.Marshal(speaker)
 	if err != nil {

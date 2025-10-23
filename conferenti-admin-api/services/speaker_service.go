@@ -42,6 +42,10 @@ func (speakerService *SpeakerService) GetAll(ctx context.Context) ([]*models.Spe
 	return speakerService.repo.GetAll(ctx)
 }
 
+func (speakerService *SpeakerService) GetById(ctx context.Context, id string) (*models.Speaker, error) {
+	return speakerService.repo.GetById(ctx, id)
+}
+
 func (speakerService *SpeakerService) Update(ctx context.Context, speaker *models.Speaker) (*models.Speaker, error) {
 	return speakerService.repo.Update(ctx, speaker)
 }

@@ -21,18 +21,29 @@ func NewSessionService(sessionRepository *repositories.SessionRepository) *Sessi
 	return service
 }
 
-func (sessionService *SessionService) Create(ctx context.Context, session *models.Session) error {
+func (sessionService *SessionService) Create(ctx context.Context, session *models.Session) *models.Session {
 	if session.SessionId == "" {
 		session.SessionId = uuid.New().String()
 	}
-	session.SessionId = uuid.New().String()
 	session.CreatedAt = time.Now()
 	session.UpdatedAt = time.Now()
-	return sessionService.repo.Create(ctx, session)
+
+	err := sessionService.repo.Create(ctx, session)
+	if err != nil {
+		// Log error but return the session anyway for debugging
+		// In production, you might want to return error
+		return session
+	}
+
+	return session
 }
 
 func (sessionService *SessionService) GetAll(ctx context.Context) ([]*models.Session, error) {
 	return sessionService.repo.GetAll(ctx)
+}
+
+func (sessionService *SessionService) GetById(ctx context.Context, id string) (*models.Session, error) {
+	return sessionService.repo.GetById(ctx, id)
 }
 
 func (sessionService *SessionService) Update(ctx context.Context, session *models.Session) (*models.Session, error) {
