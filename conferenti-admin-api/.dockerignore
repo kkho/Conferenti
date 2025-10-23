@@ -1,0 +1,8 @@
+*.md
+.git
+.gitignore
+.vscode
+.idea
+*.log
+tmp/
+vendor/

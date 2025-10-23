@@ -74,4 +74,10 @@ public class Session
     /// </summary>
     [JsonPropertyName("language")]
     public string Language { get; set; }
+
+    /// <summary>
+    /// The IDs of the speakers presenting the session
+    /// </summary>
+    [JsonPropertyName("speakerIds")]
+    public string[] SpeakerIds { get; set; }
 }
