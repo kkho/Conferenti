@@ -16,8 +16,6 @@ LABEL maintainer="conferenti@conferenti.io"
 
 # Build arguments for non-secret environment variables
 ARG LOCAL=false
-ARG AUTH0_DOMAIN
-ARG AUTH0_AUDIENCE
 ARG AUTH0_SCOPE
 ARG COSMOSDB_ENDPOINT
 ARG COSMOSDB_DATABASE
@@ -32,14 +30,16 @@ WORKDIR /app
 COPY . .
 
 # Build with secrets mounted (not stored in image layers)
-RUN --mount=type=secret,id=auth0_secret \
-  --mount=type=secret,id=auth0_client_id \
-  --mount=type=secret,id=auth0_client_secret \
-  --mount=type=secret,id=auth0_audience \
-  export AUTH0_SECRET=$(cat /run/secrets/auth0_secret) && \
-  export AUTH0_CLIENT_ID=$(cat /run/secrets/auth0_client_id) && \
-  export AUTH0_CLIENT_SECRET=$(cat /run/secrets/auth0_client_secret) && \
-  export AUTH0_AUDIENCE=$(cat /run/secrets/auth0_audience) && \
+RUN --mount=type=secret,id=AUTH0_SECRET \
+  --mount=type=secret,id=AUTH0_CLIENT_ID \
+  --mount=type=secret,id=AUTH0_CLIENT_SECRET \
+  --mount=type=secret,id=AUTH0_DOMAIN \
+  --mount=type=secret,id=AUTH0_AUDIENCE \
+  export AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_ID=$(cat /run/secrets/AUTH0_CLIENT_ID 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_DOMAIN=$(cat /run/secrets/AUTH0_DOMAIN 2>/dev/null || echo "") && \
+  export AUTH0_AUDIENCE=$(cat /run/secrets/AUTH0_AUDIENCE 2>/dev/null || echo "") && \
   make all
 
 FROM base AS runtime
@@ -56,8 +56,6 @@ ARG COSMOSDB_SPEAKER_CONTAINER
 ARG COSMOSDB_SESSION_CONTAINER
 
 ENV LOCAL=${LOCAL}
-ENV AUTH0_DOMAIN=${AUTH0_DOMAIN}
-ENV AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
 ENV AUTH0_SCOPE=${AUTH0_SCOPE}
 ENV COSMOSDB_ENDPOINT=${COSMOSDB_ENDPOINT}
 ENV COSMOSDB_DATABASE=${COSMOSDB_DATABASE}
@@ -69,6 +67,7 @@ ENV AUTH0_SECRET_FILE="/run/secrets/auth0_secret"
 ENV AUTH0_CLIENT_ID_FILE="/run/secrets/auth0_client_id"
 ENV AUTH0_CLIENT_SECRET_FILE="/run/secrets/auth0_client_secret"
 ENV AUTH0_AUDIENCE_FILE="/run/secrets/auth0_audience"
+ENV AUTH0_DOMAIN_FILE="/run/secrets/auth0_domain"
 
 RUN apk add --no-cache ca-certificates apache2-utils
 
