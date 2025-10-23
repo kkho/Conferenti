@@ -1,0 +1,80 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Conferenti Admin API",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${workspaceFolder}/conferenti-admin-api/cmd/admin-api",
+            "cwd": "${workspaceFolder}/conferenti-admin-api",
+            "envFile": "${workspaceFolder}/conferenti-admin-api/.env.local",
+            "env": {
+                "PORT": "8084",
+                "ENVIRONMENT": "development"
+            },
+            "showLog": true,
+            "trace": "verbose",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Launch Conferenti Web (Next.js)",
+            "type": "node",
+            "request": "launch",
+            "cwd": "${workspaceFolder}/conferenti-web",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": ["run", "dev"],
+            "envFile": "${workspaceFolder}/conferenti-web/.env.local",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen"
+        },
+        {
+            "name": "Debug Go Current File",
+            "type": "go",
+            "request": "launch",
+            "mode": "debug",
+            "program": "${file}",
+            "cwd": "${fileDirname}"
+        },
+        {
+            "name": "Debug Go Tests",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${workspaceFolder}/conferenti-admin-api",
+            "cwd": "${workspaceFolder}/conferenti-admin-api",
+            "env": {},
+            "args": [
+                "-test.v"
+            ]
+        },
+        {
+            "name": "Debug Go Tests (Current Package)",
+            "type": "go",
+            "request": "launch",
+            "mode": "test",
+            "program": "${fileDirname}",
+            "args": [
+                "-test.v"
+            ]
+        },
+        {
+            "name": "Attach to Go Remote Debugger",
+            "type": "go",
+            "request": "attach",
+            "mode": "remote",
+            "remotePath": "/app",
+            "port": 40000,
+            "host": "localhost"
+        }
+    ],
+    "compounds": [
+        {
+            "name": "Launch Full Stack",
+            "configurations": [
+                "Launch Conferenti Admin API"
+            ],
+            "stopAll": true
+        }
+    ]
+}

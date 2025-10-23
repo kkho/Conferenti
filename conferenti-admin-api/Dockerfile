@@ -1,0 +1,76 @@
+# syntax=docker/dockerfile:1
+FROM alpine:latest AS base
+LABEL maintainer="conferenti@conferenti.io"
+
+RUN apk update && \
+  apk upgrade && \
+  apk cache clean
+
+RUN addgroup application-group --gid 1001 \
+  && adduser application-user --uid 1001 \
+  --ingroup application-group \
+  --disabled-password
+
+FROM golang:1.25-alpine AS build
+LABEL maintainer="conferenti@conferenti.io"
+
+# Build arguments for non-secret environment variables
+ARG LOCAL=false
+ARG AUTH0_SCOPE
+ARG COSMOSDB_ENDPOINT
+ARG COSMOSDB_DATABASE
+ARG COSMOSDB_SPEAKER_CONTAINER
+ARG COSMOSDB_SESSION_CONTAINER
+
+ENV GO111MODULE=on CGO_ENABLED=0 GOOS=linux GOARCH=amd64
+
+RUN apk add --no-cache make
+
+WORKDIR /app
+COPY . .
+
+# Build with secrets mounted (not stored in image layers)
+RUN --mount=type=secret,id=AUTH0_SECRET \
+  --mount=type=secret,id=AUTH0_CLIENT_ID \
+  --mount=type=secret,id=AUTH0_CLIENT_SECRET \
+  --mount=type=secret,id=AUTH0_DOMAIN \
+  --mount=type=secret,id=AUTH0_AUDIENCE \
+  export AUTH0_SECRET=$(cat /run/secrets/AUTH0_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_ID=$(cat /run/secrets/AUTH0_CLIENT_ID 2>/dev/null || echo "") && \
+  export AUTH0_CLIENT_SECRET=$(cat /run/secrets/AUTH0_CLIENT_SECRET 2>/dev/null || echo "") && \
+  export AUTH0_DOMAIN=$(cat /run/secrets/AUTH0_DOMAIN 2>/dev/null || echo "") && \
+  export AUTH0_AUDIENCE=$(cat /run/secrets/AUTH0_AUDIENCE 2>/dev/null || echo "") && \
+  make all
+
+FROM base AS runtime
+LABEL maintainer="conferenti@conferenti.io"
+
+# Set environment variables from build args (non-secrets only)
+ARG LOCAL=false
+ARG AUTH0_DOMAIN
+ARG AUTH0_AUDIENCE
+ARG AUTH0_SCOPE
+ARG COSMOSDB_ENDPOINT
+ARG COSMOSDB_DATABASE
+ARG COSMOSDB_SPEAKER_CONTAINER
+ARG COSMOSDB_SESSION_CONTAINER
+
+ENV LOCAL=${LOCAL}
+ENV AUTH0_SCOPE=${AUTH0_SCOPE}
+ENV COSMOSDB_ENDPOINT=${COSMOSDB_ENDPOINT}
+ENV COSMOSDB_DATABASE=${COSMOSDB_DATABASE}
+ENV COSMOSDB_SPEAKER_CONTAINER=${COSMOSDB_SPEAKER_CONTAINER}
+ENV COSMOSDB_SESSION_CONTAINER=${COSMOSDB_SESSION_CONTAINER}
+
+RUN apk add --no-cache ca-certificates apache2-utils
+
+WORKDIR /app
+COPY --from=build /app/bin .
+
+# Create secrets directory for runtime secrets
+RUN mkdir -p /run/secrets && chown application-user:application-group /run/secrets
+
+RUN chown --recursive application-user .
+USER application-user
+EXPOSE 8080
+ENTRYPOINT ["/app/main"]

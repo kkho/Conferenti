@@ -1,0 +1,26 @@
+---
+name: conferenti
+
+services:
+  build:
+    container_name: admin-api
+    image: conferenti/admin-api:latest
+    build:
+      context: .
+    env_file:
+      - .env.common
+      - .env.local
+
+  admin-api:
+    container_name: admin-api-test
+    image: conferenti/admin-api:latest
+    depends_on:
+      - build
+    env_file:
+      - .env.common
+      - .env.local
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped

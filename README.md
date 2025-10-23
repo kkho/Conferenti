@@ -6,11 +6,9 @@
 
 I would like to thank my company [Peer Consulting](https://peerconsulting.no/) for sponsoring this project, it would have never been possible without them!
 
-| Api 1 |  Frontend |
-|---|---|
-| [![Api](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml) | [![Frontend](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml) |
-
-
+| Api                                                                                                                                                                                              | Frontend                                                                                                                                                                                                        | Admin Api                                                                                                                                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [![Api](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/api-test-build-deploy.yaml) | [![Frontend](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/frontend-test-build-deploy.yaml) | [![Admin Api](https://github.com/kkho/Conferenti/actions/workflows/admin-api-test-build-deploy.yaml/badge.svg?branch=main)](https://github.com/kkho/Conferenti/actions/workflows/admin-api-test-build-deploy.yaml) |
 
 <p style="margin-bottom: '32px'">
 Conferenti is a modern open-source platform developed to revolutionize the way conferences and events are organized and executed.
@@ -21,8 +19,8 @@ The platform is built on modern technology: a Next.js application with React v18
 The work is organized according to Kanban methodology, with focusing on their respective areas of responsibility within infrastructure, backend, mobile, and frontend. This way of working provides both high development speed and great flexibility, while also facilitating continuous improvements.
 
 Through the open-source principle, Conferenti invites collaboration and further development from the community. In this way, a solution is created that not only meets today’s needs but is also continuously shaped to address the challenges and opportunities of tomorrow.
-</p>
 
+</p>
 
 <img width="1643" height="1020" alt="image" src="https://github.com/user-attachments/assets/febcbf70-5843-4dfb-a731-0e9cc1c713c3" />
 
@@ -40,6 +38,12 @@ Through the open-source principle, Conferenti invites collaboration and further 
 - NPM-based workflow
 - [SPA README & Source](https://github.com/kkho/Conferenti/tree/main/conferenti-web)
 
+### Conferenti Admin API
+
+- Built with GO
+- Features: API versioning, JWT authentication, CosmosDb
+- [API README & Source](https://github.com/kkho/Conferenti/tree/main/conferenti-admin-api)
+
 ### Mobile Apps
 
 - **Android** and **iOS** apps (under development)
@@ -49,6 +53,7 @@ Through the open-source principle, Conferenti invites collaboration and further 
 ## Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
+- [Go] [https://go.dev/dl/]
 - [Node.js & npm](https://nodejs.org/) (for frontend)
 - (Optional) [Azure Key Vault Emulator](https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/keyvault/Azure.Security.KeyVault.Emulator)
 - (Optional) [Azure Cosmos DB Emulator](https://learn.microsoft.com/azure/cosmos-db/local-emulator) (for local Cosmos DB development)

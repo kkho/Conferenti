@@ -21,6 +21,12 @@ public class Speaker
     public string Name { get; set; }
 
     /// <summary>
+    /// Email of the speaker
+    /// </summary>
+    [JsonPropertyName("email")]
+    public string Email { get; set; }
+
+    /// <summary>
     /// Position of the speaker in the company
     /// </summary>
     [JsonPropertyName("position")]
