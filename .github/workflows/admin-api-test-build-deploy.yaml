@@ -35,7 +35,14 @@ jobs:
         with:
           go-version-file: "./conferenti-admin-api/go.mod"
 
-      - run: "make run test"
+      - name: Install dependencies
+        run: "make deps"
+
+      - name: Install test dependencies
+        run: "make test-deps"
+
+      - name: Run tests
+        run: "make test-unit"
   build-dev:
     name: Build image for conferenti-admin-api-dev
     needs: [test]
@@ -72,11 +79,11 @@ jobs:
     with:
       channel: "#build-dev"
       message: |
-        Test results: ${{ needs.tests.result }} for Conferenti Api Tests (Development)
-        Status: ${{ needs.tests.result == 'success' && '✅ Success' || '❌ Failed' }}
+        Test results: ${{ needs.test.result }} for Conferenti Api Tests (Development)
+        Status: ${{ needs.test.result == 'success' && '✅ Success' || '❌ Failed' }}
         Repository: ${{ github.repository }}
         Commit: ${{ github.sha }}
         Url: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-      color: ${{ needs.tests.result == 'success' && 'good' || 'danger' }}
+      color: ${{ needs.test.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
