@@ -62,13 +62,6 @@ ENV COSMOSDB_DATABASE=${COSMOSDB_DATABASE}
 ENV COSMOSDB_SPEAKER_CONTAINER=${COSMOSDB_SPEAKER_CONTAINER}
 ENV COSMOSDB_SESSION_CONTAINER=${COSMOSDB_SESSION_CONTAINER}
 
-# Secrets will be provided at runtime via secret files or env vars
-ENV AUTH0_SECRET_FILE="/run/secrets/auth0_secret"
-ENV AUTH0_CLIENT_ID_FILE="/run/secrets/auth0_client_id"
-ENV AUTH0_CLIENT_SECRET_FILE="/run/secrets/auth0_client_secret"
-ENV AUTH0_AUDIENCE_FILE="/run/secrets/auth0_audience"
-ENV AUTH0_DOMAIN_FILE="/run/secrets/auth0_domain"
-
 RUN apk add --no-cache ca-certificates apache2-utils
 
 WORKDIR /app
