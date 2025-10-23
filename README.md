@@ -53,7 +53,7 @@ Through the open-source principle, Conferenti invites collaboration and further 
 ## Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [Go] [https://go.dev/dl/]
+- [Go](https://go.dev/dl/)
 - [Node.js & npm](https://nodejs.org/) (for frontend)
 - (Optional) [Azure Key Vault Emulator](https://github.com/Azure/azure-sdk-for-net/tree/main/sdk/keyvault/Azure.Security.KeyVault.Emulator)
 - (Optional) [Azure Cosmos DB Emulator](https://learn.microsoft.com/azure/cosmos-db/local-emulator) (for local Cosmos DB development)
