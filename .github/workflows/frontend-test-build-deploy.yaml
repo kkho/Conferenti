@@ -67,7 +67,7 @@ jobs:
           ENVIRONMENT: test
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         if: always()
         with:
           name: test-results-${{ matrix.node-version }}
@@ -118,7 +118,7 @@ jobs:
       - name: Run Playwright tests
         run: npx playwright test
         working-directory: ./conferenti-web
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         if: ${{ !cancelled() }}
         with:
           name: playwright-report
