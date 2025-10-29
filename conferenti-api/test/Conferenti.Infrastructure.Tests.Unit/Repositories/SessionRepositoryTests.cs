@@ -12,7 +12,7 @@ public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
 
     public SessionRepositoryTests(CosmosDbTestFixture fixture)
     {
-        _sessionRepository = new SessionRepository(fixture.Container);
+        _sessionRepository = new SessionRepository(fixture.SessionContainer);
     }
 
     [Fact]
