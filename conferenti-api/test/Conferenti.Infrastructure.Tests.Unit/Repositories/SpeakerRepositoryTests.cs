@@ -1,18 +1,21 @@
 ﻿using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Repositories;
+using Microsoft.Azure.Cosmos;
 using Shouldly;
 using Xunit;
 
 namespace Conferenti.Infrastructure.Tests.Unit.Repositories;
 
 [CollectionDefinition("CosmosDb Collections")]
-public class SpeakerRepositoryTests : IClassFixture<CosmosDbTestFixture>
+public class SpeakerRepositoryTests : IClassFixture<CosmosDbTestFixture>, IAsyncDisposable
 {
     private readonly SpeakerRepository _speakerRepository;
+    private readonly CosmosDbTestFixture _fixture;
 
     public SpeakerRepositoryTests(CosmosDbTestFixture fixture)
     {
         _speakerRepository = new SpeakerRepository(fixture.Container);
+        _fixture = fixture;
     }
 
     [Fact]
@@ -78,5 +81,22 @@ public class SpeakerRepositoryTests : IClassFixture<CosmosDbTestFixture>
         // Assert
         Assert.NotNull(speakers);
         speakers.First().Id.ShouldBe(speaker.Id);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        var query = new QueryDefinition("SELECT c.id, c.id as partitionKey FROM c");
+        using var iterator = _fixture.Container.GetItemQueryIterator<Speaker>(query);
+
+        while (iterator.HasMoreResults)
+        {
+            var response = await iterator.ReadNextAsync();
+            foreach (var item in response)
+            {
+                await _fixture.Container.DeleteItemAsync<Speaker>(
+                    item.Id,
+                    new Microsoft.Azure.Cosmos.PartitionKey(item.Id));
+            }
+        }
     }
 }

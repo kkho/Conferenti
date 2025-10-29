@@ -1,5 +1,6 @@
 ﻿using Conferenti.Domain.Sessions;
 using Conferenti.Infrastructure.Repositories;
+using Microsoft.Azure.Cosmos;
 using Shouldly;
 using Xunit;
 
@@ -9,10 +10,12 @@ namespace Conferenti.Infrastructure.Tests.Unit.Repositories;
 public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
 {
     private readonly SessionRepository _sessionRepository;
+    private readonly CosmosDbTestFixture _fixture;
 
     public SessionRepositoryTests(CosmosDbTestFixture fixture)
     {
         _sessionRepository = new SessionRepository(fixture.SessionContainer);
+        _fixture = fixture;
     }
 
     [Fact]
@@ -49,6 +52,7 @@ public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
         // Assert
         Assert.NotNull(sessions);
         Assert.NotEmpty(sessions);
+        await Cleanup();
     }
 
     [Fact]
@@ -70,5 +74,23 @@ public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
         // Assert
         Assert.NotNull(session);
         sessions.First().Id.ShouldBe(session.Id);
+        await Cleanup();
+    }
+
+    private async Task Cleanup()
+    {
+        var query = new QueryDefinition("SELECT c.id, c.id as partitionKey FROM c");
+        using var iterator = _fixture.SessionContainer.GetItemQueryIterator<Session>(query);
+
+        while (iterator.HasMoreResults)
+        {
+            var response = await iterator.ReadNextAsync();
+            foreach (var item in response)
+            {
+                await _fixture.SessionContainer.DeleteItemAsync<Session>(
+                    item.Id,
+                    new Microsoft.Azure.Cosmos.PartitionKey(item.Id));
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Conferenti.Domain.Sessions;
 using Conferenti.TestUtil;
 using Microsoft.Azure.Cosmos;
 using Testcontainers.CosmosDb;
