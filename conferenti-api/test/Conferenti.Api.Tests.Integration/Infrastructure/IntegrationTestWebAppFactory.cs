@@ -1,9 +1,11 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.Security.KeyVault.Secrets;
-using Conferenti.Api.Settings;
+using Conferenti.Application.Sessions.GetSessions;
+using Conferenti.Application.Sessions.PostSessions;
 using Conferenti.Application.Speakers.GetSpeakers;
 using Conferenti.Application.Speakers.PostSpeakers;
+using Conferenti.Domain.Sessions;
 using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Repositories;
 using Conferenti.TestUtil;
@@ -31,6 +33,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     public Database Database { get; set; }
     public Container Container { get; set; }
 
+    public Container SessionContainer { get; set; }
+
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         // Override configuration to bypass Key Vault for integration tests
@@ -52,6 +56,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         {
             services.RemoveAll<ILogger<GetSpeakerQueryHandler>>();
             services.RemoveAll<ILogger<PostSpeakerCommandHandler>>();
+            services.RemoveAll<ILogger<GetSessionQueryHandler>>();
+            services.RemoveAll<ILogger<PostSessionCommandHandler>>();
 
             // Remove any Key Vault services that might have been registered
             services.RemoveAll<SecretClient>();
@@ -59,6 +65,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             services.RemoveAllKeyed<Container>("speakers");
             services.RemoveAllKeyed<Container>("sessions");
             services.RemoveAll<ISpeakerRepository>();
+            services.RemoveAll<ISessionRepository>();
 
 
             services.AddOpenTelemetry()
@@ -78,7 +85,9 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             // Register CosmosClient pointing to the test container
             services.AddSingleton<CosmosClient>(provider => CosmosClient);
             services.AddKeyedSingleton<Container>("speakers", Container);
+            services.AddKeyedSingleton<Container>("sessions", SessionContainer);
             services.AddScoped<ISpeakerRepository, SpeakerRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
         });
 
 
@@ -112,7 +121,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Example: CamelCase property names
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Example: Ignore null properties
-                // Add other System.Text.Json.JsonSerializerOptions as needed
+                Converters = { new JsonStringEnumConverter() }
             }
         });
 
@@ -122,6 +131,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             Database = await CosmosClient.CreateDatabaseIfNotExistsAsync("testdb");
             // Use /id (lowercase) to match the JSON property name
             Container = await Database.CreateContainerIfNotExistsAsync("testcontainer", "/id");
+            SessionContainer = await Database.CreateContainerIfNotExistsAsync("sessions", "/id");
         }, maxRetries: 5, delayMs: 2000);
     }
 

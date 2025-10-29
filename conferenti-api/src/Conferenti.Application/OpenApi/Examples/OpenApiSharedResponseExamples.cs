@@ -1,4 +1,4 @@
-﻿namespace Conferenti.Application.Exceptions.Examples;
+﻿namespace Conferenti.Application.OpenApi.Examples;
 
 public static class OpenApiSharedResponseExamples
 {

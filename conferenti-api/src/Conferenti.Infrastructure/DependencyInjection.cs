@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.Identity;
+using Conferenti.Domain.Sessions;
 using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Helpers;
 using Conferenti.Infrastructure.Repositories;
@@ -9,6 +10,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Converters;
 
 namespace Conferenti.Infrastructure;
 
@@ -22,6 +24,7 @@ public static class DependencyInjection
         {
             await services.AddCosmosDbService(cosmosDbSettings, CancellationToken.None);
             services.AddScoped<ISpeakerRepository, SpeakerRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
         }
         catch (Exception ex)
         {
@@ -44,7 +47,7 @@ public static class DependencyInjection
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Example: CamelCase property names
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Example: Ignore null properties
-                // Add other System.Text.Json.JsonSerializerOptions as needed
+                Converters = { new JsonStringEnumConverter() }
             }
         };
 
@@ -67,7 +70,7 @@ public static class DependencyInjection
 
         // Recommended partition key for Session: /sessionId (or /speakerId if you query by speaker)
         var sessionContainer = await database.Database.CreateContainerIfNotExistsAsync(
-            new ContainerProperties(Constants.SessionContainerId, "/sessionId"),
+            new ContainerProperties(Constants.SessionContainerId, "/id"),
             throughput: 400,
             cancellationToken: token);
 

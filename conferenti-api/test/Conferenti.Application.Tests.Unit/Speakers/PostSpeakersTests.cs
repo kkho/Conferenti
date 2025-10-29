@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Conferenti.Application.Speakers.GetSpeakers;
-using Conferenti.Application.Speakers.PostSpeakers;
+﻿using Conferenti.Application.Speakers.PostSpeakers;
 using Conferenti.Domain.Speakers;
 using Microsoft.Extensions.Logging;
 using NSubstitute;

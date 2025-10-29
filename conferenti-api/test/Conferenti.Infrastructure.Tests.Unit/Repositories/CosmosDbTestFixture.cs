@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using Conferenti.Domain.Sessions;
 using Conferenti.TestUtil;
-using DotNet.Testcontainers.Builders;
-using DotNet.Testcontainers.Configurations;
-using DotNet.Testcontainers.Containers;
 using Microsoft.Azure.Cosmos;
 using Testcontainers.CosmosDb;
 using Xunit;
@@ -20,6 +13,8 @@ public class CosmosDbTestFixture : IAsyncLifetime
     public CosmosDbContainer CosmosDbContainer { get; set; }
     public CosmosClient CosmosClient { get; set; }
     public Database Database { get; set; }
+
+    public Container SessionContainer { get; set; }
     public Container Container { get; set; }
 
     public CosmosDbTestFixture()
@@ -74,6 +69,7 @@ public class CosmosDbTestFixture : IAsyncLifetime
         await CosmosDbContainerExtensions.RetryAsync(async () =>
         {
             Database = await CosmosClient.CreateDatabaseIfNotExistsAsync("testdb");
+            SessionContainer = await Database.CreateContainerIfNotExistsAsync("sessions", "/id");
             Container = await Database.CreateContainerIfNotExistsAsync("testcontainer", "/id");
         }, maxRetries: 5, delayMs: 2000);
     }

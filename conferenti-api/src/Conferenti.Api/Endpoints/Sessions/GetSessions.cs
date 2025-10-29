@@ -1,21 +1,21 @@
 ﻿using Conferenti.Application.Abstractions.Messaging;
 using Conferenti.Application.OpenApi.Examples;
-using Conferenti.Application.Speakers.GetSpeakers;
-using Conferenti.Domain.Speakers;
+using Conferenti.Application.Sessions.GetSessions;
+using Conferenti.Domain.Sessions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Conferenti.Api.Endpoints.Speakers;
+namespace Conferenti.Api.Endpoints.Sessions;
 
-public class GetSpeakers : IEndpoint
+public class GetSessions : IEndpoint
 {
     public void AddEndpoints(IEndpointRouteBuilder app)
     {
-        app.MapGet("speakers", GetSpeakersAsync)
-            .WithTags(ApiConstants.SpeakerApiTag)
-            .WithSummary("Fetch speakers")
+        app.MapGet("sessions", GetSessionsAsync)
+            .WithTags(ApiConstants.SessionApiTag)
+            .WithSummary("Fetch sessions")
             .MapToApiVersion(ApiVersions.V1)
             .WithOpenApi(op =>
             {
@@ -26,7 +26,7 @@ public class GetSpeakers : IEndpoint
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
-                            Example = OpenApiAnyFactory.CreateFromJson(SpeakerOpenApiResponseExamples.SpeakersOkResponse)
+                            Example = OpenApiAnyFactory.CreateFromJson(SessionOpenApiResponseExamples.SessionOkResponse)
                         }
                     }
                 };
@@ -34,13 +34,14 @@ public class GetSpeakers : IEndpoint
                 {
                     Description = "Bad Request",
                     Content =
+                    {
+                        ["application/json"] = new OpenApiMediaType
                         {
-                            ["application/json"] = new OpenApiMediaType
-                            {
-                                Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.BadRequest)
-                            }
+                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.BadRequest)
                         }
+                    }
                 };
+
                 op.Responses["401"] = new OpenApiResponse
                 {
                     Description = "Unauthorized",
@@ -67,12 +68,12 @@ public class GetSpeakers : IEndpoint
                 {
                     Description = "Not Found",
                     Content =
+                    {
+                        ["application/json"] = new OpenApiMediaType
                         {
-                            ["application/json"] = new OpenApiMediaType
-                            {
-                                Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.NotFound)
-                            }
+                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.NotFound)
                         }
+                    }
                 };
                 op.Responses["500"] = new OpenApiResponse
                 {
@@ -81,7 +82,8 @@ public class GetSpeakers : IEndpoint
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
-                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.InternalServerError)
+                            Example = OpenApiAnyFactory.CreateFromJson(
+                                OpenApiSharedResponseExamples.InternalServerError)
                         }
                     }
                 };
@@ -90,17 +92,17 @@ public class GetSpeakers : IEndpoint
     }
 
 #pragma warning disable S1172
-    private static async Task<Results<
-        Ok<List<Speaker>>,
+    private static async Task<Results<Ok<List<Session>>,
         UnauthorizedHttpResult,
         ForbidHttpResult,
         BadRequest<ProblemDetails>,
-        InternalServerError<ProblemDetails>>> GetSpeakersAsync(
-        IQueryHandler<GetSpeakersQuery, List<Speaker>> handler,
+        InternalServerError<ProblemDetails>>> GetSessionsAsync(
+        [AsParameters] SessionParam param,
+        IQueryHandler<GetSessionsQuery, List<Session>> handler,
         HttpContext httpContext,
         CancellationToken cancellationToken)
     {
-        var query = new GetSpeakersQuery();
+        var query = new GetSessionsQuery(param);
         var result = await handler.Handle(query, cancellationToken);
 
         if (result.IsSuccess)
@@ -116,5 +118,6 @@ public class GetSpeakers : IEndpoint
 
         return TypedResults.InternalServerError(problemDetail);
     }
+
 #pragma warning restore
 }

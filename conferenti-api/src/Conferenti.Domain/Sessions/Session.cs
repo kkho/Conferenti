@@ -10,8 +10,8 @@ public class Session
     /// <summary>
     /// The Session id used to get session details
     /// </summary>
-    [JsonPropertyName("sessionId")]
-    public string SessionId { get; set; }
+    [JsonPropertyName("id")]
+    public string Id { get; set; }
 
     /// <summary>
     /// Title of the session
