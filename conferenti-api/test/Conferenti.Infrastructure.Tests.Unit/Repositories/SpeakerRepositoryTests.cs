@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Conferenti.Domain.Sessions;
-using Conferenti.Domain.Speakers;
+﻿using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Repositories;
 using Shouldly;
 using Xunit;

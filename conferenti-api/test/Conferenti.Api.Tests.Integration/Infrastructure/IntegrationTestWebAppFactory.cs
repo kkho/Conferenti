@@ -112,7 +112,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase, // Example: CamelCase property names
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, // Example: Ignore null properties
-                // Add other System.Text.Json.JsonSerializerOptions as needed
+                Converters = { new JsonStringEnumConverter() }
             }
         });
 

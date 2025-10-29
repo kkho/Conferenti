@@ -1,22 +1,22 @@
 ﻿using Conferenti.Api.Helper;
 using Conferenti.Application.Abstractions.Messaging;
 using Conferenti.Application.OpenApi.Examples;
-using Conferenti.Application.Speakers.PostSpeakers;
-using Conferenti.Domain.Speakers;
+using Conferenti.Application.Sessions.PostSessions;
+using Conferenti.Domain.Sessions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Conferenti.Api.Endpoints.Speakers;
+namespace Conferenti.Api.Endpoints.Sessions;
 
-public class PostSpeakers : IEndpoint
+public class PostSessions : IEndpoint
 {
     public void AddEndpoints(IEndpointRouteBuilder app)
     {
-        app.MapPost("speakers", UpsertSpeakersAsync)
-            .WithTags(ApiConstants.SpeakerApiTag)
-            .WithSummary("Post speakers data.")
+        app.MapPost("sessions", UpsertSessionsAsync)
+            .WithTags(ApiConstants.SessionApiTag)
+            .WithSummary("Post sessions data.")
             .Produces(200)
             .Produces(204) // No content
             .Produces(400) // Bad request
@@ -26,96 +26,96 @@ public class PostSpeakers : IEndpoint
             .Produces(500) // Internal server error
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(Constants.AdminAccess)
-            .WithOpenApi(op =>
-            {
-                op.RequestBody = new OpenApiRequestBody
-                {
-                    Required = true,
-                    Content =
+                        .WithOpenApi(op =>
+                        {
+                            op.RequestBody = new OpenApiRequestBody
+                            {
+                                Required = true,
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(
-                                SpeakerOpenApiResponseExamples
-                                .UpsertSpeakersRequestBody)
+                                SessionOpenApiResponseExamples
+                                .UpsertSessionRequestBody)
                         }
                     }
-                };
-                op.Responses["200"] = new OpenApiResponse
-                {
-                    Description = "Ok",
-                    Content =
+                            };
+                            op.Responses["200"] = new OpenApiResponse
+                            {
+                                Description = "Ok",
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(SpeakerOpenApiResponseExamples.SpeakersOkResponse)
                         }
                     }
-                };
+                            };
 
-                op.Responses["400"] = new OpenApiResponse
-                {
-                    Description = "Bad Request",
-                    Content =
+                            op.Responses["400"] = new OpenApiResponse
+                            {
+                                Description = "Bad Request",
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.BadRequest)
                         }
                     }
-                };
-                op.Responses["401"] = new OpenApiResponse
-                {
-                    Description = "Unauthorized",
-                    Content =
+                            };
+                            op.Responses["401"] = new OpenApiResponse
+                            {
+                                Description = "Unauthorized",
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.Unauthorized)
                         }
                     }
-                };
-                op.Responses["403"] = new OpenApiResponse
-                {
-                    Description = "Forbidden",
-                    Content =
+                            };
+                            op.Responses["403"] = new OpenApiResponse
+                            {
+                                Description = "Forbidden",
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.Forbidden)
                         }
                     }
-                };
+                            };
 
-                op.Responses["500"] = new OpenApiResponse
-                {
-                    Description = "Internal Server Error",
-                    Content =
+                            op.Responses["500"] = new OpenApiResponse
+                            {
+                                Description = "Internal Server Error",
+                                Content =
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
                             Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.InternalServerError)
                         }
                     }
-                };
-                return op;
-            });
+                            };
+                            return op;
+                        });
     }
 
     private static async Task<Results<
-        Ok<List<Speaker>>,
+        Ok<List<Session>>,
         UnauthorizedHttpResult,
         ForbidHttpResult,
         BadRequest<ProblemDetails>,
         NotFound<ProblemDetails>,
-        InternalServerError<ProblemDetails>>> UpsertSpeakersAsync(
-        [FromBody] Speaker[] speakers,
-        ICommandHandler<PostSpeakerCommand, List<Speaker>> handler,
+        InternalServerError<ProblemDetails>>> UpsertSessionsAsync(
+        [FromBody] Session[] sessions,
+        ICommandHandler<PostSessionCommand, List<Session>> handler,
         HttpContext httpContext,
-        CancellationToken cancellationToken)
+        CancellationToken token)
     {
-        var command = new PostSpeakerCommand(speakers.ToList());
-        var result = await handler.Handle(command, cancellationToken);
+        var command = new PostSessionCommand(sessions.ToList());
+        var result = await handler.Handle(command, cancellationToken: token);
 
         if (result.IsSuccess)
         {

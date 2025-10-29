@@ -1,4 +1,4 @@
-﻿namespace Conferenti.Application.Exceptions.Examples;
+﻿namespace Conferenti.Application.OpenApi.Examples;
 
 public static class SpeakerOpenApiResponseExamples
 {
@@ -14,7 +14,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://avatars.githubusercontent.com/u/1107128?v=4",
               "sessions": [
                 {
-                  "sessionId": "1",
+                  "id": "1",
                   "title": "Building Scalable Web Applications with React and Node.js",
                   "slug": "building-scalable-web-applications-with-react-and-nodejs",
                   "tags": ["React", "Node.js", "Web Development"],
@@ -37,7 +37,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "2",
+                  "id": "2",
                   "title": "Building AI-Powered Applications with Machine Learning",
                   "slug": "building-ai-powered-applications-with-machine-learning",
                   "tags": ["AI", "Machine Learning", "Python", "TensorFlow"],
@@ -60,7 +60,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "3",
+                  "id": "3",
                   "title": "Big Data Analytics: From Chaos to Insights",
                   "slug": "big-data-analytics-from-chaos-to-insights",
                   "tags": ["Big Data", "Analytics", "Python", "Apache Spark"],
@@ -83,7 +83,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "4",
+                  "id": "4",
                   "title": "Mastering Kubernetes: Container Orchestration at Scale",
                   "slug": "mastering-kubernetes-container-orchestration-at-scale",
                   "tags": ["Kubernetes", "DevOps", "Docker", "Cloud"],
@@ -106,7 +106,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1494790108755-2616b612b5b0?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "5",
+                  "id": "5",
                   "title": "Web Application Security: Defense Strategies for Modern Apps",
                   "slug": "web-application-security-defense-strategies-for-modern-apps",
                   "tags": ["Security", "Web Development", "OWASP", "Penetration Testing"],
@@ -129,7 +129,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "6",
+                  "id": "6",
                   "title": "Modern Frontend Development with React and TypeScript",
                   "slug": "modern-frontend-development-with-react-and-typescript",
                   "tags": ["React", "TypeScript", "Frontend", "CSS"],
@@ -152,7 +152,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "7",
+                  "id": "7",
                   "title": "Microservices Architecture: Design Patterns and Best Practices",
                   "slug": "microservices-architecture-design-patterns-and-best-practices",
                   "tags": ["Microservices", "Architecture", "API Design", "Distributed Systems"],
@@ -175,7 +175,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "8",
+                  "id": "8",
                   "title": "Full Stack Development: From Database to User Interface",
                   "slug": "full-stack-development-from-database-to-user-interface",
                   "tags": ["Full Stack", "Node.js", "React", "Database Design"],
@@ -198,7 +198,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "9",
+                  "id": "9",
                   "title": "Cloud-Native Architecture: Building for Scale and Resilience",
                   "slug": "cloud-native-architecture-building-for-scale-and-resilience",
                   "tags": ["Cloud Computing", "AWS", "Azure", "Infrastructure"],
@@ -221,7 +221,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "10",
+                  "d": "10",
                   "title": "Cross-Platform Mobile Development with React Native",
                   "slug": "cross-platform-mobile-development-with-react-native",
                   "tags": ["React Native", "Mobile Development", "iOS", "Android"],
@@ -244,7 +244,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "11",
+                  "d": "11",
                   "title": "Performance Optimization: Making Your Apps Lightning Fast",
                   "slug": "performance-optimization-making-your-apps-lightning-fast",
                   "tags": ["Performance", "Optimization", "Load Testing", "Monitoring"],
@@ -267,7 +267,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1566492031773-4f4e44671d66?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "12",
+                  "d": "12",
                   "title": "Automated Testing Strategies: Never Miss a Bug",
                   "slug": "automated-testing-strategies-never-miss-a-bug",
                   "tags": ["Testing", "Automation", "Jest", "Cypress"],
@@ -290,7 +290,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1522529599102-193c0d76b5b6?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "13",
+                  "d": "13",
                   "title": "Observability and Monitoring: Keeping Your Systems Airborne",
                   "slug": "observability-and-monitoring-keeping-your-systems-airborne",
                   "tags": ["SRE", "Monitoring", "Observability", "Prometheus"],
@@ -313,7 +313,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "14",
+                  "d": "14",
                   "title": "Microservices at Scale: Small Services, Big Impact",
                   "slug": "microservices-at-scale-small-services-big-impact",
                   "tags": ["Microservices", "Docker", "Service Mesh", "Istio"],
@@ -336,7 +336,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "15",
+                  "d": "15",
                   "title": "Enterprise Integration Patterns: Battle-Tested Solutions",
                   "slug": "enterprise-integration-patterns-battle-tested-solutions",
                   "tags": ["Enterprise Architecture", "Integration", "API Gateway", "ESB"],
@@ -359,7 +359,7 @@ public static class SpeakerOpenApiResponseExamples
               "photoUrl": "https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face",
               "sessions": [
                 {
-                  "sessionId": "16",
+                  "d": "16",
                   "title": "Web Accessibility: Building Inclusive Digital Experiences",
                   "slug": "web-accessibility-building-inclusive-digital-experiences",
                   "tags": ["Accessibility", "WCAG", "Inclusive Design", "Assistive Technology"],
@@ -389,7 +389,7 @@ public static class SpeakerOpenApiResponseExamples
             "photoUrl": "Image url",
             "sessions": [
               {
-                "sessionId": "Id of session",
+                "d": "Id of session",
                 "title": "Title of session",
                 "slug": "Session slug",
                 "tags": ["Relevant tags for the session"],

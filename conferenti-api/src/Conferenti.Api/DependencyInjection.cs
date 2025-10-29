@@ -1,8 +1,13 @@
-﻿using Asp.Versioning;
+﻿using System.Reflection;
+using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
+using Azure.Identity;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Azure.Security.KeyVault.Secrets;
+using AzureKeyVaultEmulator.Aspire.Client;
 using Conferenti.Api.Endpoints;
+using Conferenti.Api.Helper;
 using Conferenti.Api.OpenApi;
 using Conferenti.Api.Settings;
 using Microsoft.ApplicationInsights.Extensibility;
@@ -12,10 +17,6 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
 using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using System.Reflection;
-using Azure.Identity;
-using AzureKeyVaultEmulator.Aspire.Client;
-using Conferenti.Api.Helper;
 
 namespace Conferenti.Api;
 
@@ -48,6 +49,14 @@ public static class DependencyInjection
             setupAction.ExampleFilters();
         });
 
+        services.ConfigureHttpJsonOptions(options =>
+        {
+            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
+        services.Configure<Microsoft.AspNetCore.Mvc.JsonOptions>(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
         services.AddSwaggerExamplesFromAssemblyOf<Program>();
     }
 

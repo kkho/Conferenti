@@ -21,7 +21,7 @@ public class SpeakerRepository : ISpeakerRepository
 
         while (iterator.HasMoreResults)
         {
-            var response = await iterator.ReadNextAsync(token);
+            var response = await iterator.ReadNextAsync(token).ConfigureAwait(false);
             speakers.AddRange(response.Resource);
         }
 

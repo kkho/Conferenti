@@ -12,6 +12,10 @@ var api = builder
     .WithEndpoint("https", endpoint => endpoint.IsProxied = false)
     .WithReference(keyVault); // reference as normal
 
+var adminApi = builder.AddGolangApp("conferenti-admin-api", "../../../../conferenti-admin-api/cmd/admin-api")
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints();
+
 
 var frontend = builder
     .AddNpmApp("conferenti-frontend", "../../../../conferenti-web", "dev")

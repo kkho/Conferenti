@@ -9,7 +9,7 @@
             Detailed information about a session given by a speaker
             </summary>
         </member>
-        <member name="P:Conferenti.Domain.Sessions.Session.SessionId">
+        <member name="P:Conferenti.Domain.Sessions.Session.Id">
             <summary>
             The Session id used to get session details
             </summary>
@@ -64,6 +64,11 @@
             Language in which the session is conducted
             </summary>
         </member>
+        <member name="P:Conferenti.Domain.Sessions.Session.SpeakerIds">
+            <summary>
+            The IDs of the speakers presenting the session
+            </summary>
+        </member>
         <member name="T:Conferenti.Domain.Sessions.SessionFormat">
             <summary>
             Represents the format of a session in an event or conference.
@@ -90,6 +95,11 @@
         <member name="P:Conferenti.Domain.Speakers.Speaker.Name">
             <summary>
             Full name of the speaker
+            </summary>
+        </member>
+        <member name="P:Conferenti.Domain.Speakers.Speaker.Email">
+            <summary>
+            Email of the speaker
             </summary>
         </member>
         <member name="P:Conferenti.Domain.Speakers.Speaker.Position">

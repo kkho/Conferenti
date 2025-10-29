@@ -45,10 +45,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Conferenti.Infrastructure\Conferenti.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Endpoints\Sessions\" />
-  </ItemGroup>
   <PropertyGroup>
     <AzureCosmosDisableNewtonsoftJsonCheck>true</AzureCosmosDisableNewtonsoftJsonCheck>
   </PropertyGroup>
