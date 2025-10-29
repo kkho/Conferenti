@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Conferenti.Domain.Sessions;
-using Conferenti.Domain.Speakers;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Extensions.DependencyInjection;
 

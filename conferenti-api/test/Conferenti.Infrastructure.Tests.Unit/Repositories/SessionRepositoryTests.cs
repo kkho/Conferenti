@@ -1,5 +1,4 @@
 ﻿using Conferenti.Domain.Sessions;
-using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Repositories;
 using Shouldly;
 using Xunit;
@@ -11,27 +10,27 @@ public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
 {
     private readonly SessionRepository _sessionRepository;
 
-    private SessionRepositoryTests(CosmosDbTestFixture fixture)
+    public SessionRepositoryTests(CosmosDbTestFixture fixture)
     {
         _sessionRepository = new SessionRepository(fixture.Container);
     }
 
     [Fact]
-    public async Task GetSpeakers_Should_Return_Empty()
+    public async Task GetSessions_Should_Return_Empty()
     {
         // Arrange
         using var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
 
         // Act
-        var speakers = await _sessionRepository.GetSessions(new SessionParam(), cancellationToken);
+        var sessions = await _sessionRepository.GetSessions(new SessionParam(), cancellationToken);
 
         // Assert
-        speakers.ShouldBeEmpty();
+        sessions.ShouldBeEmpty();
     }
 
     [Fact]
-    public async Task GetSpeakers_Should_Return_Speakers()
+    public async Task GetSessions_Should_Return_Speakers()
     {
         // Arrange
         using var cancellationTokenSource = new CancellationTokenSource();
@@ -45,15 +44,15 @@ public class SessionRepositoryTests : IClassFixture<CosmosDbTestFixture>
 
         // Act
         await _sessionRepository.UpsertSessionsAsync([session], cancellationToken);
-        var speakers = await _sessionRepository.GetSessions(new SessionParam(), cancellationToken);
+        var sessions = await _sessionRepository.GetSessions(new SessionParam(), cancellationToken);
 
         // Assert
-        Assert.NotNull(speakers);
-        Assert.NotEmpty(speakers);
+        Assert.NotNull(sessions);
+        Assert.NotEmpty(sessions);
     }
 
     [Fact]
-    public async Task AddSpeakerAsync_Should_Return_Speaker()
+    public async Task AddSessionsAsync_Should_Return_Speaker()
     {
         // Arrange
         using var cancellationTokenSource = new CancellationTokenSource();
