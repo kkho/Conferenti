@@ -1,7 +1,8 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.Security.KeyVault.Secrets;
-using Conferenti.Api.Settings;
+using Conferenti.Application.Sessions.GetSessions;
+using Conferenti.Application.Sessions.PostSessions;
 using Conferenti.Application.Speakers.GetSpeakers;
 using Conferenti.Application.Speakers.PostSpeakers;
 using Conferenti.Domain.Sessions;
@@ -55,6 +56,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
         {
             services.RemoveAll<ILogger<GetSpeakerQueryHandler>>();
             services.RemoveAll<ILogger<PostSpeakerCommandHandler>>();
+            services.RemoveAll<ILogger<GetSessionQueryHandler>>();
+            services.RemoveAll<ILogger<PostSessionCommandHandler>>();
 
             // Remove any Key Vault services that might have been registered
             services.RemoveAll<SecretClient>();

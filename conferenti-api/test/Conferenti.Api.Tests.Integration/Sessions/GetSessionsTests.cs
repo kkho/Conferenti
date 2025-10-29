@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Conferenti.Api.Tests.Integration.Infrastructure;
+﻿using Conferenti.Api.Tests.Integration.Infrastructure;
 
 namespace Conferenti.Api.Tests.Integration.Sessions;
 public class GetSessionsTests : BaseFunctionalTest
