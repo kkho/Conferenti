@@ -4,6 +4,7 @@ using Azure.Security.KeyVault.Secrets;
 using Conferenti.Api.Settings;
 using Conferenti.Application.Speakers.GetSpeakers;
 using Conferenti.Application.Speakers.PostSpeakers;
+using Conferenti.Domain.Sessions;
 using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Repositories;
 using Conferenti.TestUtil;
@@ -30,6 +31,8 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
     public CosmosClient CosmosClient { get; set; }
     public Database Database { get; set; }
     public Container Container { get; set; }
+
+    public Container SessionContainer { get; set; }
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -59,6 +62,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             services.RemoveAllKeyed<Container>("speakers");
             services.RemoveAllKeyed<Container>("sessions");
             services.RemoveAll<ISpeakerRepository>();
+            services.RemoveAll<ISessionRepository>();
 
 
             services.AddOpenTelemetry()
@@ -78,7 +82,9 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             // Register CosmosClient pointing to the test container
             services.AddSingleton<CosmosClient>(provider => CosmosClient);
             services.AddKeyedSingleton<Container>("speakers", Container);
+            services.AddKeyedSingleton<Container>("sessions", SessionContainer);
             services.AddScoped<ISpeakerRepository, SpeakerRepository>();
+            services.AddScoped<ISessionRepository, SessionRepository>();
         });
 
 
@@ -122,6 +128,7 @@ public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsy
             Database = await CosmosClient.CreateDatabaseIfNotExistsAsync("testdb");
             // Use /id (lowercase) to match the JSON property name
             Container = await Database.CreateContainerIfNotExistsAsync("testcontainer", "/id");
+            SessionContainer = await Database.CreateContainerIfNotExistsAsync("sessions", "/id");
         }, maxRetries: 5, delayMs: 2000);
     }
 
