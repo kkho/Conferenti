@@ -19,6 +19,7 @@ internal static class SessionData
     {
         Id = Id,
         Title = Title,
-        Description = Description
+        Description = Description,
+        SpeakerIds = []
     };
 }
