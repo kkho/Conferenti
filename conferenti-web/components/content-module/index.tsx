@@ -1,29 +1,54 @@
 import Image from 'next/image';
 
 export interface Props {
-  imageUrl: string;
+  classes?: string;
+  imageUrl?: string;
   title: string;
   description?: string;
+  extraClasses?: string;
+  textClasses?: string;
+  imageHeight?: number;
+  imageWidth?: number;
+  imageClasses?: string;
 }
 
 export const Content = (props: Props) => {
-  const { title, description, imageUrl } = props;
+  const {
+    title,
+    description,
+    imageUrl,
+    extraClasses,
+    classes,
+    textClasses,
+    imageHeight,
+    imageWidth,
+    imageClasses
+  } = props;
   return (
     <>
-      <div className="flex flex-row items-start justify-between">
-        <div className="pt-24">
-          <h2 className="text-3xl font-semibold tracking-tight text-pretty text-white sm:text-4xl">
+      <div className={`flex items-start ${classes}`}>
+        <div className={`${extraClasses}`}>
+          <h2
+            className={`text-3xl font-semibold tracking-tight text-pretty sm:text-4xl z-index-11 ${textClasses}`}
+          >
             {title}
           </h2>
-          <p className="mt-6 text-lg/8 text-gray-400">{description}</p>
+          <p className="mt-6 text-lg/8 max-w-[700px] text-gray-600 z-index-1">
+            {description}
+          </p>
         </div>
-        <Image
-          src={imageUrl}
-          alt={title}
-          className="mt-6 rounded-lg"
-          width={200}
-          height={200}
-        />
+        {imageUrl && (
+          <Image
+            src={imageUrl}
+            alt={title}
+            className={`mt-6 mb-8 rounded-lg object-cover ${imageClasses}`}
+            style={{
+              height: imageHeight ? `${imageHeight}px` : 'auto'
+            }}
+            width={imageWidth ?? 300}
+            height={imageHeight ?? 300}
+          />
+        )}
       </div>
     </>
   );

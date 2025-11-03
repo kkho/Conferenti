@@ -1,0 +1,56 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  column-gap: 16px;
+  row-gap: 36px;
+}
+
+.cardHeader {
+  min-width: 0 !important;
+
+  // Ensure description area allows text truncation
+  :global([class*='description']) {
+    min-width: 0;
+    overflow: hidden;
+    height: auto;
+  }
+}
+
+.title {
+  margin: 0 0 12px;
+}
+
+.description {
+  margin: 0 0 12px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+.card {
+  width: 550px;
+  max-width: fit-content;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  margin: 0;
+  flex: 1;
+}
+
+.footer {
+  margin: 0;
+  margin-top: auto;
+}

@@ -21,15 +21,25 @@ function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
-function createNavigation(menuItems: MenuItemData[], pathName: string):
-  { name: string; _type: string; href: string; current: boolean; slug: string }[] {
-    return menuItems.map((item) => ({
+function createNavigation(
+  menuItems: MenuItemData[],
+  pathName: string
+): {
+  name: string;
+  _type: string;
+  href: string;
+  current: boolean;
+  slug: string;
+}[] {
+  return (
+    menuItems.map((item) => ({
       name: item.title ?? '',
       _type: item._type ?? '',
       href: resolveHref(item._type ?? '', item.slug ?? '') || '#',
       current: pathName === (item._type ?? ''),
       slug: item.slug ?? ''
-    })) || [];
+    })) || []
+  );
 }
 
 export function Navbar({ menuItems }: { menuItems: MenuItemData[] }) {
@@ -58,11 +68,12 @@ export function Navbar({ menuItems }: { menuItems: MenuItemData[] }) {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
+            <div className="flex shrink-0 items-center h-8 w-auto">
+              <Image
+                alt="Conferenti logo"
+                src="/Peer_Hexagon_Lys.svg"
+                width={32}
+                height={32}
               />
             </div>
             <div className="hidden sm:ml-6 sm:block">

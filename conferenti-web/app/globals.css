@@ -24,3 +24,20 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.banner {
+  background-image: url('/conferenti_banner.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  object-fit: cover;
+  height: 300px;
+  width: 100vw;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.cardContent {
+  color: var(--color-gray-500) !important; 
+  height: 400px;
+  margin-bottom: 12px;
+}

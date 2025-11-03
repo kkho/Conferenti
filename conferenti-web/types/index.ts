@@ -1,10 +1,8 @@
-
-
 export interface MenuItemData {
   title?: string;
   slug?: string;
   _type?: string;
-  current?: boolean
+  current?: boolean;
 }
 
 export interface Speaker {
@@ -18,7 +16,7 @@ export interface Speaker {
 }
 
 export interface Session {
-  sessionId?: string;
+  id?: string;
   title?: string;
   slug?: string;
   tags: string[];
@@ -29,6 +27,7 @@ export interface Session {
   level?: SessionLevel;
   format?: SessionFormat;
   language: string;
+  speakerIds: string[];
 }
 
 export interface SpeakerSessionDetails {
@@ -37,14 +36,15 @@ export interface SpeakerSessionDetails {
 }
 
 export enum SessionLevel {
-  Beginner = "Beginner",
-  Intermediate = "Intermediate",
-  Advanced = "Advanced",
+  Beginner = 'Beginner',
+  Intermediate = 'Intermediate',
+  Advanced = 'Advanced'
 }
 
 export enum SessionFormat {
-  Lecture = "Lecture",
-  Workshop = "Workshop",
-  Panel = "Panel",
-  Keynote = "Keynote",
+  Lecture = 'Lecture',
+  Workshop = 'Workshop',
+  Panel = 'Panel',
+  Keynote = 'Keynote',
+  Presentation = 'Presentation'
 }
