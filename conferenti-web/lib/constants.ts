@@ -1,3 +1,5 @@
+import { SessionFormat } from '@/types';
+
 // Global application constants
 export const API_ENDPOINTS = {
   SPEAKERS: '/api/speakers',
@@ -29,13 +31,27 @@ export const ROUTES = {
 export const SPEAKER_LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
 export const SESSION_FORMATS = ['Presentation', 'Workshop', 'Panel'] as const;
 
-
 // API Configuration
 export const APIEndpoint =
   typeof window === 'undefined'
-    ? process.env["services__conferenti-api__http__0"] || 'http://localhost:7027'
-    : "/api";
+    ? process.env['services__conferenti-api__http__0'] ||
+      'http://localhost:7027'
+    : '/api';
 
 // Type helpers
-export type SpeakerLevel = typeof SPEAKER_LEVELS[number];
-export type SessionFormat = typeof SESSION_FORMATS[number];
+export type SpeakerLevel = (typeof SPEAKER_LEVELS)[number];
+
+export const resolveSessionFormatAsset = (value: SessionFormat) => {
+  switch (value) {
+    case SessionFormat.Keynote:
+      return '/keynote.png';
+    case SessionFormat.Workshop:
+      return '/workshop.png';
+    case SessionFormat.Lecture:
+      return '/developer.png';
+    case SessionFormat.Panel:
+      return '/developer.png';
+    default:
+      return '/workshop.png';
+  }
+};
