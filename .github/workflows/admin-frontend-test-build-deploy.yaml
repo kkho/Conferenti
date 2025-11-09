@@ -68,7 +68,7 @@ jobs:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   notify-failed-tests:
-    needs: [tests]
+    needs: [buildTest]
     if: ${{ always() }}
     uses: kkho/workflows/.github/workflows/slack-message.yaml@main
     with:
