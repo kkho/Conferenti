@@ -59,7 +59,7 @@ jobs:
           checkout: true
           solution-path: "./Conferenti.sln"
           system_name: "conferenti"
-          test-projects: "./conferenti-api/test/**/Conferenti.Tests.Integration*csproj"
+          test-projects: "./conferenti-api/test/**/*Tests.Integration*csproj"
           environment: "dev"
 
   build-dev:
