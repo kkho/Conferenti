@@ -40,7 +40,10 @@ function HomeContent() {
 
   return (
     <div className="w-full font-sans">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
+      <main
+        id="main-content"
+        className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start"
+      >
         <div className="banner"></div>
         <section className="w-full section pr-12 pl-12 item-center bg-[#f8f9fa]">
           <h1 className="text-3xl pt-8 font-semibold tracking-tight text-pretty sm:text-4xl text-center text-black">

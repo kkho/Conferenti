@@ -1,5 +1,6 @@
 ﻿using Conferenti.Api.Helper;
 using Conferenti.Application.Abstractions.Messaging;
+using Conferenti.Application.Endpoints;
 using Conferenti.Application.OpenApi.Examples;
 using Conferenti.Application.Speakers.PostSpeakers;
 using Conferenti.Domain.Speakers;

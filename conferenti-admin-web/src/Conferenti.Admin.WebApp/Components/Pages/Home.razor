@@ -1,0 +1,33 @@
+﻿@page "/"
+@attribute [Authorize(Roles = "AdminRole")]
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Fast.Components.FluentUI
+@inject NavigationManager NavigationManager
+
+
+<AuthorizeView>
+    <Authorized>
+        <PageTitle>Home</PageTitle>
+
+        <h1>Hello, world!</h1>
+
+        Welcome to your new app.
+
+    </Authorized>
+    <NotAuthorized>
+        <FluentButton OnClick="NavigateToLogin">Logg inn</FluentButton>
+    </NotAuthorized>
+    <Authorizing>
+        Authorizing, please wait...
+    </Authorizing>
+</AuthorizeView>
+
+@code
+{
+    private void NavigateToLogin()
+    {
+        NavigationManager.NavigateTo("/Account/Login");
+    }
+
+
+}

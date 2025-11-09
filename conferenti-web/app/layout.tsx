@@ -21,6 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-screen bg-gray-900" suppressHydrationWarning>
       <body className={`h-auto antialiased`} suppressHydrationWarning>
+        <a href="#main-content" className="skip-link">
+          Skip to main content
+        </a>
         <Providers>
           {children}
           <FooterComponent />

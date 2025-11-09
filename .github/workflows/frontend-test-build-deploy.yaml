@@ -1,5 +1,4 @@
-name: Conferenti Web - Test and Deploy Pipeline
-
+name: Conferenti Web
 on:
   pull_request:
     types: [ready_for_review, opened, reopened, synchronize]

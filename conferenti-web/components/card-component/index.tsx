@@ -44,14 +44,14 @@ const CardComponent = (
       <CardHeader
         className={`${styles.cardHeader}`}
         header={
-          <h5
+          <h3
             style={{ fontWeight: 'bold' }}
             className={`text-base/7 font-semibold tracking-tight ${
               titleClass ?? 'text-white'
             }`}
           >
             {title}
-          </h5>
+          </h3>
         }
         description={
           <span
@@ -72,10 +72,13 @@ const CardComponent = (
             appearance="primary"
             icon={<Open16Regular />}
             onClick={handleClick}
+            aria-label="Open details"
           >
             Open
           </Button>
-          <Button icon={<BookmarkAddRegular />}>Bookmark</Button>
+          <Button icon={<BookmarkAddRegular />} aria-label="Bookmark">
+            Bookmark
+          </Button>
         </CardFooter>
       )}
     </Card>

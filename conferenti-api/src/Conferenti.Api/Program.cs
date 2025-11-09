@@ -10,6 +10,7 @@ using Conferenti.Api.ExceptionHandlers;
 using Conferenti.Api.Helper;
 using Conferenti.Api.Settings;
 using Conferenti.Application;
+using Conferenti.Application.Endpoints;
 using Conferenti.Infrastructure;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

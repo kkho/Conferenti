@@ -25,9 +25,10 @@ export const SpeakerList = ({
         {speakers && speakers.length > 0 ? (
           speakers.map((speaker) => (
             <li key={speaker.id || speaker.name}>
-              <div
-                className="flex items-center flex-col gap-x-6 cursor-pointer p-4 rounded-lg hover:bg-gray-300 transition-colors bg-[#f8f9fa]"
+              <button
+                className="flex items-center flex-col gap-x-6 cursor-pointer p-4 rounded-lg hover:bg-gray-300 transition-colors bg-[#f8f9fa] w-full border-0"
                 onClick={() => handleSpeakerClick(speaker)}
+                aria-label={`View details for ${speaker.name}, ${speaker.position}`}
               >
                 <SpeakerImage
                   className="size48 rounded-full outline-1 -outline-offset-1 outline-white/10"
@@ -47,7 +48,7 @@ export const SpeakerList = ({
                     <p className="text-sm/6 text-gray-600">{speaker.company}</p>
                   )}
                 </div>
-              </div>
+              </button>
             </li>
           ))
         ) : (

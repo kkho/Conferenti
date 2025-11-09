@@ -10,6 +10,7 @@ using Conferenti.Api.Endpoints;
 using Conferenti.Api.Helper;
 using Conferenti.Api.OpenApi;
 using Conferenti.Api.Settings;
+using Conferenti.Application.Endpoints;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Options;
 using OpenTelemetry.Logs;

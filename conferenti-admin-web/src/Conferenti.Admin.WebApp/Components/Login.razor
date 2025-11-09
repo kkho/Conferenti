@@ -1,0 +1,32 @@
+﻿@using Microsoft.AspNetCore.Authentication
+@using Auth0.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized>        
+        <a href="Account/Logout">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="Account/Login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+    [CascadingParameter]
+    private HttpContext? HttpContext { get; set; }
+
+    private async Task LoginAsync()
+    {
+        if (HttpContext is not null)
+        {
+            var authenticationProperties = new LoginAuthenticationPropertiesBuilder()
+                .WithRedirectUri(NavigationManager.Uri)
+                .WithScope("admin:execute")
+                .Build();
+
+            await HttpContext.ChallengeAsync(Auth0Constants.AuthenticationScheme, authenticationProperties);
+        }
+    }
+}

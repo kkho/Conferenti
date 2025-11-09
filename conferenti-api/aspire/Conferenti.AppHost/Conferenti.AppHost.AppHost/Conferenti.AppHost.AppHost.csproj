@@ -11,15 +11,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.1" />
-    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.1" />
-    <PackageReference Include="AzureKeyVaultEmulator.Aspire.Hosting" Version="2.6.5" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="9.8.0" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.8.0" />
+    <PackageReference Include="Aspire.Hosting.AppHost" Version="9.5.2" />
+    <PackageReference Include="Aspire.Hosting.Azure.ServiceBus" Version="9.5.2" />
+    <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.2" />
+    <PackageReference Include="AzureKeyVaultEmulator.Aspire.Hosting" Version="2.7.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="9.9.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.9.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\conferenti-admin-web\src\Conferenti.Admin.WebApp\Conferenti.Admin.WebApp.csproj" />
     <ProjectReference Include="..\..\..\src\Conferenti.Api\Conferenti.Api.csproj" />
   </ItemGroup>
 
