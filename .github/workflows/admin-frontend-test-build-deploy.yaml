@@ -64,6 +64,13 @@ jobs:
       push-image: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
       build-args: |
         LOCAL=${{ vars.LOCAL || false }}
+        AUTH0_SCOPE=${{ vars.AUTH0_ADMIN_SCOPE || '' }}
+        COSMOSDB_DATABASE="ConferentiDatabase"
+        COSMOSDB_SPEAKER_CONTAINER="SpeakerContainer"
+        COSMOSDB_SESSION_CONTAINER="SessionContainer"
+        COSMOSDB_ENDPOINT=${{ vars.COSMOSDB_ENDPOINT || 'https://localhost:8081/' }}
+      tags: |
+        ${{ vars.CONTAINER_REGISTRY }}/${{ github.actor }}/conferenti/conferenti-admin-web-development:${{ github.run_number }}
     secrets:
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
