@@ -35,7 +35,7 @@ jobs:
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: "9.x"
-          solution-path: "./Conferenti.Api.sln"
+          solution-path: "./Conferenti.sln"
   tests:
     needs: setup-dotnet
     name: Unit test
