@@ -1,0 +1,19 @@
+﻿@page "/StatusCode/404"
+
+@using Microsoft.FluentUI.AspNetCore.Components
+@rendermode InteractiveServer
+
+<PageTitle>Not Found</PageTitle>
+
+<div style="text-align: center; padding: 50px;">
+    <h1>404 - Page Not Found</h1>
+    <p>The page you're looking for doesn't exist.</p>
+    <FluentButton Appearance="Appearance.Accent" OnClick="@(() => NavigationManager.NavigateTo("/"))">
+        Go to Home
+    </FluentButton>
+</div>
+
+@code {
+    [Inject]
+    private NavigationManager NavigationManager { get; set; } = default!;
+}

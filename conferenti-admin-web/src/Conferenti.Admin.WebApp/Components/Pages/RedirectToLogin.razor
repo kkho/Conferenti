@@ -1,0 +1,39 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager NavigationManager
+
+@code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticationState = await AuthenticationStateTask;
+
+        if (authenticationState?.User?.Identity is null || !authenticationState.User.Identity.IsAuthenticated)
+        {
+            var returnUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+            if (string.IsNullOrWhiteSpace(returnUrl))
+            {
+                NavigationManager.NavigateTo("Account/Login", true);
+            }
+            else
+            {
+                NavigationManager.NavigateTo($"Account/Login?returnUrl={returnUrl}", true);
+            }
+        }
+
+        var isInRole = authenticationState.User.IsInRole("AdminRole");
+
+        if (authenticationState.User.Identity.IsAuthenticated)
+        {
+
+            if (isInRole)
+            {
+                // User has the 'read:data' scope
+                NavigationManager.NavigateTo("/unauthorized");
+            }
+        }
+    }
+
+}

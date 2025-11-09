@@ -1,4 +1,5 @@
 ﻿using Conferenti.Api.Endpoints;
+using Conferenti.Application.Endpoints;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 

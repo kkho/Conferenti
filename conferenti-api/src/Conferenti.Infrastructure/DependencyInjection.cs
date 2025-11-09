@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Azure.Identity;
+using Azure.Messaging.ServiceBus;
 using Conferenti.Domain.Sessions;
 using Conferenti.Domain.Speakers;
 using Conferenti.Infrastructure.Helpers;
@@ -36,6 +37,32 @@ public static class DependencyInjection
         services.AddHttpClient();
         services.AddMemoryCache();
         services.AddResponseCompression();
+        return services;
+    }
+
+    public static IServiceCollection AddServiceBus(this IServiceCollection services, IConfiguration configuration)
+    {
+        var serviceBusSettings = configuration.GetSection("ServiceBus").Get<ServiceBusSettings>();
+
+        if (serviceBusSettings is null)
+        {
+            throw new ArgumentException($"{nameof(serviceBusSettings)}: ServiceBus settings are not configured properly");
+        }
+
+        services.AddSingleton<ServiceBusClient>(sp => new ServiceBusClient(serviceBusSettings.ConnectionString));
+
+        services.AddKeyedSingleton<ServiceBusSender>("session", (sp, key) =>
+        {
+            var client = sp.GetRequiredService<ServiceBusClient>();
+            return client.CreateSender(serviceBusSettings.SessionQueueName);
+        });
+
+        services.AddKeyedSingleton<ServiceBusSender>("speaker", (sp, key) =>
+        {
+            var client = sp.GetRequiredService<ServiceBusClient>();
+            return client.CreateSender(serviceBusSettings.SpeakerQueueName);
+        });
+
         return services;
     }
 

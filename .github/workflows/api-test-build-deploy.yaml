@@ -1,4 +1,4 @@
-name: Conferenti Api - Test and Deploy Pipeline
+name: Conferenti Api
 
 on:
   pull_request:
@@ -35,7 +35,7 @@ jobs:
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: "9.x"
-          solution-path: "./conferenti-api/Conferenti.Api.sln"
+          solution-path: "./Conferenti.sln"
   tests:
     needs: setup-dotnet
     name: Unit test
@@ -52,12 +52,12 @@ jobs:
           collect-coverage: true
           dotnet-version: "9.x"
           working-directory: "."
-          solution-path: "./conferenti-api/Conferenti.Api.sln"
+          solution-path: "./Conferenti.sln"
           test-projects: "./conferenti-api/test/**/*Tests*csproj"
       - uses: kkho/workflows/integrationtest@main
         with:
           checkout: true
-          solution-path: "./conferenti-api/Conferenti.Api.sln"
+          solution-path: "./Conferenti.sln"
           system_name: "conferenti"
           test-projects: "*Conferenti.Api.Tests.Integration*csproj"
           environment: "dev"

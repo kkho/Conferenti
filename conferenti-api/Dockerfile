@@ -1,5 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-LABEL maintainer="conferenti@converenti.com"
+LABEL maintainer="conferenti@conferenti.com"
 
 # Update packages to latest version to ensure we get voulnerabilities as quick as possible.
 RUN apt-get update

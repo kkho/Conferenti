@@ -1,4 +1,5 @@
 ﻿using Conferenti.Application.Abstractions.Messaging;
+using Conferenti.Application.Endpoints;
 using Conferenti.Application.OpenApi.Examples;
 using Conferenti.Application.Speakers.GetSpeakers;
 using Conferenti.Domain.Speakers;

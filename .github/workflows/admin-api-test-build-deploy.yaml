@@ -1,4 +1,4 @@
-name: Conferenti Admin Api - Test and Deploy Pipeline
+name: Conferenti Admin Api
 
 on:
   pull_request:

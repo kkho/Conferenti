@@ -145,8 +145,10 @@ const UserProfile = () => {
   const { user, isLoading } = useUser();
 
   let profileUserImage = '/empty-user.png';
+  let altText = 'User profile';
   if (!isLoading) {
     profileUserImage = user?.picture || '/empty-user.png';
+    altText = user?.name ? `${user.name}'s profile` : 'User profile';
   }
 
   return (
@@ -159,7 +161,7 @@ const UserProfile = () => {
           height={32}
           loader={() => profileUserImage}
           src={profileUserImage}
-          alt=""
+          alt={altText}
           className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
         />
       </MenuButton>

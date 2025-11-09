@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api", "src\Conferenti.Api\Conferenti.Api.csproj", "{E98E1A56-0637-4A32-BF41-B9D2039C7B9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api", "conferenti-api\src\Conferenti.Api\Conferenti.Api.csproj", "{E98E1A56-0637-4A32-BF41-B9D2039C7B9F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,36 +12,41 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{324D9C46-9EC5-43F0-A31C-6AD9B6589CC2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Infrastructure", "src\Conferenti.Infrastructure\Conferenti.Infrastructure.csproj", "{CE2DBC1E-5347-487A-9B43-DCA8F3D5D2D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Infrastructure", "conferenti-api\src\Conferenti.Infrastructure\Conferenti.Infrastructure.csproj", "{CE2DBC1E-5347-487A-9B43-DCA8F3D5D2D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Infrastructure.Tests.Unit", "test\Conferenti.Infrastructure.Tests.Unit\Conferenti.Infrastructure.Tests.Unit.csproj", "{FD84FA1D-0D82-421A-A0D4-3140D99E2EE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Infrastructure.Tests.Unit", "conferenti-api\test\Conferenti.Infrastructure.Tests.Unit\Conferenti.Infrastructure.Tests.Unit.csproj", "{FD84FA1D-0D82-421A-A0D4-3140D99E2EE6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspire", "aspire", "{0418CE2C-FE93-43B0-BC64-78F8FC6EA15C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.AppHost.AppHost", "aspire\Conferenti.AppHost\Conferenti.AppHost.AppHost\Conferenti.AppHost.AppHost.csproj", "{720E4118-0D2F-4098-AD04-7BC0F6DAB904}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.AppHost.AppHost", "conferenti-api\aspire\Conferenti.AppHost\Conferenti.AppHost.AppHost\Conferenti.AppHost.AppHost.csproj", "{720E4118-0D2F-4098-AD04-7BC0F6DAB904}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.AppHost.ServiceDefaults", "aspire\Conferenti.AppHost\Conferenti.AppHost.ServiceDefaults\Conferenti.AppHost.ServiceDefaults.csproj", "{95CC68EE-5235-34C1-2CC4-3E7B0BC3CAB0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.AppHost.ServiceDefaults", "conferenti-api\aspire\Conferenti.AppHost\Conferenti.AppHost.ServiceDefaults\Conferenti.AppHost.ServiceDefaults.csproj", "{95CC68EE-5235-34C1-2CC4-3E7B0BC3CAB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Application", "src\Conferenti.Application\Conferenti.Application.csproj", "{578BC5D3-B0E5-4D82-ACDB-D37871D9FB99}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Application", "conferenti-api\src\Conferenti.Application\Conferenti.Application.csproj", "{578BC5D3-B0E5-4D82-ACDB-D37871D9FB99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain", "src\Conferenti.Domain\Conferenti.Domain.csproj", "{D5EEDB84-508F-4507-AF0D-0FF6BD5F7191}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain", "conferenti-api\src\Conferenti.Domain\Conferenti.Domain.csproj", "{D5EEDB84-508F-4507-AF0D-0FF6BD5F7191}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
-		.dockerignore = .dockerignore
-		..\.github\dependabot.yaml = ..\.github\dependabot.yaml
-		Dockerfile = Dockerfile
+		.github\workflows\admin-api-test-build-deploy.yaml = .github\workflows\admin-api-test-build-deploy.yaml
+		.github\workflows\api-test-build-deploy.yaml = .github\workflows\api-test-build-deploy.yaml
+		.github\dependabot.yaml = .github\dependabot.yaml
+		.github\workflows\frontend-test-build-deploy.yaml = .github\workflows\frontend-test-build-deploy.yaml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain.Tests.Unit", "test\Conferenti.Domain.Tests.Unit\Conferenti.Domain.Tests.Unit.csproj", "{61B67852-37F6-4BED-ACBA-957BE44FEDE3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Domain.Tests.Unit", "conferenti-api\test\Conferenti.Domain.Tests.Unit\Conferenti.Domain.Tests.Unit.csproj", "{61B67852-37F6-4BED-ACBA-957BE44FEDE3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Application.Tests.Unit", "test\Conferenti.Application.Tests.Unit\Conferenti.Application.Tests.Unit.csproj", "{6146D002-AB12-41BE-93B3-E2A91F913FBD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Application.Tests.Unit", "conferenti-api\test\Conferenti.Application.Tests.Unit\Conferenti.Application.Tests.Unit.csproj", "{6146D002-AB12-41BE-93B3-E2A91F913FBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api.Tests.Functional", "test\Conferenti.Api.Tests.Functional\Conferenti.Api.Tests.Functional.csproj", "{EAFF8743-AE53-45E5-8C16-4FFBC24F6AEE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api.Tests.Functional", "conferenti-api\test\Conferenti.Api.Tests.Functional\Conferenti.Api.Tests.Functional.csproj", "{EAFF8743-AE53-45E5-8C16-4FFBC24F6AEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.TestUtil", "test\Conferenti.TestUtil\Conferenti.TestUtil.csproj", "{3F006B70-6FBB-4BA9-8153-CAEC752FA4C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.TestUtil", "conferenti-api\test\Conferenti.TestUtil\Conferenti.TestUtil.csproj", "{3F006B70-6FBB-4BA9-8153-CAEC752FA4C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api.Tests.Integration", "test\Conferenti.Api.Tests.Integration\Conferenti.Api.Tests.Integration.csproj", "{6F19B834-365F-99EA-8702-33C7DEFBD7BE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Api.Tests.Integration", "conferenti-api\test\Conferenti.Api.Tests.Integration\Conferenti.Api.Tests.Integration.csproj", "{6F19B834-365F-99EA-8702-33C7DEFBD7BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conferenti.Admin.WebApp", "conferenti-admin-web\src\Conferenti.Admin.WebApp\Conferenti.Admin.WebApp.csproj", "{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "admin", "admin", "{9AD95879-EB9F-42B4-A7C7-666568EA41AC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -97,6 +102,10 @@ Global
 		{6F19B834-365F-99EA-8702-33C7DEFBD7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F19B834-365F-99EA-8702-33C7DEFBD7BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F19B834-365F-99EA-8702-33C7DEFBD7BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -114,6 +123,7 @@ Global
 		{EAFF8743-AE53-45E5-8C16-4FFBC24F6AEE} = {324D9C46-9EC5-43F0-A31C-6AD9B6589CC2}
 		{3F006B70-6FBB-4BA9-8153-CAEC752FA4C4} = {324D9C46-9EC5-43F0-A31C-6AD9B6589CC2}
 		{6F19B834-365F-99EA-8702-33C7DEFBD7BE} = {324D9C46-9EC5-43F0-A31C-6AD9B6589CC2}
+		{999D3DC9-F9C0-9845-FB62-C4B7F5D03F39} = {9AD95879-EB9F-42B4-A7C7-666568EA41AC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B584980D-D9A4-436E-91C0-3ECC30FAD267}

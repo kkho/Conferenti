@@ -1,10 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Conferenti.Api.Helper;
+﻿using Conferenti.Application.Helpers;
 using Conferenti.Domain.Abstractions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ValidationException = Conferenti.Application.Exceptions.ValidationException;
 
-namespace Conferenti.Api.Endpoints;
+namespace Conferenti.Application.Endpoints;
 
 public static class ApiResultExtensions
 {

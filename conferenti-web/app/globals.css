@@ -41,3 +41,19 @@ body {
   height: 400px;
   margin-bottom: 12px;
 }
+
+/* Skip to main content link for keyboard accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #000;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}

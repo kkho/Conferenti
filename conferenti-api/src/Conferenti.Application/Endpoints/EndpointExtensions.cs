@@ -1,7 +1,10 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace Conferenti.Api.Endpoints;
+namespace Conferenti.Application.Endpoints;
 
 public static class EndpointExtensions
 {

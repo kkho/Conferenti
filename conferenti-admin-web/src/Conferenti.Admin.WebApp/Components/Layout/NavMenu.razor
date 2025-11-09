@@ -1,0 +1,23 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using Microsoft.FluentUI.AspNetCore.Components.Icons.Regular
+@rendermode InteractiveServer
+
+<div class="navmenu">
+    <input type="checkbox" title="Menu expand/collapse toggle" id="navmenu-toggle" class="navmenu-icon" />
+    <label for="navmenu-toggle" class="navmenu-icon"><FluentIcon Icon="@(Size20.Navigation)" Color="Color.Fill" /></label>
+    <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
+        <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Size20.Home())" IconColor="Color.Accent">
+            Home
+        </FluentNavLink>
+        <FluentNavLink Href="sessions" Icon="@(new Size20.CalendarAgenda())" IconColor="Color.Accent">
+            Sessions
+        </FluentNavLink>
+        <FluentNavLink Href="speakers" Icon="@(new Size20.PeopleTeam())" IconColor="Color.Accent">
+            Speakers
+        </FluentNavLink>
+    </FluentNavMenu>
+</div>
+
+@code {
+    private bool expanded = true;
+}

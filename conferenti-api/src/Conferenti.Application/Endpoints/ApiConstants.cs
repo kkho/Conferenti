@@ -1,4 +1,4 @@
-﻿namespace Conferenti.Api.Endpoints;
+﻿namespace Conferenti.Application.Endpoints;
 
 public static class ApiConstants
 {
