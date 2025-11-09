@@ -40,7 +40,7 @@ jobs:
         uses: kkho/workflows/setup-dotnet@main
         with:
           dotnet-version: "9.x"
-          solution-path: "./Conferenti.Admin.Web.sln"
+          solution-path: "./Conferenti.sln"
 
       - uses: kkho/workflows/unittest@main
         with:
@@ -48,7 +48,7 @@ jobs:
           collect-coverage: true
           dotnet-version: "9.x"
           working-directory: "./conferenti-admin-web"
-          solution-path: "./Conferenti.Admin.Web.sln"
+          solution-path: "./Conferenti.sln"
           test-projects: "./conferenti-admin-web/tests/**/*Tests*csproj"
   
   build-dev:
