@@ -66,6 +66,77 @@
             "remotePath": "/app",
             "port": 40000,
             "host": "localhost"
+        },
+        {
+            "name": "Python: FastAPI (Conferenti AI Agent)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "conferenti_agent.services.api_client:app",
+                "--host", "0.0.0.0",
+                "--port", "8000"
+            ],
+            "cwd": "${workspaceFolder}/conferenti-ai-agent",
+            "envFile": "${workspaceFolder}/conferenti-ai-agent/.env",
+            "jinja": true,
+            "justMyCode": false,
+            "console": "integratedTerminal",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/conferenti-ai-agent/src"
+            }
+        },
+        {
+            "name": "Python: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/conferenti-ai-agent",
+            "envFile": "${workspaceFolder}/conferenti-ai-agent/.env",
+            "justMyCode": true,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/conferenti-ai-agent/src"
+            }
+        },
+        {
+            "name": "Python: Main (Conferenti AI Agent)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "conferenti_agent.main",
+            "cwd": "${workspaceFolder}/conferenti-ai-agent",
+            "envFile": "${workspaceFolder}/conferenti-ai-agent/.env",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/conferenti-ai-agent/src"
+            }
+        },
+        {
+            "name": "Python: Main Api (Conferenti AI Agent)",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "conferenti_agent.services.api_client",
+            "cwd": "${workspaceFolder}/conferenti-ai-agent",
+            "envFile": "${workspaceFolder}/conferenti-ai-agent/.env",
+            "console": "integratedTerminal",
+            "justMyCode": false,
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/conferenti-ai-agent/src"
+            }
+        },
+        {
+            "name": "Python: Debug Tests",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "-v",
+                "-s"
+            ],
+            "cwd": "${workspaceFolder}/conferenti-ai-agent",
+            "console": "integratedTerminal",
+            "justMyCode": false
         }
     ],
     "compounds": [

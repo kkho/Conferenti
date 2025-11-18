@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "conferenti-agent"
+version = "0.1.0"
+description = "AI Agent for Conferenti conference management"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [
+    {name = "Conferenti Team"}
+]
+
+dependencies = [
+    "azure-ai-agents>=1.0.0",
+    "azure-identity>=1.15.0",
+    "azure-core>=1.29.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-mock>=3.12.0",
+    "pytest-cov>=4.1.0",
+    "httpx>=0.25.0",
+    "black>=23.0.0",
+    "ruff>=0.1.0",
+]
+
+[project.scripts]
+conferenti-agent = "conferenti_agent.agent:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+conferenti_agent = ["py.typed"]
