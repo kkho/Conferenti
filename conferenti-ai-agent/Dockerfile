@@ -1,4 +1,4 @@
-FROM python:3.12-slim AS base
+FROM python:3.12 AS base
 
 # Default build args (can be overridden at runtime via Key Vault)
 ARG PROJECT_ENDPOINT=http://localhost:11434/v1
