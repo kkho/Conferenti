@@ -1,0 +1,96 @@
+name: Conferenti AI Agent
+on:
+  pull_request:
+    types: [ready_for_review, opened, reopened, synchronize]
+    branches: [main]
+    paths:
+      - "conferenti-ai-agent/**"
+      - ".github/workflows/ai-agent-test-build-deploy.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "conferenti-ai-agent/**"
+      - ".github/workflows/ai-agent-test-build-deploy.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      changed: ${{ steps.set-matrix.outputs.changed }}
+    strategy:
+      matrix:
+        python-version: [3.12]
+    defaults:
+      run:
+        working-directory: ./conferenti-ai-agent
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install -e ".[dev]"
+
+      - name: Run tests
+        run: |
+          pytest --cov=conferenti_agent test/unit/ -v
+  build-dev:
+    name: Build image for conferenti-ai-agent-dev
+    needs: [test]
+    uses: kkho/workflows/.github/workflows/build-push-backend.yaml@main
+    with:
+      app_name: conferenti-ai-agent
+      system_name: conferenti
+      environment: development
+      dockerfile: ./conferenti-ai-agent/Dockerfile
+      docker-build-context: ./conferenti-ai-agent
+      push-image: ${{ github.ref == 'refs/heads/main' && github.event_name == 'push' }}
+      build-args: |
+        LOCAL=${{ vars.LOCAL || false }}
+        AUTH0_SCOPE=${{ vars.AUTH0_ADMIN_SCOPE || '' }}
+        COSMOSDB_DATABASE="ConferentiDatabase"
+        COSMOSDB_SPEAKER_CONTAINER="SpeakerContainer"
+        COSMOSDB_SESSION_CONTAINER="SessionContainer"
+        COSMOSDB_ENDPOINT=${{ vars.COSMOSDB_ENDPOINT || 'https://localhost:8081/' }}
+      tags: |
+        ${{ vars.CONTAINER_REGISTRY }}/${{ github.actor }}/conferenti/conferenti-ai-agent-development:${{ github.run_number }}
+    secrets:
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      AUTH0_SECRET: ${{ secrets.CONFERENTI_AI_API_CLIENT_SECRET }}
+      AUTH0_CLIENT_SECRET: ${{ secrets.CONFERENTI_AI_API_CLIENT_SECRET }}
+      AUTH0_DOMAIN: ${{ secrets.AUTH0_DOMAIN }}
+      AUTH0_CLIENT_ID: ${{ secrets.CONFERENTI_AI_API_CLIENT_ID }}
+      AUTH0_AUDIENCE: ${{ secrets.AUTH0_AUDIENCE }}
+
+  notify-failed-tests:
+    needs: [test]
+    if: ${{ always() }}
+    uses: kkho/workflows/.github/workflows/slack-message.yaml@main
+    with:
+      channel: "#build-dev"
+      message: |
+        Test results: ${{ needs.test.result }} for Conferenti Ai Agent Tests (Development)
+        Status: ${{ needs.test.result == 'success' && '✅ Success' || '❌ Failed' }}
+        Repository: ${{ github.repository }}
+        Commit: ${{ github.sha }}
+        Url: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      color: ${{ needs.test.result == 'success' && 'good' || 'danger' }}
+    secrets:
+      SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
