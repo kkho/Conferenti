@@ -6,6 +6,7 @@ using Conferenti.Application.Sessions.PostSessions;
 using Conferenti.Domain.Sessions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.OpenApi;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 

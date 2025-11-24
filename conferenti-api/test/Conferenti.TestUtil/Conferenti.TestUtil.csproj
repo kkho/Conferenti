@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Testcontainers.CosmosDb" Version="4.8.1" />
+    <PackageReference Include="Testcontainers.CosmosDb" Version="4.9.0" />
+    <PackageReference Include="Testcontainers.Ollama" Version="4.9.0" />
   </ItemGroup>
 
 </Project>

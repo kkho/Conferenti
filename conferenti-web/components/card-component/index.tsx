@@ -37,8 +37,14 @@ const CardComponent = (
   } = props;
   return (
     <Card className={`${className} ${styles.card}`} {...props}>
-      <CardPreview>
-        <Image src={imageSource} alt={altText} width="100%" height="100px" />
+      <CardPreview className="align-items-center justify-items-center">
+        <Image
+          src={imageSource}
+          alt={altText}
+          width={100}
+          height={100}
+          style={{ width: '80%', height: 'auto' }}
+        />
       </CardPreview>
 
       <CardHeader

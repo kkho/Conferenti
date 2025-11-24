@@ -2,6 +2,7 @@ import './globals.css';
 import { Metadata } from 'next';
 import { Providers } from './provider';
 import FooterComponent from '@/components/footer';
+import ChatBubbleComponent from '@/components/chat-bubble';
 
 export const metadata: Metadata = {
   title: 'Conferenti',
@@ -27,6 +28,7 @@ export default function RootLayout({
         <Providers>
           {children}
           <FooterComponent />
+          <ChatBubbleComponent></ChatBubbleComponent>
         </Providers>
       </body>
     </html>

@@ -32,13 +32,13 @@ body {
   background-position: center;
   object-fit: cover;
   height: 300px;
-  width: 100vw;
+  width: 100%;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .cardContent {
   color: var(--color-gray-500) !important; 
-  height: 400px;
+  height: 450px;
   margin-bottom: 12px;
 }
 
@@ -56,4 +56,8 @@ body {
 
 .skip-link:focus {
   top: 0;
+}
+
+.icon-color {
+  color: #2C1536;
 }

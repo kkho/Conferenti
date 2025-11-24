@@ -8,10 +8,10 @@ using Conferenti.Api;
 using Conferenti.Api.Endpoints;
 using Conferenti.Api.ExceptionHandlers;
 using Conferenti.Api.Helper;
-using Conferenti.Api.Settings;
 using Conferenti.Application;
 using Conferenti.Application.Endpoints;
 using Conferenti.Infrastructure;
+using Conferenti.Infrastructure.Settings;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -117,6 +117,27 @@ builder.Services
     .AddSwagger();
 
 builder.Services.AddApplication();
+
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient("Auth0", client =>
+{
+    client.BaseAddress = new Uri(auth0Settings!.Authority);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+var aiAgentUri = builder.Configuration.GetValue<string>("AiAgentSettings:BaseUrl")
+                 ?? "http://localhost:8000";
+var aiAgentTimeout = builder.Configuration.GetValue<int>("AiAgentSettings:Timeout");
+
+builder.Services.AddHttpClient("AiAgent", client =>
+{
+    client.BaseAddress = new Uri(aiAgentUri);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(aiAgentTimeout);
+});
 
 await builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services
