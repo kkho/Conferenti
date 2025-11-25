@@ -29,12 +29,22 @@ def apply_config():
 
     record_replay_handler = None
 
-    logger.info("🚀 Starting aoai-api-simulator in %s mode", get_config().simulator_mode)
-    logger.info("🗝️ Simulator api-key                       : %s", get_config().simulator_api_key)
+    logger.info(
+        "🚀 Starting aoai-api-simulator in %s mode", get_config().simulator_mode
+    )
+    logger.info(
+        "🗝️ Simulator api-key                       : %s", get_config().simulator_api_key
+    )
 
     if get_config().simulator_mode in ["record", "replay"]:
-        logger.info("📼 Recording directory                     : %s", get_config().recording.dir)
-        logger.info("📼 Recording auto-save                     : %s", get_config().recording.autosave)
+        logger.info(
+            "📼 Recording directory                     : %s",
+            get_config().recording.dir,
+        )
+        logger.info(
+            "📼 Recording auto-save                     : %s",
+            get_config().recording.autosave,
+        )
         persister = YamlRecordingPersister(get_config().recording.dir)
 
         record_replay_handler = RecordReplayHandler(
@@ -44,14 +54,24 @@ def apply_config():
             autosave=get_config().recording.autosave,
         )
     else:
-        logger.info("📝 allow_undefined_openai_deployments      : %s", get_config().allow_undefined_openai_deployments)
+        logger.info(
+            "📝 allow_undefined_openai_deployments      : %s",
+            get_config().allow_undefined_openai_deployments,
+        )
 
-    logger.info("📝 Using OpenAI deployments                : %s", get_config().openai_deployments)
+    logger.info(
+        "📝 Using OpenAI deployments                : %s",
+        get_config().openai_deployments,
+    )
     logger.info("📝 Using latencies                         : %s", get_config().latency)
 
 
 def _default_validate_api_key_header(request: Request):
-    validate_api_key_header(request=request, header_name="api-key", allowed_key_value=get_config().simulator_api_key)
+    validate_api_key_header(
+        request=request,
+        header_name="api-key",
+        allowed_key_value=get_config().simulator_api_key,
+    )
 
 
 # This middleware replaces double slashes in paths with a single slash
@@ -79,7 +99,9 @@ def save_recordings(_: Annotated[bool, Depends(_default_validate_api_key_header)
         return Response(content="📼 Recordings saved", status_code=200)
 
     logger.warning("⚠️ Not saving recordings as not in record mode")
-    return Response(content="⚠️ Not saving recordings as not in record mode", status_code=400)
+    return Response(
+        content="⚠️ Not saving recordings as not in record mode", status_code=400
+    )
 
 
 @app.get("/++/config")
@@ -108,7 +130,10 @@ def config_get(_: Annotated[bool, Depends(_default_validate_api_key_header)]):
         },
         "openai_deployments": (
             {
-                name: {"tokens_per_minute": deployment.tokens_per_minute, "model": deployment.model}
+                name: {
+                    "tokens_per_minute": deployment.tokens_per_minute,
+                    "model": deployment.model,
+                }
                 for name, deployment in config.openai_deployments.items()
             }
             if config.openai_deployments
@@ -118,29 +143,43 @@ def config_get(_: Annotated[bool, Depends(_default_validate_api_key_header)]):
 
 
 @app.patch("/++/config")
-def config_patch(config: dict, _: Annotated[bool, Depends(_default_validate_api_key_header)]):
+def config_patch(
+    config: dict, _: Annotated[bool, Depends(_default_validate_api_key_header)]
+):
     original_config = get_config()
 
     # Config is a nested settings class to enable setting env var names on child items
     # As a result we need to update each level independently
-    root_dict = {k: v for k, v in config.items() if k in ["simulator_mode", "allow_undefined_openai_deployments"]}
+    root_dict = {
+        k: v
+        for k, v in config.items()
+        if k in ["simulator_mode", "allow_undefined_openai_deployments"]
+    }
     new_config = original_config.model_copy(update=root_dict)
     if "latency" in config:
         if "open_ai_completions" in config["latency"]:
-            new_config.latency.open_ai_completions = original_config.latency.open_ai_completions.model_copy(
-                update=config["latency"]["open_ai_completions"]
+            new_config.latency.open_ai_completions = (
+                original_config.latency.open_ai_completions.model_copy(
+                    update=config["latency"]["open_ai_completions"]
+                )
             )
         if "open_ai_chat_completions" in config["latency"]:
-            new_config.latency.open_ai_chat_completions = original_config.latency.open_ai_chat_completions.model_copy(
-                update=config["latency"]["open_ai_chat_completions"]
+            new_config.latency.open_ai_chat_completions = (
+                original_config.latency.open_ai_chat_completions.model_copy(
+                    update=config["latency"]["open_ai_chat_completions"]
+                )
             )
         if "open_ai_embeddings" in config["latency"]:
-            new_config.latency.open_ai_embeddings = original_config.latency.open_ai_embeddings.model_copy(
-                update=config["latency"]["open_ai_embeddings"]
+            new_config.latency.open_ai_embeddings = (
+                original_config.latency.open_ai_embeddings.model_copy(
+                    update=config["latency"]["open_ai_embeddings"]
+                )
             )
         if "open_ai_translations" in config["latency"]:
-            new_config.latency.open_ai_translations = original_config.latency.open_ai_translations.model_copy(
-                update=config["latency"]["open_ai_translations"]
+            new_config.latency.open_ai_translations = (
+                original_config.latency.open_ai_translations.model_copy(
+                    update=config["latency"]["open_ai_translations"]
+                )
             )
 
     # Update the config and re-initialize
@@ -152,7 +191,7 @@ def config_patch(config: dict, _: Annotated[bool, Depends(_default_validate_api_
 
 @app.api_route("/{full_path:path}", methods=["GET", "POST", "PUT", "DELETE"])
 async def catchall(request: Request):
-    logger.debug("⚡ handling route: %s", request.url.path)
+    logger.debug("handling route: %s", request.url.path)
 
     response = None
     context = RequestContext(config=get_config(), request=request)

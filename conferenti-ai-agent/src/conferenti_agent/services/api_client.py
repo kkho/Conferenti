@@ -1,12 +1,18 @@
+import logging
+from datetime import datetime
 import os
 from typing import List, Optional
-from dotenv import find_dotenv, load_dotenv
+import uuid
+from conferenti_agent.types.ai_chat import ChatMessage, ChatRequest, ChatResponse
+from conferenti_agent.types.ai_roles import Roles
 from pydantic import BaseModel, Field
 from fastapi import Depends, FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 from conferenti_agent.services.speaker_service import get_speaker_service
 from conferenti_agent.auth import verify_token, require_scope
+
+logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="Conferenti AI Agent Api",
@@ -142,6 +148,7 @@ async def suggest_speakers_general(
 
     except Exception as e:
         import traceback
+
         print(f"Error in suggest_speakers_general: {str(e)}")
         print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
@@ -167,6 +174,44 @@ async def generate_speaker_bio(speaker_id: str, request: MatchSpeakerRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+@app.post("/api/ai/chat", response_model=ChatResponse)
+async def handle_chat(request: ChatRequest):
+    """
+    Main chat endpoint - receives message from .NET Conferenti Api
+    determines intent and returns AI response.
+    """
+    try:
+        intent = detect_intent(request.message)
+
+        context = build_context(request.conversationHistory)
+
+        if intent == "speaker_search":
+            response_test = await handle_speaker_query(request.message, context)
+        elif intent == "session_search":
+            response_test = await handle_session_query(request.message, context)
+        else:
+            response_text = await handle_general_query(request.message, context)
+
+        await store_message(
+            session_id=request.sessionId, role=Roles.USER, content=request.message
+        )
+
+        await store_message(
+            session_id=request.sessionId, role=Roles.ASSISTANT, content=response_text
+        )
+
+        return ChatResponse(
+            response=response_text,
+            sessionId=request.sessionId,
+            timestamp=datetime.utcnow(),
+            intent=intent,
+        )
+
+    except Exception as e:
+        logger.error(f"Chat error: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to process message")
+
+
 @app.get("/health", dependencies=[])
 async def health_check():
     """Health check endpoint"""
@@ -179,6 +224,150 @@ async def health_check():
             else "azure-openai"
         ),
     }
+
+
+def detect_intent(message: str) -> str:
+    """
+    Analyze message to determine user intent
+    """
+    message_lower = message.lower()
+
+    speaker_keywords = ["speaker", "presenter", "who is", "tell me about", "biography"]
+    if any(keyword in message_lower for keyword in speaker_keywords):
+        return "speaker_search"
+
+    session_keywords = [
+        "session",
+        "talk",
+        "presentation",
+        "workshop",
+        "schedule",
+        "agenda",
+        "when",
+    ]
+
+    if any(keyword in message_lower for keyword in session_keywords):
+        return "session_search"
+
+    return "general"
+
+
+def build_context(history: List[ChatMessage]) -> str:
+    """
+    Build conversation context from history
+    """
+
+    if not history:
+        return ""
+
+    recent_messages = history[-5:] if len(history) > 5 else history
+
+    context_parts = []
+    for msg in recent_messages:
+        role = Roles.USER if msg.role == Roles.USER else Roles.ASSISTANT
+        context_parts.append(f"{role}: {msg.content}")
+
+    return "\n".join(context_parts)
+
+
+async def handle_speaker_query(message: str, context: str) -> str:
+    """
+    Handle speaker related queries using existing agent
+    """
+    from conferenti_agent.services.speaker_service import SpeakerService
+
+    service = SpeakerService()
+    prompt = f"""Previous conversation:
+    {context}
+    
+    Current question: {message}
+    
+    Provide information about the requested speakers(s)."""
+
+    result = await service.suggest_speakers_general(prompt)
+    return result.get("suggestion", "I couldn't find information about that speaker.")
+
+
+async def handle_session_query(message: str, context: str) -> str:
+    """
+    Handle session-related queries using existing agent
+    """
+    from conferenti_agent.services.session_service import SessionService
+
+    service = SessionService()
+    prompt = f"""Previous conversation: {context}
+    
+    Current question" {message}
+    
+    Provide information about the requested session(s)."""
+
+    result = await service.suggest_sessions_general(prompt)
+    return result.get("suggestion", "I couldn't find information about that sessions.")
+
+
+async def handle_general_query(message: str, context: str) -> str:
+    """
+    Handle general conference queries
+    """
+    from conferenti_agent.agent import AiAgent
+
+    agent = AiAgent()
+    prompt = f"""You are a helpful conference assitant for Conferenti
+    Previous confersation: {context}
+    
+    User question: {message}
+    
+    Provide a helpful, concise response about the conference."""
+
+    response = await agent.run_sync(prompt)
+    return response
+
+
+async def store_message(session_id: str, role: str, content: str):
+    """
+    Store message in Cosmos Db with TTL
+    """
+    from conferenti_agent.services.database import get_db_client
+
+    client = get_db_client()
+    container = client.chat_container
+
+    message = {
+        "id": str(uuid.uuid4()),
+        "sessionId": session_id,
+        "role": role,
+        "content": content,
+        "timestamp": datetime.utcnow().isoformat(),
+        "ttl": 259200,  # 3 days in seconds
+    }
+
+    await container.upsert_item(message)
+
+
+async def load_messages_from_cosmos(session_id: str) -> List[ChatMessage]:
+    """
+    Load conversation history from Cosmos Db
+    """
+    from conferenti_agent.services.database import get_cosmos_client
+
+    client = get_cosmos_client()
+    container = client.chat_container
+
+    query = f"SELECT * FROM c WHERE c.sessionId='{session_id}' ORDER BY c.timestamp ASC"
+
+    items = list(container.query_items(query=query, enable_cross_partition_query=True))
+
+    messages = []
+    for item in items:
+        messages.append(
+            ChatMessage(
+                role=item["role"],
+                content=item["content"],
+                timestam=datetime.fromisoformat(item["timestamp"]),
+            )
+        )
+
+    return messages
 
 
 if __name__ == "__main__":

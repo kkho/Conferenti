@@ -1,18 +1,10 @@
+import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 from azure.cosmos import CosmosClient, exceptions
 from conferenti_agent.config import get_settings
 
-# Suppress SSL warnings for Cosmos DB emulator
-
-
-@dataclass
-class CosmosConfig:
-    endpoint: str
-    key: str
-    database_name: str
-    speaker_container_name: str
-    session_container_name: str
+logger = logging.getLogger(__name__)
 
 
 class CosmosDbClient:
@@ -38,6 +30,10 @@ class CosmosDbClient:
         )
         self.session_container = self.database.get_container_client(
             settings.cosmos_db_session_container
+        )
+
+        self.chat_container = self.database.create_container_if_not_exists(
+            id=settings.cosmos_db_chat_container, partition_key="/sessionId"
         )
 
     async def get_speaker_by_id(self, speaker_id: str) -> Optional[Dict[str, Any]]:
@@ -102,6 +98,110 @@ class CosmosDbClient:
         except Exception as e:
             print(f"Error fetching session: {e}")
             return None
+
+    async def get_sessions_by_topic(self, topic: str) -> Dict[str, Any]:
+        """
+        Suggest sessions based on specific topic/technology
+
+        Args:
+            topic: Technology or topic to search for
+
+        Returns:
+            Dict with matching msessions and AI summary
+        """
+        try:
+            query = f"""
+                SELECT * FROM c
+                WHERE CONTAINS(LOWER(c.title), LOWER('{topic}'))
+                    OR CONTAINS(LOWER(c.description), LOWER('{topic}'))
+                    OR ARRAY_CONTAINS(c.tags, '{topic}', true)
+                ORDER BY c.startTime
+            """
+
+            sessions = list(
+                self.session_container.query_items(
+                    query=query, enable_cross_partition_query=True
+                )
+            )
+
+            return sessions
+        except exceptions.CosmosResourceNotFoundError:
+            return None
+        except Exception as e:
+            logger.error(f"Error in suggest_by_topic: {str(e)}")
+            raise
+
+    async def get_sessions_by_time(
+        self, date: str = None, time_slot: str = None
+    ) -> Dict[str, Any]:
+        """Get sessions by date or time slot"""
+        try:
+            query_conditions = ["SELECT * FROM c WHERE 1=1"]
+
+            if date:
+                query_conditions.append(f"AND STARTSWITH(c.startTime, '{date}')")
+
+            if time_slot:
+                time_ranges = {
+                    "morning": ("08:00", "12:00"),
+                    "afternoon": ("12:00", "17:00"),
+                    "evening": ("17:00", "22:00"),
+                }
+
+                if time_slot.lower() in time_ranges:
+                    start, end = time_ranges[time_slot.lower()]
+                    query_conditions.append(
+                        f"AND c.startTime >= '{start}' AND c.startTime < '{end}'"
+                    )
+
+                query_conditions.append("ORDER BY c.startTime")
+                query = " ".join(query_conditions)
+
+                sessions = list(
+                    self.session_container.query_items(
+                        query=query, enable_cross_partition_query=True
+                    )
+                )
+
+                return sessions
+        except exceptions.CosmosResourceNotFoundError:
+            return None
+        except Exception as e:
+            logger.error(f"Error in get_sessions_by_time: {str(e)}")
+            raise
+
+    async def suggest_session_by_speaker(self, speaker_id: str) -> List[Dict[str, Any]]:
+        """Get sessions by a specific speaker"""
+        try:
+            query = f"""
+                SELECT * FROM c
+                WHERE ARRAY_CONTAINS(c.speakerIds, '{speaker_id}')
+                ORDER BY c.startTime
+            """
+
+            sessions = list(
+                self.session_container.query_items(
+                    query=query, enable_cross_partition_query=True
+                )
+            )
+
+            return sessions
+        except exceptions.CosmosResourceNotFoundError:
+            return None
+        except Exception as e:
+            logger.error(f"Error in suggest_by_topic: {str(e)}")
+            raise
+
+    async def get_all_sessions(self, max_items: int = 5) -> List[Dict[str, Any]]:
+        """Get all sessions."""
+        query = "SELECT * FROM c"
+        items = list(
+            self.session_container.query_items(
+                query=query, enable_cross_partition_query=True, max_item_count=max_items
+            )
+        )
+
+        return items
 
 
 _db_client: Optional[CosmosDbClient] = None

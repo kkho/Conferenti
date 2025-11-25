@@ -119,7 +119,7 @@ class AiAgent:
         else:
             return self.run_sync(message)
 
-    def run_sync(self, message: str) -> Dict[str, Any]:
+    def run_sync(self) -> Dict[str, Any]:
         """Synchronous execution."""
         try:
             # Create Ollama client with custom host
@@ -141,7 +141,7 @@ class AiAgent:
         except Exception as e:
             return {"status": "failed", "error": str(e)}
 
-    def run_streaming(self, message: str):
+    def run_streaming(self):
         """Streaming execution (generator)."""
         try:
             full_response = ""

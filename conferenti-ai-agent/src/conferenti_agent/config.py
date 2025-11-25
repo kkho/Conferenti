@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     cosmos_db_database_name: str = "ConferentiDatabase"
     cosmos_db_speaker_container: str = "SpeakerContainer"
     cosmos_db_session_container: str = "SessionContainer"
+    cosmos_db_chat_container: str = "ChatContainer"
 
     # Conferenti API
     conferenti_api_url: str = "http://localhost:5000/api"
