@@ -1,8 +1,9 @@
 import logging
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
-from azure.cosmos import CosmosClient, exceptions
+from azure.cosmos import CosmosClient, PartitionKey, exceptions
 from conferenti_agent.config import get_settings
+from conferenti_agent.types.ai_chat import ChatMessage
 
 logger = logging.getLogger(__name__)
 
@@ -18,6 +19,8 @@ class CosmosDbClient:
         connection_kwargs = {}
         if settings.cosmos_db_use_local:
             connection_kwargs["connection_verify"] = False
+            # Prevent SDK from discovering/resolving endpoints
+            connection_kwargs["enable_endpoint_discovery"] = False
 
         self.client = CosmosClient(
             settings.cosmos_db_endpoint, settings.cosmos_db_key, **connection_kwargs
@@ -33,7 +36,8 @@ class CosmosDbClient:
         )
 
         self.chat_container = self.database.create_container_if_not_exists(
-            id=settings.cosmos_db_chat_container, partition_key="/sessionId"
+            id=settings.cosmos_db_chat_container,
+            partition_key=PartitionKey(path="/sessionId"),
         )
 
     async def get_speaker_by_id(self, speaker_id: str) -> Optional[Dict[str, Any]]:
@@ -201,6 +205,22 @@ class CosmosDbClient:
             )
         )
 
+        return items
+
+    async def get_chats_from_session(self, session_id: str) -> List[ChatMessage]:
+        """
+        Load conversation history from Cosmos Db
+        """
+
+        query = (
+            f"SELECT * FROM c WHERE c.sessionId='{session_id}' ORDER BY c.timestamp ASC"
+        )
+
+        items = list(
+            self.chat_container.query_items(
+                query=query, enable_cross_partition_query=True
+            )
+        )
         return items
 
 

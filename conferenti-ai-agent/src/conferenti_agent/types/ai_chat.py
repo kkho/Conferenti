@@ -4,7 +4,7 @@ from pydantic import BaseModel, Field
 
 
 class ChatMessage(BaseModel):
-    role: str = Field(..., pattern="^(user|assisant)$")
+    role: str = Field(..., pattern="^(USER|ASSISTANT)$")
     content: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -12,14 +12,16 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str = Field(..., min_length=1, max_length=2000)
     sessionId: str
-    conversationHistory: Optional[List[ChatMessage]] = []
 
 
 class ChatResponse(BaseModel):
     response: str
     sessionId: str
     timestamp: datetime
+    success: bool = False
+    error: Optional[str] = None
     intent: Optional[str] = None
+    topics: Optional[List[str]] = []
 
 
 class ChatHistoryResponse(BaseModel):

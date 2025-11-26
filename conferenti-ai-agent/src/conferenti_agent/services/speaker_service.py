@@ -1,6 +1,7 @@
 # speaker_service.py
 
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
+import logging
 import os
 from conferenti_agent.prompts import (
     SUGGEST_SPEAKERS_PROMPT,
@@ -11,6 +12,8 @@ from conferenti_agent.prompts import (
 from conferenti_agent.agent import create_agent_client
 from conferenti_agent.services.database import get_db_client
 from conferenti_agent.config import get_settings
+
+logger = logging.getLogger(__name__)
 
 
 class SpeakerService:
@@ -51,87 +54,49 @@ class SpeakerService:
         """Get all sessions for a specific speaker."""
         return []
 
-    async def suggest_speakers_for_session(
-        self, session_id: str, count: int = 5
-    ) -> str:
-        """
-        AI generates speaker suggestions in conversational format.
-        Returns: Formatted text for chatbot UI display.
-        """
-        session = await self.db.get_session_by_id(session_id)
-        if not session:
-            raise ValueError(f"Session {session_id} not found")
-
-        prompt = SUGGEST_SPEAKERS_PROMPT.format(
-            session_theme=session.get("theme", "General Technology"),
-            target_audience=session.get("target_audience", "Professionals"),
-            industry="Technology",
-            topics=", ".join(session.get("topics", []) or ["General Topics"]),
-            number_of_speakers=count,
-        )
-
-        agent = self.agent_client.create_agent(
-            name="speaker_suggester",
-            instructions="You are a helpful conference planning assistant. Provide clear, actionable speaker suggestions.",
-        )
-        response = agent.run(prompt, stream=False)
-
-        # Handle response format
-        if isinstance(response, dict):
-            if "content" in response:
-                return response["content"]
-            elif "status" in response and response["status"] == "failed":
-                raise Exception(
-                    f"Agent failed: {response.get('error', 'Unknown error')}"
-                )
-
-        raise Exception(f"Unexpected response format: {response}")
-
-    async def suggest_speakers_general(
-        self,
-        session_theme: str,
-        topics: List[str],
-        target_audience: str = "Professionals",
-        count: int = 5,
-    ) -> str:
+    async def suggest_speakers_general(self, query: str, topics: List[str]) -> str:
         """
         AI generates general speaker suggestions without session context.
         Useful for initial planning.
 
         Returns: Formatted text for chatbot UI display.
         """
-        prompt = SUGGEST_SPEAKERS_PROMPT.format(
-            session_theme=session_theme,
-            target_audience=target_audience,
-            industry="Technology",
-            topics=", ".join(topics),
-            number_of_speakers=count,
-        )
+        try:
+            speakers = await self.db.get_all_speakers()
 
-        agent = self.agent_client.create_agent(
-            name="speaker_suggester_general",
-            instructions="You are a helpful conference planning assistant.",
-        )
-        response = agent.run(prompt, stream=False)
+            if not speakers:
+                return {
+                    "suggestion": "I couldn't find any speakers at the moment.",
+                    "speakers": [],
+                    "query": query,
+                }
 
-        # Debug logging
-        print(f"Agent response: {response}")
-        print(
-            f"Response keys: {response.keys() if isinstance(response, dict) else 'Not a dict'}"
-        )
+            prompt = SUGGEST_SPEAKERS_PROMPT.format(
+                available_speakers=self._format_speakers_for_prompt(speakers),
+                topics=", ".join(topics),
+            )
 
-        # Handle different response formats
-        if isinstance(response, dict):
-            if "content" in response:
-                return response["content"]
-            elif "status" in response and response["status"] == "failed":
-                raise Exception(
-                    f"Agent failed: {response.get('error', 'Unknown error')}"
-                )
+            agent = self.agent_client.create_agent(
+                name="speaker_suggester_general",
+                instructions="You are a helpful conference planning assistant.",
+            )
+            response = agent.run(prompt, stream=False)
+
+            # Handle different response formats
+            if isinstance(response, dict):
+                if "content" in response:
+                    return response["content"]
+                elif "status" in response and response["status"] == "failed":
+                    raise Exception(
+                        f"Agent failed: {response.get('error', 'Unknown error')}"
+                    )
+                else:
+                    raise Exception(f"Unexpected response format: {response}")
             else:
-                raise Exception(f"Unexpected response format: {response}")
-        else:
-            raise Exception(f"Response is not a dictionary: {type(response)}")
+                raise Exception(f"Response is not a dictionary: {type(response)}")
+        except Exception as e:
+            logger.error(f"Error in suggest_general: {str(e)}")
+            raise
 
     async def generate_speaker_bio(self, speaker_id: str) -> str:
         """
@@ -190,12 +155,15 @@ class SpeakerService:
             session_theme=session.get("theme", ""),
             target_audience=session.get("audience", ""),
             session_duration=45,
-            focus_areas=", ".join(session.get("topics", [])),
+            focus_areas=", ".join(session.get("tags", [])),
             number_of_topics=count,
         )
 
-        agent = self.agent_client.create_agent(model="llama3.2")
-        response = agent.run(prompt)
+        agent = self.agent_client.create_agent(
+            name="speaker_suggester_topics",
+            instructions="You are a helpful conference planning assistant.",
+        )
+        response = agent.run_sync(prompt)
 
         return response["content"]
 
@@ -249,6 +217,22 @@ class SpeakerService:
 
         response = agent.run(prompt)
         return response["content"]
+
+    def _format_speakers_for_prompt(self, speakers: List[Dict[str, Any]]) -> str:
+        """Format session data for AI prompt"""
+        formatted = []
+
+        for speaker in speakers:
+            speaker_info = f"""
+            Name: {speaker.get('name', 'N/A')}
+            Title: {speaker.get('position', 'N/A')}
+            Company: {speaker.get('company', 'N/A')}
+            Expertise Areas: {', '.join(speaker.get('expertise', []))}
+            Bio: {speaker.get('bio', 'N/A')}
+            ---"""
+
+            formatted.append(speaker_info)
+        return "\n".join(formatted)
 
 
 # Singleton instance

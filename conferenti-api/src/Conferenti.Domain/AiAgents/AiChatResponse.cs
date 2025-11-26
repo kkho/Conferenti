@@ -11,4 +11,8 @@ public class AiChatResponse
     public string Error { get; set; }
 
     public DateTimeOffset Timestamp { get; set; }
+
+    public string Intent { get; set; }
+
+    public string[] Topics { get; set; }
 }

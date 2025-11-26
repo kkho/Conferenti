@@ -1,5 +1,6 @@
 # session_service.py
 
+from datetime import datetime, timezone
 import logging
 from typing import Any, Dict, List, Optional
 import os
@@ -32,9 +33,7 @@ class SessionService:
         self.agent_client = create_agent_client()
         self.db = get_db_client()
 
-    async def suggest_general(
-        self, query: str, context: Optional[str] = None
-    ) -> Dict[str, Any]:
+    async def suggest_general(self, query: str, context: Optional[str] = None) -> str:
         """
         General session suggestion based on user query
 
@@ -55,7 +54,28 @@ class SessionService:
                     "query": query,
                 }
 
-            prompt = self._build.prompt
+            prompt = self._build_prompt(query, sessions, context)
+            # Get AI response
+            logger.info(f"Generating session suggestion for query: {query}")
+
+            agent = self.agent_client.create_agent(
+                name="session_suggester_general",
+                instructions="You are a helpful conference planning assistant.",
+            )
+            response = agent.run(prompt)
+
+            # Handle different response formats
+            if isinstance(response, dict):
+                if "content" in response:
+                    return response["content"]
+                elif "status" in response and response["status"] == "failed":
+                    raise Exception(
+                        f"Agent failed: {response.get('error', 'Unknown error')}"
+                    )
+                else:
+                    raise Exception(f"Unexpected response format: {response}")
+            else:
+                raise Exception(f"Response is not a dictionary: {type(response)}")
 
         except Exception as e:
             logger.error(f"Error in suggest_general: {str(e)}")
@@ -82,19 +102,24 @@ class SessionService:
                 }
 
             prompt = f"""You are a conference assistant. The user is interested in sessions about: {topic}
-            
-            Found sessions:
-            {self._format_sessions_for_prompt(sessions)}
-            
-            Provide a helpful summary of these sessions, highlighting:
-            1. Brief overview of each session
-            2. Key topics covered
-            3. Recommendation based on the topic interest
-            4. Time slots and scheduling suggestions
-            
-            Be concise and friendly."""
 
-            response = await self.agent_client.run_sync(prompt)
+                Found sessions:
+                {self._format_sessions_for_prompt(sessions)}
+
+                Provide a helpful summary of these sessions, highlighting:
+                1. Brief overview of each session
+                2. Key topics covered
+                3. Recommendation based on the topic interest
+                4. Time slots and scheduling suggestions
+
+                Be concise and friendly."""
+
+            agent = self.agent_client.create_agent(
+                name="session_suggester_topic",
+                instructions="You are a helpful conference planning assistant.",
+            )
+
+            response = agent.run(prompt)
 
             return {
                 "suggestion": response,
@@ -110,7 +135,6 @@ class SessionService:
     async def suggest_by_speaker(self, speaker_id: str) -> Dict[str, Any]:
         """
         Find sessions by a specific speaker
-
         Args:
             speaker_id: Id of the speaker
 
@@ -139,7 +163,11 @@ class SessionService:
             
             Be concise and enthusiastic."""
 
-            response = await self.agent_client.run_sync(prompt)
+            agent = self.agent_client.create_agent(
+                name="session_suggester_speaker",
+                instructions="You are a helpful conference planning assistant.",
+            )
+            response = agent.run(prompt)
 
             return {
                 "suggestion": response,
@@ -186,7 +214,11 @@ class SessionService:
           
           Be organized and helpful.
           """
-            response = await self.agent_client.run_sync(prompt)
+            agent = self.agent_client.create_agent(
+                name="session_suggester_time",
+                instructions="You are a helpful conference planning assistant.",
+            )
+            response = agent.run(prompt)
 
             return {
                 "suggestion": response,

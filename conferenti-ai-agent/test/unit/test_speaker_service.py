@@ -110,50 +110,12 @@ class TestSpeakerService:
         mock_agent_client.create_agent.return_value = mock_agent
 
         result = await speaker_service.suggest_speakers_general(
-            session_theme="Cloud Computing", topics=["AWS", "Azure", "DevOps"], count=3
+            query="Cloud Computing", topics=["AWS", "Azure", "DevOps"]
         )
 
         assert "suggested speakers" in result.lower()
         mock_agent_client.create_agent.assert_called_once()
         mock_agent.run.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_suggest_speakers_for_session(
-        self, speaker_service, mock_db_client, mock_agent_client
-    ):
-        """Test speaker suggestions for specific session."""
-        mock_session = {
-            "id": "session-123",
-            "name": "AI Conference 2024",
-            "theme": "Machine Learning",
-            "target_audience": "Data Scientists",
-            "topics": ["Deep Learning", "NLP"],
-        }
-        mock_db_client.get_session_by_id.return_value = mock_session
-
-        mock_agent = MagicMock()
-        mock_agent.run.return_value = {
-            "status": "completed",
-            "content": "Suggested speakers for ML session...",
-        }
-        mock_agent_client.create_agent.return_value = mock_agent
-
-        result = await speaker_service.suggest_speakers_for_session(
-            "session-123", count=5
-        )
-
-        assert "speakers" in result.lower()
-        mock_db_client.get_session_by_id.assert_called_once_with("session-123")
-
-    @pytest.mark.asyncio
-    async def test_suggest_speakers_for_session_not_found(
-        self, speaker_service, mock_db_client
-    ):
-        """Test speaker suggestions for non-existent session."""
-        mock_db_client.get_session_by_id.return_value = None
-
-        with pytest.raises(ValueError, match="Session .* not found"):
-            await speaker_service.suggest_speakers_for_session("missing-session")
 
     @pytest.mark.asyncio
     async def test_generate_speaker_bio(

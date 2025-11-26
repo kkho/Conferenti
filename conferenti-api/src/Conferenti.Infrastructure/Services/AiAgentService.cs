@@ -11,7 +11,7 @@ public class AiAgentService(
     ILogger<AiAgentService> logger)
     : IAiAgentService
 {
-    private readonly HttpClient _httpClient = httpClientFactory.CreateClient();
+    private readonly HttpClient _httpClient = httpClientFactory.CreateClient("AiAgent");
 
     public async Task<AiChatResponse> SendChatMessageAsync(AiChatRequest request, CancellationToken cancellationToken = default)
     {
@@ -19,7 +19,7 @@ public class AiAgentService(
         {
             var token = await authenticationService.GetServiceTokenAsync(cancellationToken);
 
-            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/chat");
+            using var requestMessage = new HttpRequestMessage(HttpMethod.Post, "/api/ai/chat");
             requestMessage.Content = JsonContent.Create(request);
 
             requestMessage.Headers.Add("Authorization", $"Bearer {token}");
@@ -28,10 +28,12 @@ public class AiAgentService(
 
             if (!response.IsSuccessStatusCode)
             {
+                var content = await response.Content.ReadAsStringAsync(cancellationToken);
                 logger.LogWarning(
-                    "AI Agent returned status {StatusCode}: {ReasonPhrase}",
+                    "AI Agent returned status {StatusCode}: {ReasonPhrase}, {Message}",
                     response.StatusCode,
-                    response.ReasonPhrase);
+                    response.ReasonPhrase,
+                    content);
 
                 return new AiChatResponse
                 {

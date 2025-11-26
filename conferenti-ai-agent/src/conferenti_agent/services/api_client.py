@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 import os
 from typing import List, Optional
 import uuid
@@ -45,11 +45,8 @@ class SuggestSpeakersRequest(BaseModel):
 class SuggestSpeakersGeneralRequest(BaseModel):
     """Request to suggest speakers without session context"""
 
-    theme: str = Field(..., description="Theme of the conference")
+    query: str
     topics: list[str] = Field(..., description="List of topics for the conference")
-    target_audience: str = Field(
-        "Professionals", description="Target audience for the speakers"
-    )
     count: int = Field(5, ge=1, le=20, description="Number of speakers to suggest")
 
 
@@ -98,30 +95,6 @@ async def root():
     }
 
 
-@app.post("/api/speakers/suggest", response_model=SuggestionResponse)
-async def suggest_speakers_for_session(request: SuggestSpeakersRequest):
-    """
-    AI generates speaker suggestions for a specific session.
-    Returns conversational text suitable for chatbot UI
-    """
-    try:
-        speaker_service = get_speaker_service()
-        suggestion = await speaker_service.suggest_speakers_for_session(
-            request.session_id, request.count
-        )
-
-        return SuggestionResponse(
-            success=True,
-            suggestion=suggestion,
-            message="Speaker suggestions generated successfully",
-        )
-
-    except ValueError as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-
 @app.post("/api/speakers/suggest-general", response_model=SuggestionResponse)
 async def suggest_speakers_general(
     request: SuggestSpeakersGeneralRequest,
@@ -136,7 +109,6 @@ async def suggest_speakers_general(
         suggestion = await speaker_service.suggest_speakers_general(
             session_theme=request.theme,
             topics=request.topics,
-            target_audience=request.target_audience,
             count=request.count,
         )
 
@@ -181,30 +153,38 @@ async def handle_chat(request: ChatRequest):
     determines intent and returns AI response.
     """
     try:
-        intent = detect_intent(request.message)
+        intent, topics = detect_intent(request.message)
 
-        context = build_context(request.conversationHistory)
+        conversation_history = await load_messages_from_cosmos(
+            session_id=request.sessionId
+        )
+        context = build_context(conversation_history)
 
         if intent == "speaker_search":
-            response_test = await handle_speaker_query(request.message, context)
+            response_text = await handle_speaker_query(request.message, context, topics)
         elif intent == "session_search":
-            response_test = await handle_session_query(request.message, context)
+            response_text = await handle_session_query(request.message, context)
         else:
             response_text = await handle_general_query(request.message, context)
 
-        await store_message(
-            session_id=request.sessionId, role=Roles.USER, content=request.message
+        store_message(
+            session_id=request.sessionId, role=Roles.USER.value, content=request.message
         )
 
-        await store_message(
-            session_id=request.sessionId, role=Roles.ASSISTANT, content=response_text
+        store_message(
+            session_id=request.sessionId,
+            role=Roles.ASSISTANT.value,
+            content=response_text,
         )
 
         return ChatResponse(
             response=response_text,
             sessionId=request.sessionId,
-            timestamp=datetime.utcnow(),
+            success=True,
+            error=None,
+            timestamp=datetime.now(timezone.utc),
             intent=intent,
+            topics=topics,
         )
 
     except Exception as e:
@@ -231,10 +211,91 @@ def detect_intent(message: str) -> str:
     Analyze message to determine user intent
     """
     message_lower = message.lower()
+    topics = []
 
-    speaker_keywords = ["speaker", "presenter", "who is", "tell me about", "biography"]
+    tech_keywords = {
+        "ai",
+        "artificial intelligence",
+        "machine learning",
+        "ml",
+        "deep learning",
+        "python",
+        "java",
+        "golang",
+        "javascript",
+        "typescript",
+        "c#",
+        "rust",
+        "azure",
+        "aws",
+        "gcp",
+        "cloud",
+        "kubernetes",
+        "k8s",
+        "docker",
+        "react",
+        "angular",
+        "vue",
+        "frontend",
+        "backend",
+        "data science",
+        "analytics",
+        "big data",
+        "sql",
+        "nosql",
+        "devops",
+        "ci/cd",
+        "microservices",
+        "api",
+        "rest",
+        "graphql",
+        "security",
+        "cybersecurity",
+        "encryption",
+        "authentication",
+    }
+
+    for tech in tech_keywords:
+        if tech in message_lower:
+            topics.append(tech)
+
+    import re
+
+    quoted = re.findall(r'"([^"]+)"', message)
+    topics.extend(quoted)
+
+    words = message.split()
+    capitalized = [
+        w.strip(".,!?") for w in words if w and w[0].isupper() and len(w) > 1
+    ]
+    common_words = {
+        "I",
+        "The",
+        "A",
+        "An",
+        "In",
+        "On",
+        "At",
+        "To",
+        "For",
+        "With",
+        "Who",
+        "Show",
+        "Find",
+    }
+    proper_nouns = [w for w in capitalized if w not in common_words]
+    topics.extend(proper_nouns)
+
+    speaker_keywords = [
+        "speaker",
+        "presenter",
+        "who is",
+        "tell me about",
+        "biography",
+        "expert",
+    ]
     if any(keyword in message_lower for keyword in speaker_keywords):
-        return "speaker_search"
+        return ("speaker_search", topics)
 
     session_keywords = [
         "session",
@@ -244,12 +305,13 @@ def detect_intent(message: str) -> str:
         "schedule",
         "agenda",
         "when",
+        "time",
+        "attending",
     ]
-
     if any(keyword in message_lower for keyword in session_keywords):
-        return "session_search"
+        return ("session_search", topics)
 
-    return "general"
+    return ("general", topics)
 
 
 def build_context(history: List[ChatMessage]) -> str:
@@ -270,7 +332,7 @@ def build_context(history: List[ChatMessage]) -> str:
     return "\n".join(context_parts)
 
 
-async def handle_speaker_query(message: str, context: str) -> str:
+async def handle_speaker_query(message: str, context: str, topics: List[str]) -> str:
     """
     Handle speaker related queries using existing agent
     """
@@ -284,8 +346,8 @@ async def handle_speaker_query(message: str, context: str) -> str:
     
     Provide information about the requested speakers(s)."""
 
-    result = await service.suggest_speakers_general(prompt)
-    return result.get("suggestion", "I couldn't find information about that speaker.")
+    result = await service.suggest_speakers_general(prompt, topics=topics)
+    return result or "I couldn't find information about that speaker."
 
 
 async def handle_session_query(message: str, context: str) -> str:
@@ -299,10 +361,11 @@ async def handle_session_query(message: str, context: str) -> str:
     
     Current question" {message}
     
-    Provide information about the requested session(s)."""
+    Provide information about the requested session(s).
+    """
 
-    result = await service.suggest_sessions_general(prompt)
-    return result.get("suggestion", "I couldn't find information about that sessions.")
+    result = await service.suggest_general(prompt)
+    return result or "I couldn't find information about that sessions."
 
 
 async def handle_general_query(message: str, context: str) -> str:
@@ -319,11 +382,11 @@ async def handle_general_query(message: str, context: str) -> str:
     
     Provide a helpful, concise response about the conference."""
 
-    response = await agent.run_sync(prompt)
+    response = agent.run(prompt)
     return response
 
 
-async def store_message(session_id: str, role: str, content: str):
+def store_message(session_id: str, role: str, content: str):
     """
     Store message in Cosmos Db with TTL
     """
@@ -335,27 +398,24 @@ async def store_message(session_id: str, role: str, content: str):
     message = {
         "id": str(uuid.uuid4()),
         "sessionId": session_id,
-        "role": role,
+        "role": str(role),
         "content": content,
         "timestamp": datetime.utcnow().isoformat(),
         "ttl": 259200,  # 3 days in seconds
     }
 
-    await container.upsert_item(message)
+    container.upsert_item(message)
 
 
 async def load_messages_from_cosmos(session_id: str) -> List[ChatMessage]:
     """
     Load conversation history from Cosmos Db
     """
-    from conferenti_agent.services.database import get_cosmos_client
+    from conferenti_agent.services.database import get_db_client
 
-    client = get_cosmos_client()
-    container = client.chat_container
+    client = get_db_client()
 
-    query = f"SELECT * FROM c WHERE c.sessionId='{session_id}' ORDER BY c.timestamp ASC"
-
-    items = list(container.query_items(query=query, enable_cross_partition_query=True))
+    items = await client.get_chats_from_session(session_id=session_id)
 
     messages = []
     for item in items:

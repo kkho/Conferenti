@@ -30,6 +30,7 @@ type CosmosDbConfig struct {
 	Database         string
 	SpeakerContainer string
 	SessionContainer string
+	ChatContainer    string
 }
 
 func Load() *Config {
@@ -86,6 +87,7 @@ func Load() *Config {
 			Database:         getEnv("COSMOSDB_DATABASE", ""),
 			SpeakerContainer: getEnv("COSMOSDB_SPEAKER_CONTAINER", ""),
 			SessionContainer: getEnv("COSMOSDB_SESSION_CONTAINER", ""),
+			ChatContainer:    getEnv("COSMOSDB_CHAT_CONTAINER", ""),
 		},
 	}
 }

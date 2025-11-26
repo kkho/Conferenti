@@ -61,6 +61,11 @@ class Settings(BaseSettings):
         """
         super().__init__(**kwargs)
 
+        if self.cosmos_db_use_local:
+            import urllib3
+
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
         self.cosmos_db_endpoint = (
             os.getenv("COSMOSDB_ENDPOINT") or self.cosmos_db_endpoint
         )
