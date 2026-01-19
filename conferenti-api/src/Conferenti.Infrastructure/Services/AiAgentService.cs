@@ -5,6 +5,7 @@ using Conferenti.Domain.AiAgents;
 using Microsoft.Extensions.Logging;
 
 namespace Conferenti.Infrastructure.Services;
+
 public class AiAgentService(
     IHttpClientFactory httpClientFactory,
     IAuthenticationService authenticationService,

@@ -23,7 +23,7 @@ describe('auth0 module', () => {
     process.env.AUTH0_SCOPE = 'openid profile email';
     process.env.AUTH0_AUDIENCE = 'https://api.conferenti.com';
 
-    await import('./auth0');
+    await import('./auth/auth0');
 
     expect(mockAuth0ClientConstructor).toHaveBeenCalledWith({
       authorizationParameters: {
@@ -37,7 +37,7 @@ describe('auth0 module', () => {
     delete process.env.AUTH0_SCOPE;
     delete process.env.AUTH0_AUDIENCE;
 
-    await import('./auth0');
+    await import('./auth/auth0');
 
     expect(mockAuth0ClientConstructor).toHaveBeenCalledWith({
       authorizationParameters: {
@@ -51,7 +51,7 @@ describe('auth0 module', () => {
     process.env.AUTH0_SCOPE = 'test';
     process.env.AUTH0_AUDIENCE = 'test';
 
-    await import('./auth0');
+    await import('./auth/auth0');
 
     expect(mockAuth0ClientConstructor).toHaveBeenCalledTimes(1);
   });
@@ -60,7 +60,7 @@ describe('auth0 module', () => {
     const mockInstance = { test: 'value' };
     mockAuth0ClientConstructor.mockReturnValue(mockInstance);
 
-    const { auth0 } = await import('./auth0');
+    const { auth0 } = await import('./auth/auth0');
 
     expect(auth0).toBe(mockInstance);
   });

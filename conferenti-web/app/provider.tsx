@@ -1,5 +1,5 @@
 'use client';
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 import {
   FluentProvider,
   teamsDarkV21Theme,
@@ -20,7 +20,9 @@ export function Providers({ children }: PropsWithChildren) {
   return (
     <FluentProvider>
       <Navbar menuItems={menuItems} />
-      <ReactQueryClientProvider>{children}</ReactQueryClientProvider>
+      <ReactQueryClientProvider>
+        <Suspense fallback={null}>{children}</Suspense>
+      </ReactQueryClientProvider>
     </FluentProvider>
   );
 }

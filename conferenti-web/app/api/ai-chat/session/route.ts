@@ -5,6 +5,11 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_BASE_URL =
   process.env['services__conferenti-api__https__0'] || 'https://localhost:7027';
 
+// For development with self-signed certificates
+if (process.env.NODE_ENV === 'development') {
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+}
+
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
   let sessionId = cookieStore.get('ai_chat_session')?.value;
@@ -43,6 +48,7 @@ export async function POST(request: NextRequest) {
     })
   });
 
+  console.log(response);
   const data = await response.json();
   return NextResponse.json(data);
 }

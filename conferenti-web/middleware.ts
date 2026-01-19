@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { auth0 } from './lib/auth0';
+import { auth0 } from './lib/auth/auth0';
 
 export async function middleware(request: NextRequest) {
   return await auth0.middleware(request);
@@ -8,13 +8,9 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
-     * - public assets (.png, .svg, etc.)
+     * Only run Auth0 middleware on auth routes to avoid blocking navigation
+     * This prevents delays during page navigation
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:png|jpg|jpeg|gif|svg|webp|ico)).*)'
+    '/api/auth/:path*'
   ]
 };

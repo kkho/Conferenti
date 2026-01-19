@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -37,7 +37,7 @@ body {
 }
 
 .cardContent {
-  color: var(--color-gray-500) !important; 
+  color: var(--color-gray-500) !important;
   height: 450px;
   margin-bottom: 12px;
 }
@@ -59,5 +59,25 @@ body {
 }
 
 .icon-color {
-  color: #2C1536;
+  color: #2c1536;
+}
+
+.scrollbar::-webkit-scrollbar {
+  width: 20px;
+  height: 20px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  border-radius: 100vh;
+  background: #f7f4ed;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #e0cbcb;
+  border-radius: 100vh;
+  border: 3px solid #f6f7ed;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #c0a0b9;
 }
