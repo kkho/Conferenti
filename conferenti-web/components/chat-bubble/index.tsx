@@ -95,20 +95,19 @@ const ChatBubbleComponent = () => {
                     className={`px-6 pb-6 ${styles.chatWindow} overflow-y-auto overflow-x-hidden scrollbar`}
                   >
                     <Chat>
+                      <ChatMessage
+                        avatar={
+                          <Avatar
+                            name="Conferenti Bot"
+                            color="colorful"
+                            badge={{ status: 'available' }}
+                          />
+                        }
+                      >
+                        Hello I am Conferenti Bot! Your AI-assistant.
+                      </ChatMessage>
                       {!messages ||
-                        (messages.length === 0 && (
-                          <ChatMessage
-                            avatar={
-                              <Avatar
-                                name="Conferenti Bot"
-                                color="colorful"
-                                badge={{ status: 'available' }}
-                              />
-                            }
-                          >
-                            Hello I am Conferenti Bot! Your AI-assistant.
-                          </ChatMessage>
-                        ))}
+                        (messages.length === 0 && <ChatMessage></ChatMessage>)}
 
                       {messages.map((msg) =>
                         msg.role === Role.Assistant ? (

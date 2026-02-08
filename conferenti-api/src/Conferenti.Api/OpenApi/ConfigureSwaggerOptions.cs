@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi;
-using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Conferenti.Api.OpenApi;
@@ -22,12 +20,12 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         {
             options.SwaggerDoc(
                 description.GroupName,
-                new OpenApiInfo()
+                new Microsoft.OpenApi.Models.OpenApiInfo
                 {
                     Title = $"Conferenti API {description.ApiVersion}",
                     Version = description.ApiVersion.ToString(),
                     Description = "An API to manage conferences and speakers.",
-                    Contact = new OpenApiContact()
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
                     {
                         Name = "",
                         Email = string.Empty,
@@ -40,32 +38,29 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         options.IncludeXmlComments(xmlPath);
 
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
         {
             Description =
                 "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\". Prefix token with 'Bearer'",
             Name = "Authorization",
-            In = ParameterLocation.Header,
-            Type = SecuritySchemeType.ApiKey,
+            In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+            Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
             Scheme = "Bearer"
         });
 
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+        options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
         {
+            [new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
-                new OpenApiSecurityScheme
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
                 {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Bearer"
-                    },
-                    Scheme = "oauth2",
-                    Name = "Bearer",
-                    In = ParameterLocation.Header
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
                 },
-                new List<string>()
-            }
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = Microsoft.OpenApi.Models.ParameterLocation.Header
+            }] = new List<string>()
         });
 
         options.SchemaFilter<RequiredNotNullableSchemaFilter>();
@@ -75,9 +70,9 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
 
 internal sealed class MakeApiVersionHeaderMandatory : IOperationFilter
 {
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
+    public void Apply(Microsoft.OpenApi.Models.OpenApiOperation operation, OperationFilterContext context)
     {
-        var versionParameter = operation.Parameters.SingleOrDefault(p => p.Name == "api-version");
+        var versionParameter = operation.Parameters?.SingleOrDefault(p => p.Name == "api-version");
 
         if (versionParameter == null)
         {
@@ -90,7 +85,7 @@ internal sealed class MakeApiVersionHeaderMandatory : IOperationFilter
 
 internal sealed class RequiredNotNullableSchemaFilter : ISchemaFilter
 {
-    public void Apply(OpenApiSchema schema, SchemaFilterContext context)
+    public void Apply(Microsoft.OpenApi.Models.OpenApiSchema schema, SchemaFilterContext context)
     {
         if (schema.Properties == null)
         {
