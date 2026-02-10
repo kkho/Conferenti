@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 LABEL maintainer="conferenti@conferenti.com"
 WORKDIR /src
 
@@ -18,11 +18,11 @@ RUN dotnet build "Conferenti.Admin.WebApp.csproj" -c Release -o /app/build
 FROM build AS publish
 Run dotnet publish "Conferenti.Admin.WebApp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 
 # Create non-root user for security
-RUN addgorup --system --gid 1001 appuser \
+RUN addgroup --system --gid 1001 appuser \
 	&& adduser --system --uid 1001 --ingroup appuser appuser
 
 # Copy published application
@@ -31,12 +31,12 @@ COPY --from=publish /app/publish .
 # Switch ownership
 RUN chown -R appuser:appuser /app
 
-# Switch to non user
+# Switch to non-root user
 USER appuser
 
-#Expors ports
+#Expose ports
 EXPOSE 8080
-EXPOS 8881
+EXPOSE 8881
 
 # SET environment variables
 ENV ASPNETCORE_URLS=http://+:8080;
