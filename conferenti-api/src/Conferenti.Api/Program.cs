@@ -68,14 +68,7 @@ if (!keyVaultSettings!.BypassKeyVault)
 }
 #pragma warning restore ASP0000
 
-builder.Services.AddApplicationInsightsTelemetry(options =>
-{
-    options.EnableAdaptiveSampling = false;
-    options.EnableDebugLogger = true;
-    // Do not set ConnectionString or InstrumentationKey for local development
-});
-
-await builder.ConfigureOpenTelemetry(secretClient, telemetrySettings!);
+await builder.ConfigureOpenTelemetry(telemetrySettings!);
 
 #pragma warning disable ASP0000
 await using (var tempProvider = builder.Services.BuildServiceProvider())
@@ -86,8 +79,7 @@ await using (var tempProvider = builder.Services.BuildServiceProvider())
         .MinimumLevel.Debug()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
         .Enrich.FromLogContext()
-        .WriteTo.Console(new RenderedCompactJsonFormatter())
-        .WriteTo.ApplicationInsights(services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces));
+        .WriteTo.Console(new RenderedCompactJsonFormatter()));
 }
 #pragma warning restore ASP0000
 

@@ -105,22 +105,9 @@ public static class DependencyInjection
         return app;
     }
 
-    public static async Task ConfigureOpenTelemetry(this WebApplicationBuilder builder, SecretClient? secretClient, TelemetrySettings settings)
+    public static async Task ConfigureOpenTelemetry(this WebApplicationBuilder builder, TelemetrySettings settings)
     {
         var useLocal = settings.UseLocal;
-
-        if (!useLocal && secretClient != null)
-        {
-            var appInsightsConnectionString = await secretClient.GetSecretAsync(Constants.AppInsightsConnectionString);
-            builder.Services.AddSingleton<TelemetryConfiguration>(sp =>
-            {
-                var config = TelemetryConfiguration.CreateDefault();
-                config.ConnectionString = appInsightsConnectionString is not null
-                    ? appInsightsConnectionString.Value.Value
-                    : builder.Configuration["ApplicationInsights:ConnectionString"];
-                return config;
-            });
-        }
 
         builder.Logging.AddOpenTelemetry(logging =>
         {

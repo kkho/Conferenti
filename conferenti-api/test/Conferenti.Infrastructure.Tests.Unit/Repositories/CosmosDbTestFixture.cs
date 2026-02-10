@@ -19,8 +19,7 @@ public class CosmosDbTestFixture : IAsyncLifetime
 
     public CosmosDbTestFixture()
     {
-        CosmosDbContainer = new CosmosDbBuilder()
-            .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+        CosmosDbContainer = new CosmosDbBuilder("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
             .Build();
     }
 

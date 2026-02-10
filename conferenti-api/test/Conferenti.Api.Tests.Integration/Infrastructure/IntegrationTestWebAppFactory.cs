@@ -26,12 +26,10 @@ namespace Conferenti.Api.Tests.Integration.Infrastructure;
 
 public class IntegrationTestWebAppFactory : WebApplicationFactory<Program>, IAsyncLifetime
 {
-    private readonly CosmosDbContainer _cosmosDbContainer = new CosmosDbBuilder()
-        .WithImage("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
+    private readonly CosmosDbContainer _cosmosDbContainer = new CosmosDbBuilder("mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator:latest")
         .Build();
 
-    private readonly OllamaContainer _ollamaContainer = new OllamaBuilder()
-        .WithImage("ollama/ollama")
+    private readonly OllamaContainer _ollamaContainer = new OllamaBuilder("ollama/ollama:latest")
         .Build();
 
     public CosmosClient CosmosClient { get; set; }
