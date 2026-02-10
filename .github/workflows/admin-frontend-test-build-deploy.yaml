@@ -13,7 +13,7 @@ on:
       - "conferenti-admin-web/**"
       - ".github/workflows/admin-frontend-test-build-deploy.yaml"
   workflow_dispatch:
-  
+
 permissions:
   contents: read
   packages: write
@@ -36,21 +36,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup .NET 9.x
+      - name: Setup .NET 10.x
         uses: kkho/workflows/setup-dotnet@main
         with:
-          dotnet-version: "9.x"
+          dotnet-version: "10.x"
           solution-path: "./Conferenti.sln"
 
       - uses: kkho/workflows/unittest@main
         with:
           checkout: false
           collect-coverage: true
-          dotnet-version: "9.x"
+          dotnet-version: "10.x"
           working-directory: "./conferenti-admin-web"
           solution-path: "./Conferenti.sln"
           test-projects: "./conferenti-admin-web/tests/**/*Tests*csproj"
-  
+
   build-dev:
     name: Build image for conferenti-admin-web-dev
     needs: [buildTest]
@@ -81,17 +81,11 @@ jobs:
     with:
       channel: "#build-dev"
       message: |
-        Test results: ${{ needs.tests.result }} for Conferenti Admin Web Tests (Development)
-        Status: ${{ needs.tests.result == 'success' && '? Success' || '? Failed' }}
+        Test results: ${{ needs.buildTest.result }} for Conferenti Admin Web Tests (Development)
+        Status: ${{ needs.buildTest.result == 'success' && '✅ Success' || '❌ Failed' }}
         Repository: ${{ github.repository }}
         Commit: ${{ github.sha }}
         Url: [View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-      color: ${{ needs.tests.result == 'success' && 'good' || 'danger' }}
+      color: ${{ needs.buildTest.result == 'success' && 'good' || 'danger' }}
     secrets:
       SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
-
-
-      
-     
-    
