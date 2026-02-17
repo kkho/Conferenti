@@ -423,7 +423,7 @@ async def load_messages_from_cosmos(session_id: str) -> List[ChatMessage]:
             ChatMessage(
                 role=item["role"],
                 content=item["content"],
-                timestam=datetime.fromisoformat(item["timestamp"]),
+                timestamp=datetime.fromisoformat(item["timestamp"]),
             )
         )
 
