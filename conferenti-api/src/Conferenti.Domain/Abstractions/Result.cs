@@ -35,14 +35,20 @@ public class Result
 
 public class Result<TValue> : Result
 {
+#pragma warning disable IDE0032 // Use auto property - intentionally using backing field to enable safety check
+    private readonly TValue _value;
+#pragma warning restore IDE0032
+
     public Result(TValue value, bool isSuccess, Error error)
         : base(isSuccess, error)
     {
-        Value = value;
+        _value = value;
     }
 
     [NotNull]
-    public TValue Value { get; }
+    public TValue Value => IsSuccess
+        ? _value!
+        : throw new InvalidOperationException("The value of a failure result can't be accessed.");
 
     public static implicit operator Result<TValue>(TValue value) =>
         value is not null ? Success(value) : Failure<TValue>(Error.NullValue);
