@@ -114,17 +114,20 @@ class CosmosDbClient:
             Dict with matching msessions and AI summary
         """
         try:
-            query = f"""
+            query = """
                 SELECT * FROM c
-                WHERE CONTAINS(LOWER(c.title), LOWER('{topic}'))
-                    OR CONTAINS(LOWER(c.description), LOWER('{topic}'))
-                    OR ARRAY_CONTAINS(c.tags, '{topic}', true)
+                WHERE CONTAINS(LOWER(c.title), LOWER(@topic))
+                    OR CONTAINS(LOWER(c.description), LOWER(@topic))
+                    OR ARRAY_CONTAINS(c.tags, @topic, true)
                 ORDER BY c.startTime
             """
+            parameters = [{"name": "@topic", "value": topic}]
 
             sessions = list(
                 self.session_container.query_items(
-                    query=query, enable_cross_partition_query=True
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
             )
 
@@ -141,9 +144,11 @@ class CosmosDbClient:
         """Get sessions by date or time slot"""
         try:
             query_conditions = ["SELECT * FROM c WHERE 1=1"]
+            parameters = []
 
             if date:
-                query_conditions.append(f"AND STARTSWITH(c.startTime, '{date}')")
+                query_conditions.append("AND STARTSWITH(c.startTime, @date)")
+                parameters.append({"name": "@date", "value": date})
 
             if time_slot:
                 time_ranges = {
@@ -155,19 +160,23 @@ class CosmosDbClient:
                 if time_slot.lower() in time_ranges:
                     start, end = time_ranges[time_slot.lower()]
                     query_conditions.append(
-                        f"AND c.startTime >= '{start}' AND c.startTime < '{end}'"
+                        "AND c.startTime >= @start AND c.startTime < @end"
                     )
+                    parameters.append({"name": "@start", "value": start})
+                    parameters.append({"name": "@end", "value": end})
 
-                query_conditions.append("ORDER BY c.startTime")
-                query = " ".join(query_conditions)
+            query_conditions.append("ORDER BY c.startTime")
+            query = " ".join(query_conditions)
 
-                sessions = list(
-                    self.session_container.query_items(
-                        query=query, enable_cross_partition_query=True
-                    )
+            sessions = list(
+                self.session_container.query_items(
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
+            )
 
-                return sessions
+            return sessions
         except exceptions.CosmosResourceNotFoundError:
             return None
         except Exception as e:
@@ -177,15 +186,18 @@ class CosmosDbClient:
     async def suggest_session_by_speaker(self, speaker_id: str) -> List[Dict[str, Any]]:
         """Get sessions by a specific speaker"""
         try:
-            query = f"""
+            query = """
                 SELECT * FROM c
-                WHERE ARRAY_CONTAINS(c.speakerIds, '{speaker_id}')
+                WHERE ARRAY_CONTAINS(c.speakerIds, @speaker_id)
                 ORDER BY c.startTime
             """
+            parameters = [{"name": "@speaker_id", "value": speaker_id}]
 
             sessions = list(
                 self.session_container.query_items(
-                    query=query, enable_cross_partition_query=True
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
             )
 
@@ -212,13 +224,12 @@ class CosmosDbClient:
         Load conversation history from Cosmos Db
         """
 
-        query = (
-            f"SELECT * FROM c WHERE c.sessionId='{session_id}' ORDER BY c.timestamp ASC"
-        )
+        query = "SELECT * FROM c WHERE c.sessionId=@session_id ORDER BY c.timestamp ASC"
+        parameters = [{"name": "@session_id", "value": session_id}]
 
         items = list(
             self.chat_container.query_items(
-                query=query, enable_cross_partition_query=True
+                query=query, parameters=parameters, enable_cross_partition_query=True
             )
         )
         return items
