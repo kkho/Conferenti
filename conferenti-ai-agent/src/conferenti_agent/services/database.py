@@ -125,7 +125,9 @@ class CosmosDbClient:
 
             sessions = list(
                 self.session_container.query_items(
-                    query=query, parameters=parameters, enable_cross_partition_query=True
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
             )
 
@@ -163,16 +165,18 @@ class CosmosDbClient:
                     parameters.append({"name": "@start", "value": start})
                     parameters.append({"name": "@end", "value": end})
 
-                query_conditions.append("ORDER BY c.startTime")
-                query = " ".join(query_conditions)
+            query_conditions.append("ORDER BY c.startTime")
+            query = " ".join(query_conditions)
 
-                sessions = list(
-                    self.session_container.query_items(
-                        query=query, parameters=parameters, enable_cross_partition_query=True
-                    )
+            sessions = list(
+                self.session_container.query_items(
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
+            )
 
-                return sessions
+            return sessions
         except exceptions.CosmosResourceNotFoundError:
             return None
         except Exception as e:
@@ -191,7 +195,9 @@ class CosmosDbClient:
 
             sessions = list(
                 self.session_container.query_items(
-                    query=query, parameters=parameters, enable_cross_partition_query=True
+                    query=query,
+                    parameters=parameters,
+                    enable_cross_partition_query=True
                 )
             )
 
