@@ -33,7 +33,8 @@ def apply_config():
         "🚀 Starting aoai-api-simulator in %s mode", get_config().simulator_mode
     )
     logger.info(
-        "🗝️ Simulator api-key                       : %s", get_config().simulator_api_key
+        "🗝️ Simulator api-key configured            : %s",
+        bool(get_config().simulator_api_key),
     )
 
     if get_config().simulator_mode in ["record", "replay"]:
