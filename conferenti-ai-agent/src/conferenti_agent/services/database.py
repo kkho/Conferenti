@@ -111,7 +111,7 @@ class CosmosDbClient:
             topic: Technology or topic to search for
 
         Returns:
-            Dict with matching msessions and AI summary
+            Dict with matching sessions and AI summary
         """
         try:
             query = """
