@@ -5,10 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_BASE_URL =
   process.env['services__conferenti-api__https__0'] || 'https://localhost:7027';
 
-// For development with self-signed certificates
-if (process.env.NODE_ENV === 'development') {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-}
+// Note: Do not disable TLS certificate validation in code. For local development
+// with self-signed certificates, configure your environment or use proper
+// development certificates instead of setting NODE_TLS_REJECT_UNAUTHORIZED.
 
 export async function GET(request: NextRequest) {
   const cookieStore = await cookies();
