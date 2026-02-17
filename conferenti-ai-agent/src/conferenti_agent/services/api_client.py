@@ -375,8 +375,8 @@ async def handle_general_query(message: str, context: str) -> str:
     from conferenti_agent.agent import AiAgent
 
     agent = AiAgent()
-    prompt = f"""You are a helpful conference assitant for Conferenti
-    Previous confersation: {context}
+    prompt = f"""You are a helpful conference assistant for Conferenti
+    Previous conversation: {context}
     
     User question: {message}
     
