@@ -359,7 +359,7 @@ async def handle_session_query(message: str, context: str) -> str:
     service = SessionService()
     prompt = f"""Previous conversation: {context}
     
-    Current question" {message}
+    Current question: {message}
     
     Provide information about the requested session(s).
     """
