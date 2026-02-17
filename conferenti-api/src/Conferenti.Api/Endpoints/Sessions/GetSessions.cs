@@ -1,5 +1,4 @@
 ﻿using System.Text.Json.Nodes;
-using Conferenti.Api.OpenApi;
 using Conferenti.Application.Abstractions.Messaging;
 using Conferenti.Application.Endpoints;
 using Conferenti.Application.OpenApi.Examples;
