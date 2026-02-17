@@ -64,7 +64,7 @@ export interface ChatSession {
   userId: string;
   createdAt: Date;
   lastMessageAt: Date;
-  ttl: number; // Set 259300 seconds (3 days)
+  ttl: number; // Set 259200 seconds (3 days)
 }
 
 export enum Role {

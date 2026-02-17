@@ -224,13 +224,12 @@ class CosmosDbClient:
         Load conversation history from Cosmos Db
         """
 
-        query = (
-            f"SELECT * FROM c WHERE c.sessionId='{session_id}' ORDER BY c.timestamp ASC"
-        )
+        query = "SELECT * FROM c WHERE c.sessionId=@session_id ORDER BY c.timestamp ASC"
+        parameters = [{"name": "@session_id", "value": session_id}]
 
         items = list(
             self.chat_container.query_items(
-                query=query, enable_cross_partition_query=True
+                query=query, parameters=parameters, enable_cross_partition_query=True
             )
         )
         return items
