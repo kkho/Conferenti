@@ -35,7 +35,7 @@ public class Result
 
 public class Result<TValue> : Result
 {
-#pragma warning disable IDE0032 // Use auto property - intentionally using backing field to enable safety check
+#pragma warning disable IDE0032 // Use auto property - Cannot use auto property because Value needs custom logic to throw exception on failure
     private readonly TValue _value;
 #pragma warning restore IDE0032
 
