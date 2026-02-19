@@ -107,7 +107,7 @@ async def suggest_speakers_general(
     try:
         speaker_service = get_speaker_service()
         suggestion = await speaker_service.suggest_speakers_general(
-            session_theme=request.theme,
+            query=request.theme,
             topics=request.topics,
             count=request.count,
         )
