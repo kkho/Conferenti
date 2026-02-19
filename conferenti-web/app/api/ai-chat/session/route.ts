@@ -5,6 +5,8 @@ import { NextRequest, NextResponse } from 'next/server';
 const API_BASE_URL =
   process.env['services__conferenti-api__https__0'] || 'https://localhost:7027';
 
+const THREE_DAYS_IN_SECONDS = 259200; // 3 days * 24 hours * 60 minutes * 60 seconds
+
 // Note: Do not disable TLS certificate validation in code. For local development
 // with self-signed certificates, configure your environment or use proper
 // development certificates instead of setting NODE_TLS_REJECT_UNAUTHORIZED.
@@ -23,7 +25,7 @@ export async function GET(request: NextRequest) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 259200, // 3 days,
+    maxAge: THREE_DAYS_IN_SECONDS,
     path: '/'
   });
 
@@ -61,7 +63,7 @@ export async function POST(request: NextRequest) {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'strict',
-    maxAge: 259200, // 3 days
+    maxAge: THREE_DAYS_IN_SECONDS,
     path: '/'
   });
 

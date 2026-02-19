@@ -6,7 +6,7 @@ export function useAiChat() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const threeDaysInSeconds = 259300;
+  const threeDaysInSeconds = 259200; // 3 days * 24 hours * 60 minutes * 60 seconds
 
   useEffect(() => {
     const initSession = async () => {
@@ -104,7 +104,7 @@ export function useAiChat() {
         setIsLoading(false);
       }
     },
-    [isLoading, threeDaysInSeconds]
+    [isLoading]
   );
 
   const startNewChat = useCallback(async () => {
