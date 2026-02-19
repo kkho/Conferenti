@@ -232,10 +232,6 @@ class SessionService:
             logger.error(f"Error in suggest_by_time: {str(e)}")
             raise
 
-        except Exception as e:
-            logger.error(f"Error in suggest_by_time: {str(e)}")
-            raise
-
     def _format_sessions_for_prompt(self, sessions: List[Dict[str, Any]]) -> str:
         """Format session data for AI prompt"""
         formatted = []
