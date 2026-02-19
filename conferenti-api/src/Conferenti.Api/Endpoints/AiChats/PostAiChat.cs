@@ -1,4 +1,3 @@
-﻿using System.Drawing.Text;
 using Conferenti.Application.AiAgents;
 using Conferenti.Application.Endpoints;
 using Conferenti.Domain.AiAgents;
