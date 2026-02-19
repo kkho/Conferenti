@@ -5,20 +5,19 @@ export function useAiChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
 
-  const threeDaysInSeconds = 259300;
+  const threeDaysInSeconds = 259200; // 3 days * 24 hours * 60 minutes * 60 seconds
 
   useEffect(() => {
     const initSession = async () => {
       try {
-        const response = await fetch('/api/ai-chat/session', {
+        // Initialize session on server - sessionId managed via HTTP-Only cookie
+        await fetch('/api/ai-chat/session', {
           credentials: 'include' // Important: send/receive cookies
         });
-        const data = await response.json();
-        setSessionId(data.sessionId);
 
         // Optional: Load chat history if session exists
+        // const data = await response.json();
         // if (data.sessionId) {
         //   await loadHistory(data.sessionId);
         // }
@@ -41,7 +40,7 @@ export function useAiChat() {
 
       const userMessage: ChatMessage = {
         id: crypto.randomUUID(),
-        sessionId: sessionId || '',
+        sessionId: '', // Will be populated with server-provided sessionId
         userId,
         role: Role.User,
         content,
@@ -79,13 +78,18 @@ export function useAiChat() {
 
         const data = await response.json();
 
-        if (!sessionId && data.sessionId) {
-          setSessionId(data.sessionId);
-        }
+        // Update user message with server-provided sessionId
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.id === userMessage.id
+              ? { ...msg, sessionId: data.sessionId }
+              : msg
+          )
+        );
 
         const assistantMessage: ChatMessage = {
           id: crypto.randomUUID(),
-          sessionId: sessionId || data.sessionId || '',
+          sessionId: data.sessionId, // Use server-provided sessionId
           userId: 'Conferenti Bot',
           role: Role.Assistant,
           content: data.response,
@@ -97,10 +101,10 @@ export function useAiChat() {
       } catch (err) {
         setError('Failed to send message. Please try again');
       } finally {
-        setIsLoading(false); // Fixed: was true, should be false
+        setIsLoading(false);
       }
     },
-    [isLoading, sessionId]
+    [isLoading]
   );
 
   const startNewChat = useCallback(async () => {
@@ -112,11 +116,10 @@ export function useAiChat() {
       });
 
       // Create new session with new cookie
-      const response = await fetch('/api/ai-chat/session', {
+      await fetch('/api/ai-chat/session', {
         credentials: 'include'
       });
-      const data = await response.json();
-      setSessionId(data.sessionId);
+
       setMessages([]);
       setError(null);
     } catch (err) {
@@ -129,7 +132,6 @@ export function useAiChat() {
     messages,
     isLoading,
     error,
-    sessionId,
     sendMessage,
     startNewChat
   };
