@@ -32,7 +32,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const cookieStore = await cookies();
-  const sessionId = cookieStore.get('ai_chat_session')?.value;
+  let sessionId = cookieStore.get('ai_chat_session')?.value;
+
+  // If no session exists, create one
+  if (!sessionId) {
+    sessionId = randomUUID();
+  }
 
   const { message } = await request.json();
 
@@ -49,7 +54,18 @@ export async function POST(request: NextRequest) {
 
   console.log(response);
   const data = await response.json();
-  return NextResponse.json(data);
+  
+  // Set session cookie and ensure sessionId is in response
+  const apiResponse = NextResponse.json(data);
+  apiResponse.cookies.set('ai_chat_session', sessionId, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 259200, // 3 days
+    path: '/'
+  });
+
+  return apiResponse;
 }
 
 export async function DELETE(request: NextRequest) {
