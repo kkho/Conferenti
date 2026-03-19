@@ -106,8 +106,6 @@ const ChatBubbleComponent = () => {
                       >
                         Hello I am Conferenti Bot! Your AI-assistant.
                       </ChatMessage>
-                      {!messages ||
-                        (messages.length === 0 && <ChatMessage></ChatMessage>)}
 
                       {messages.map((msg) =>
                         msg.role === Role.Assistant ? (

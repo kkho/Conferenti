@@ -16,6 +16,8 @@ from conferenti_agent.config import get_settings
 
 logger = logging.getLogger(__name__)
 
+instructions = "You are a helpful conference planning assistant."
+
 
 class SessionService:
     """Service for session operations with AI and Cosmos DB."""
@@ -60,7 +62,7 @@ class SessionService:
 
             agent = self.agent_client.create_agent(
                 name="session_suggester_general",
-                instructions="You are a helpful conference planning assistant.",
+                instructions=instructions,
             )
             response = agent.run(prompt)
 
@@ -116,7 +118,7 @@ class SessionService:
 
             agent = self.agent_client.create_agent(
                 name="session_suggester_topic",
-                instructions="You are a helpful conference planning assistant.",
+                instructions=instructions,
             )
 
             response = agent.run(prompt)
@@ -165,7 +167,7 @@ class SessionService:
 
             agent = self.agent_client.create_agent(
                 name="session_suggester_speaker",
-                instructions="You are a helpful conference planning assistant.",
+                instructions=instructions,
             )
             response = agent.run(prompt)
 
@@ -216,7 +218,7 @@ class SessionService:
           """
             agent = self.agent_client.create_agent(
                 name="session_suggester_time",
-                instructions="You are a helpful conference planning assistant.",
+                instructions=instructions,
             )
             response = agent.run(prompt)
 

@@ -8,15 +8,16 @@ COPY ["src/Conferenti.Admin.WebApp/Conferenti.Admin.WebApp.csproj", "src/Confere
 
 COPY ["src/Conferenti.Infrastructure/Conferenti.Infrastructure.csproj", "src/Conferenti.Infrastructure/"]
 
-Run dotnet restore "src/Conferenti.Admin.WebApp/Conferenti.Admin.WebApp.csproj"
+RUN dotnet restore "src/Conferenti.Admin.WebApp/Conferenti.Admin.WebApp.csproj"
 
-COPY . .
+# Copy only source code to avoid inadvertently adding sensitive data
+COPY ["src/", "src/"]
 
 WORKDIR "/src/src/Conferenti.Admin.WebApp"
 RUN dotnet build "Conferenti.Admin.WebApp.csproj" -c Release -o /app/build
 
 FROM build AS publish
-Run dotnet publish "Conferenti.Admin.WebApp.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Conferenti.Admin.WebApp.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app

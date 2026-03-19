@@ -155,9 +155,22 @@ async def handle_chat(request: ChatRequest):
     try:
         intent, topics = detect_intent(request.message)
 
-        conversation_history = await load_messages_from_cosmos(
-            session_id=request.sessionId
-        )
+        try:
+            conversation_history = await load_messages_from_cosmos(
+                session_id=request.sessionId
+            )
+        except Exception as db_err:
+            err_msg = str(db_err)
+            if (
+                "connection refused" in err_msg.lower()
+                or "failed to establish" in err_msg.lower()
+            ):
+                err_msg = f"Cosmos DB emulator unreachable at {os.getenv('COSMOSDB_ENDPOINT', 'https://localhost:8081')} — is it running?"
+            logger.warning(
+                f"Could not load chat history (Cosmos DB unavailable?): {err_msg}"
+            )
+            conversation_history = []
+
         context = build_context(conversation_history)
 
         if intent == "speaker_search":
@@ -167,15 +180,27 @@ async def handle_chat(request: ChatRequest):
         else:
             response_text = await handle_general_query(request.message, context)
 
-        store_message(
-            session_id=request.sessionId, role=Roles.USER.value, content=request.message
-        )
-
-        store_message(
-            session_id=request.sessionId,
-            role=Roles.ASSISTANT.value,
-            content=response_text,
-        )
+        try:
+            store_message(
+                session_id=request.sessionId,
+                role=Roles.USER.value,
+                content=request.message,
+            )
+            store_message(
+                session_id=request.sessionId,
+                role=Roles.ASSISTANT.value,
+                content=response_text,
+            )
+        except Exception as db_err:
+            err_msg = str(db_err)
+            if (
+                "connection refused" in err_msg.lower()
+                or "failed to establish" in err_msg.lower()
+            ):
+                err_msg = f"Cosmos DB emulator unreachable at {os.getenv('COSMOSDB_ENDPOINT', 'https://localhost:8081')} — is it running?"
+            logger.warning(
+                f"Could not store chat messages (Cosmos DB unavailable?): {err_msg}"
+            )
 
         return ChatResponse(
             response=response_text,
@@ -372,9 +397,13 @@ async def handle_general_query(message: str, context: str) -> str:
     """
     Handle general conference queries
     """
-    from conferenti_agent.agent import AiAgent
+    from conferenti_agent.agent import create_agent_client
 
-    agent = AiAgent()
+    agent_client = create_agent_client()
+    agent = agent_client.create_agent(
+        name="general_assistant",
+        instructions="You are a helpful conference assistant for Conferenti.",
+    )
     prompt = f"""You are a helpful conference assistant for Conferenti
     Previous conversation: {context}
     
@@ -383,7 +412,9 @@ async def handle_general_query(message: str, context: str) -> str:
     Provide a helpful, concise response about the conference."""
 
     response = agent.run(prompt)
-    return response
+    if isinstance(response, dict):
+        return response.get("content") or response.get("error") or str(response)
+    return str(response)
 
 
 def store_message(session_id: str, role: str, content: str):

@@ -14,6 +14,7 @@ from conferenti_agent.services.database import get_db_client
 from conferenti_agent.config import get_settings
 
 logger = logging.getLogger(__name__)
+instructions = "You are a helpful conference planning assistant."
 
 
 class SpeakerService:
@@ -78,7 +79,7 @@ class SpeakerService:
 
             agent = self.agent_client.create_agent(
                 name="speaker_suggester_general",
-                instructions="You are a helpful conference planning assistant.",
+                instructions=instructions,
             )
             response = agent.run(prompt, stream=False)
 
@@ -161,7 +162,7 @@ class SpeakerService:
 
         agent = self.agent_client.create_agent(
             name="speaker_suggester_topics",
-            instructions="You are a helpful conference planning assistant.",
+            instructions=instructions,
         )
         response = agent.run_sync(prompt)
 

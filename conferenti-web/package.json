@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=development NODE_OPTIONS='--inspect' next dev --experimental-https",
+    "dev": "cross-env NODE_ENV=development NODE_OPTIONS='--inspect' next dev --experimental-https",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
@@ -11,8 +11,8 @@
     "type-check": "tsc --noEmit",
     "build": "next build",
     "build:no-turbopack": "next build",
-    "build:test": "NODE_ENV=test next build",
-    "build:production": "NODE_ENV=production next build",
+    "build:test": "cross-env NODE_ENV=test next build",
+    "build:production": "cross-env NODE_ENV=production next build",
     "start": "next start",
     "lint": "eslint",
     "lint:fix": "next lint --fix"

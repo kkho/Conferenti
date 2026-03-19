@@ -4,6 +4,7 @@ Configuration management for Conferenti AI Agent.
 
 import os
 from typing import Optional
+from pydantic import Field, AliasChoices
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from conferenti_agent.keyvault import get_keyvault_config
 
@@ -34,7 +35,10 @@ class Settings(BaseSettings):
     cosmos_db_use_local: bool = True
     cosmos_db_use_docker: bool = False
     cosmos_db_endpoint: str = "https://localhost:8081"
-    cosmos_db_key: Optional[str] = None
+    # Accepts both COSMOS_DB_KEY (pydantic default) and COSMOSDB_KEY (Aspire convention)
+    cosmos_db_key: Optional[str] = Field(
+        None, validation_alias=AliasChoices("cosmos_db_key", "cosmosdb_key")
+    )
     cosmos_db_database_name: str = "ConferentiDatabase"
     cosmos_db_speaker_container: str = "SpeakerContainer"
     cosmos_db_session_container: str = "SessionContainer"
@@ -66,9 +70,16 @@ class Settings(BaseSettings):
 
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
+        # COSMOSDB_ENDPOINT is injected by Aspire (no underscore between COSMOS and DB)
         self.cosmos_db_endpoint = (
             os.getenv("COSMOSDB_ENDPOINT") or self.cosmos_db_endpoint
         )
+
+        # If running inside Docker (Aspire), treat the emulator as local
+        # so TLS verification is disabled and endpoint discovery is off.
+        if os.getenv("COSMOSDB_ENDPOINT") and not self.cosmos_db_use_docker:
+            self.cosmos_db_use_local = True
+            self.cosmos_db_use_docker = True
 
         kv = get_keyvault_config()
 

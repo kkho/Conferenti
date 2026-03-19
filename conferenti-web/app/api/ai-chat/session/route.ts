@@ -42,32 +42,80 @@ export async function POST(request: NextRequest) {
   }
 
   const { message } = await request.json();
+  try {
+    const response = await fetch(`${API_BASE_URL}/v1/ai/chat/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        message,
+        sessionId
+      })
+    });
 
-  const response = await fetch(`${API_BASE_URL}/v1/ai/chat/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      message,
-      sessionId
-    })
-  });
+    if (!response.ok) {
+      const text = await response.text().catch(() => '');
+      console.error('AI backend returned non-OK:', response.status, text);
+      const apiResponse = NextResponse.json(
+        {
+          error: 'AI backend error',
+          status: response.status,
+          details: text,
+          sessionId
+        },
+        { status: 502 }
+      );
 
-  console.log(response);
-  const data = await response.json();
-  
-  // Set session cookie and ensure sessionId is in response
-  const apiResponse = NextResponse.json(data);
-  apiResponse.cookies.set('ai_chat_session', sessionId, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge: THREE_DAYS_IN_SECONDS,
-    path: '/'
-  });
+      apiResponse.cookies.set('ai_chat_session', sessionId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: THREE_DAYS_IN_SECONDS,
+        path: '/'
+      });
 
-  return apiResponse;
+      return apiResponse;
+    }
+
+    const data = await response.json().catch(() => ({}));
+
+    // Ensure sessionId is present in the returned payload
+    if (data && typeof data === 'object') {
+      (data as any).sessionId = sessionId;
+    }
+
+    // Set session cookie and return AI response
+    const apiResponse = NextResponse.json(data);
+    apiResponse.cookies.set('ai_chat_session', sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: THREE_DAYS_IN_SECONDS,
+      path: '/'
+    });
+
+    return apiResponse;
+  } catch (err) {
+    console.error('Failed to contact AI backend:', err);
+    const apiResponse = NextResponse.json(
+      {
+        error: 'Failed to contact AI backend',
+        message: String(err),
+        sessionId
+      },
+      { status: 502 }
+    );
+    apiResponse.cookies.set('ai_chat_session', sessionId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: THREE_DAYS_IN_SECONDS,
+      path: '/'
+    });
+
+    return apiResponse;
+  }
 }
 
 export async function DELETE(request: NextRequest) {

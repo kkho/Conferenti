@@ -14,7 +14,7 @@ public class PostAiChat : IEndpoint
             .WithTags("AI")
             .WithSummary("Send message to AI agent")
             .MapToApiVersion(ApiVersions.V1)
-            .RequireAuthorization();
+            .AllowAnonymous();
     }
 
     private static async Task<Results<Ok<AiChatResponse>, BadRequest<ProblemDetails>>>
