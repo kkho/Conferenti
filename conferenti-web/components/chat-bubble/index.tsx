@@ -54,6 +54,7 @@ const ChatBubbleComponent = () => {
     if (event.key === 'Enter' && !event.shiftKey) {
       event.preventDefault();
       handleSendMessage();
+      setInputValue('');
     }
   };
 
@@ -81,7 +82,9 @@ const ChatBubbleComponent = () => {
                   transition={{ type: 'spring', stiffness: 320, damping: 30 }}
                 >
                   <div className="flex items-start justify-between gap-4 p-6">
-                    <h3 className="text-lg font-semibold bg-white">Hello</h3>
+                    <h3 className="text-lg font-semibold text-white">
+                      Lama Bot 1.0
+                    </h3>
                     <button
                       onClick={() => setIsOpen(false)}
                       className="ml-auto rounded-md p-1 focus:outline-none focus:ring-2 focus:ring-offset-2 text-white"
