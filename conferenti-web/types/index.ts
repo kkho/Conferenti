@@ -48,3 +48,26 @@ export enum SessionFormat {
   Keynote = 'Keynote',
   Presentation = 'Presentation'
 }
+
+export interface ChatMessage {
+  id: string;
+  sessionId: string;
+  userId: string;
+  role: Role;
+  content: string;
+  timestamp: Date;
+  ttl: number; // Set 259200 seconds (3 days)
+}
+
+export interface ChatSession {
+  id: string;
+  userId: string;
+  createdAt: Date;
+  lastMessageAt: Date;
+  ttl: number; // Set 259200 seconds (3 days)
+}
+
+export enum Role {
+  User = 'User',
+  Assistant = 'Assistant'
+}

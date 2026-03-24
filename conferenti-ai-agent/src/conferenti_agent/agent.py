@@ -119,8 +119,9 @@ class AiAgent:
         else:
             return self.run_sync(message)
 
-    def run_sync(self, message: str) -> Dict[str, Any]:
+    def run_sync(self, message: Optional[str] = None) -> Dict[str, Any]:
         """Synchronous execution."""
+        # NOTE: message is already appended by run(); do not append it again here.
         try:
             # Create Ollama client with custom host
             client = ollama.Client(host=self.base_url)
@@ -139,11 +140,24 @@ class AiAgent:
             }
 
         except Exception as e:
-            return {"status": "failed", "error": str(e)}
+            err_str = str(e)
+            # Provide an actionable message when Ollama is not reachable
+            if "connection refused" in err_str.lower() or "failed to establish" in err_str.lower():
+                friendly = (
+                    f"Could not connect to Ollama at {self.base_url}. "
+                    "Make sure Ollama is installed and running: "
+                    "run `ollama serve` in a separate terminal, "
+                    "or pull the model first with `ollama pull llama3.2`. "
+                    "See https://ollama.com/download"
+                )
+                return {"status": "failed", "error": friendly}
+            return {"status": "failed", "error": err_str}
 
-    def run_streaming(self, message: str):
+    def run_streaming(self, message: Optional[str] = None):
         """Streaming execution (generator)."""
         try:
+            if message:
+                self.conversation_history.append({"role": "user", "content": message})
             full_response = ""
 
             # Create Ollama client with custom host

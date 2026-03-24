@@ -59,9 +59,8 @@ class TestSpeakerEndpoints:
         response = client.post(
             "/api/speakers/suggest-general",
             json={
-                "session_theme": "Cloud Computing",
+                "query": "Cloud Computing",
                 "topics": ["AWS", "Azure"],
-                "target_audience": "Engineers",
                 "count": 3,
             },
         )
@@ -143,7 +142,7 @@ class TestErrorHandling:
 
         response = client.post(
             "/api/speakers/suggest-general",
-            json={"session_theme": "Cloud", "topics": ["AWS"]},
+            json={"query": "Cloud", "topics": ["AWS"]},
         )
 
         # Should return 500 or handle gracefully

@@ -1,0 +1,26 @@
+.chatWindow {
+  height: 500px;
+  width: 590px;
+  flex-direction: column;
+  box-shadow: 0 0 4px 3px #00000040;
+  max-height: calc(100% - 32px - (54px + var(--fixed-toolbar-height)) - 12px);
+}
+
+.bottomLeftContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bottomContainer {
+  & input {
+    line-height: 1.4;
+    padding: 4px 0 4px 8px;
+    font-family: inherit;
+    outline: none;
+    border: none;
+    background: transparent;
+    color: var(--color-gray-500);
+    font-size: 15px;
+  }
+}

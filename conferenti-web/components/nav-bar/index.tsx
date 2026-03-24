@@ -88,6 +88,7 @@ export function Navbar({ menuItems }: { menuItems: MenuItemData[] }) {
                       <Link
                         key={item.name}
                         href={href}
+                        prefetch={true}
                         aria-current={item.current ? 'page' : undefined}
                         className={classNames(
                           item.current

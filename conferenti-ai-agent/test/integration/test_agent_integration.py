@@ -104,13 +104,13 @@ class TestDatabaseIntegration:
         mock_container.query_items.return_value = []
         mock_db.get_container_client.return_value = mock_container
         mock_cosmos_client.return_value.get_database_client.return_value = mock_db
-        
+
         from conferenti_agent.services.database import get_db_client, _db_client
         import conferenti_agent.services.database as db_module
-        
+
         # Clear singleton
         db_module._db_client = None
-        
+
         db = get_db_client()
         speakers = await db.get_all_speakers(max_items=10)
 
@@ -142,9 +142,8 @@ class TestEndToEndSpeakerSuggestion:
         service = get_speaker_service()
 
         result = await service.suggest_speakers_general(
-            session_theme="Cloud Computing",
+            query="Cloud Computing",
             topics=["AWS", "Azure", "Kubernetes"],
-            target_audience="DevOps Engineers",
             count=3,
         )
 

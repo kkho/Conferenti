@@ -2,20 +2,17 @@ SUGGEST_SPEAKERS_PROMPT = """
 You are a conference organizer AI.
 
 Input Variables:
-- {session_theme}
-- {target_audience}
-- {industry}
+- {available_speakers}
 - {topics}
-- {number_of_speakers}
 
-Task: suggest speakers for this session
+Task: available speakers for Conferenti by given input that is inserted in Input Variables and based on the given topic that each speaker will talk about
 
 Output Format:
 For each speaker:
   - Full Name
   - Title & Company
   - Expertise Areas (3-5)
-  - Why Good Fit (2-3 sentences)
+  - Why Good Fit (2 sentences)
   - Notable Achievements
   - Suggested Topics (2-3)
   

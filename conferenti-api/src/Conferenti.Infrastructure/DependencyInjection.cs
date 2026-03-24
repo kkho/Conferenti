@@ -2,10 +2,14 @@
 using System.Text.Json.Serialization;
 using Azure.Identity;
 using Azure.Messaging.ServiceBus;
+using Conferenti.Application.Abstractions.Authentication;
+using Conferenti.Application.AiAgents;
 using Conferenti.Domain.Sessions;
 using Conferenti.Domain.Speakers;
+using Conferenti.Infrastructure.Authentication;
 using Conferenti.Infrastructure.Helpers;
 using Conferenti.Infrastructure.Repositories;
+using Conferenti.Infrastructure.Services;
 using Conferenti.Infrastructure.Settings;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Azure.Cosmos;
@@ -34,7 +38,9 @@ public static class DependencyInjection
                 throw new Exception("Failed to connect to Cosmos DB. Please ensure that the Cosmos DB emulator is running if using local settings.", ex);
             }
         }
-        services.AddHttpClient();
+
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IAiAgentService, AiAgentService>();
         services.AddMemoryCache();
         services.AddResponseCompression();
         return services;

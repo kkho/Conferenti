@@ -5,13 +5,12 @@ import { FilterBarContent } from '@/components/filter-bar-content';
 import { Speaker } from '@/types';
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import dynamic from 'next/dynamic';
 // TODO: Uncomment when Auth0 is configured
 // import { useUser } from '@auth0/nextjs-auth0/client';
 import { useGetSpeakers } from '@/hooks/speakers';
 import SpeakerList from '@/app/speakers/speaker-list';
 
-function SpeakersContent() {
+export default function SpeakersPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
@@ -87,17 +86,4 @@ function SpeakersContent() {
       </div>
     </>
   );
-}
-
-const DynamicSpeakersContent = dynamic(() => Promise.resolve(SpeakersContent), {
-  ssr: false,
-  loading: () => (
-    <div className="flex justify-center items-center min-h-screen">
-      Loading speakers...
-    </div>
-  )
-});
-
-export default function SpeakersPage() {
-  return <DynamicSpeakersContent />;
 }

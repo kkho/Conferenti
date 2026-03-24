@@ -1,4 +1,5 @@
-﻿using Conferenti.Api.Helper;
+﻿using System.Text.Json.Nodes;
+using Conferenti.Api.Helper;
 using Conferenti.Application.Abstractions.Messaging;
 using Conferenti.Application.Endpoints;
 using Conferenti.Application.OpenApi.Examples;
@@ -6,7 +7,7 @@ using Conferenti.Application.Sessions.PostSessions;
 using Conferenti.Domain.Sessions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Conferenti.Api.Endpoints.Sessions;
@@ -27,80 +28,81 @@ public class PostSessions : IEndpoint
             .Produces(500) // Internal server error
             .MapToApiVersion(ApiVersions.V1)
             .RequireAuthorization(Constants.AdminAccess)
-                        .WithOpenApi(op =>
-                        {
-                            op.RequestBody = new OpenApiRequestBody
-                            {
-                                Required = true,
-                                Content =
+            .AddOpenApiOperationTransformer((operation, context, ct) =>
+            {
+                operation.RequestBody = new OpenApiRequestBody
+                {
+                    Required = true,
+                    Content = new Dictionary<string, OpenApiMediaType>
                     {
                         ["application/json"] = new OpenApiMediaType
                         {
-                            Example = OpenApiAnyFactory.CreateFromJson(
-                                SessionOpenApiResponseExamples
-                                .UpsertSessionRequestBody)
-                        }
-                    }
-                            };
-                            op.Responses["200"] = new OpenApiResponse
-                            {
-                                Description = "Ok",
-                                Content =
-                    {
-                        ["application/json"] = new OpenApiMediaType
-                        {
-                            Example = OpenApiAnyFactory.CreateFromJson(SpeakerOpenApiResponseExamples.SpeakersOkResponse)
-                        }
-                    }
-                            };
 
-                            op.Responses["400"] = new OpenApiResponse
-                            {
-                                Description = "Bad Request",
-                                Content =
-                    {
-                        ["application/json"] = new OpenApiMediaType
-                        {
-                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.BadRequest)
+                            Example = JsonNode.Parse(SessionOpenApiResponseExamples.UpsertSessionRequestBody)
                         }
                     }
-                            };
-                            op.Responses["401"] = new OpenApiResponse
-                            {
-                                Description = "Unauthorized",
-                                Content =
+                };
+                operation.Responses = new OpenApiResponses
+                {
+                    ["200"] = new OpenApiResponse
                     {
-                        ["application/json"] = new OpenApiMediaType
+                        Description = "Ok",
+                        Content = new Dictionary<string, OpenApiMediaType>
                         {
-                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.Unauthorized)
+                            ["application/json"] = new OpenApiMediaType
+                            {
+                                Example = JsonNode.Parse(SpeakerOpenApiResponseExamples.SpeakersOkResponse)
+                            }
+                        }
+                    },
+                    ["400"] = new OpenApiResponse
+                    {
+                        Description = "Bad Request",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["application/json"] = new OpenApiMediaType
+                            {
+                                Example = JsonNode.Parse(OpenApiSharedResponseExamples.BadRequest)
+                            }
+                        }
+                    },
+                    ["401"] = new OpenApiResponse
+                    {
+                        Description = "Unauthorized",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["application/json"] = new OpenApiMediaType
+                            {
+                                Example = JsonNode.Parse(OpenApiSharedResponseExamples.Unauthorized)
+                            }
+                        }
+                    },
+                    ["403"] = new OpenApiResponse
+                    {
+                        Description = "Forbidden",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["application/json"] = new OpenApiMediaType
+                            {
+                                Example = JsonNode.Parse(OpenApiSharedResponseExamples.Forbidden)
+                            }
+                        }
+                    },
+                    ["500"] = new OpenApiResponse
+                    {
+                        Description = "Internal Server Error",
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            ["application/json"] = new OpenApiMediaType
+                            {
+                                Example = JsonNode.Parse(OpenApiSharedResponseExamples.InternalServerError)
+                            }
                         }
                     }
-                            };
-                            op.Responses["403"] = new OpenApiResponse
-                            {
-                                Description = "Forbidden",
-                                Content =
-                    {
-                        ["application/json"] = new OpenApiMediaType
-                        {
-                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.Forbidden)
-                        }
-                    }
-                            };
+                };
 
-                            op.Responses["500"] = new OpenApiResponse
-                            {
-                                Description = "Internal Server Error",
-                                Content =
-                    {
-                        ["application/json"] = new OpenApiMediaType
-                        {
-                            Example = OpenApiAnyFactory.CreateFromJson(OpenApiSharedResponseExamples.InternalServerError)
-                        }
-                    }
-                            };
-                            return op;
-                        });
+                return Task.CompletedTask;
+            });
     }
 
     private static async Task<Results<

@@ -8,10 +8,10 @@ using Conferenti.Api;
 using Conferenti.Api.Endpoints;
 using Conferenti.Api.ExceptionHandlers;
 using Conferenti.Api.Helper;
-using Conferenti.Api.Settings;
 using Conferenti.Application;
 using Conferenti.Application.Endpoints;
 using Conferenti.Infrastructure;
+using Conferenti.Infrastructure.Settings;
 using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -51,6 +51,8 @@ builder.Logging.ClearProviders();
 var telemetrySettings = builder.Configuration.GetSection("TelemetrySettings").Get<TelemetrySettings>();
 var keyVaultSettings = builder.Configuration.GetSection("KeyVaultSettings").Get<KeyVaultSettings>();
 var auth0Settings = builder.Configuration.GetSection("Auth0Settings").Get<Auth0Settings>();
+builder.Services.AddSingleton<Auth0Settings>(a => auth0Settings);
+
 var allowedOrigins = builder.Configuration.GetValue<string>("CorsSettings:AllowedOrigins")?.Split(";");
 
 builder.Services.AddVaultService(builder.Configuration, keyVaultSettings!);
@@ -66,14 +68,7 @@ if (!keyVaultSettings!.BypassKeyVault)
 }
 #pragma warning restore ASP0000
 
-builder.Services.AddApplicationInsightsTelemetry(options =>
-{
-    options.EnableAdaptiveSampling = false;
-    options.EnableDebugLogger = true;
-    // Do not set ConnectionString or InstrumentationKey for local development
-});
-
-await builder.ConfigureOpenTelemetry(secretClient, telemetrySettings!);
+await builder.ConfigureOpenTelemetry(telemetrySettings!);
 
 #pragma warning disable ASP0000
 await using (var tempProvider = builder.Services.BuildServiceProvider())
@@ -84,8 +79,7 @@ await using (var tempProvider = builder.Services.BuildServiceProvider())
         .MinimumLevel.Debug()
         .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
         .Enrich.FromLogContext()
-        .WriteTo.Console(new RenderedCompactJsonFormatter())
-        .WriteTo.ApplicationInsights(services.GetRequiredService<TelemetryConfiguration>(), TelemetryConverter.Traces));
+        .WriteTo.Console(new RenderedCompactJsonFormatter()));
 }
 #pragma warning restore ASP0000
 
@@ -118,6 +112,41 @@ builder.Services
 
 builder.Services.AddApplication();
 
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddHttpClient("Auth0", client =>
+{
+    client.BaseAddress = new Uri(auth0Settings!.Authority);
+    client.DefaultRequestHeaders.Add("Accept", "application/json");
+    client.Timeout = TimeSpan.FromSeconds(30);
+});
+
+var aiAgentUri = builder.Configuration.GetValue<string>("AiAgentSettings:BaseUrl")
+                 ?? "https://localhost:8000";
+var aiAgentTimeout = builder.Configuration.GetValue<int>("AiAgentSettings:Timeout");
+
+builder.Services.AddHttpClient("AiAgent", client =>
+    {
+        client.BaseAddress = new Uri(aiAgentUri);
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.Timeout = TimeSpan.FromSeconds(aiAgentTimeout);
+    })
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler();
+
+        if (builder.Environment.IsDevelopment())
+        {
+#pragma warning disable S4830
+            handler.ServerCertificateCustomValidationCallback =
+#pragma warning restore S4830
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+        }
+
+        return handler;
+    });
+
 await builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services
     .AddEndpoints(Assembly.GetExecutingAssembly());
@@ -137,8 +166,6 @@ builder.Services.AddAuthorization(options =>
             return context.User.HasClaim(claim =>
                 claim.Type == "scope" && (IsCreateOrganizationScope(context.User) || IsReadShowScope(context.User)));
         }).Build();
-
-
 
     options.AddPolicy(Constants.AdminAccess, hasAdminAccessPolicy);
     options.AddPolicy(Constants.ReadAccess, readAccessPolicy);

@@ -1,23 +1,21 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-  <Sdk Name="Aspire.AppHost.Sdk" Version="9.3.1" />
+<Project Sdk="Aspire.AppHost.Sdk/13.1.2">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <IsAspireHost>true</IsAspireHost>
     <UserSecretsId>dbba578b-5a4c-4a62-8b3c-b5372020740b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.Hosting.AppHost" Version="13.0.0" />
-    <PackageReference Include="Aspire.Hosting.Azure.ServiceBus" Version="13.0.0" />
+    <PackageReference Include="Aspire.Hosting.Azure.ServiceBus" Version="13.1.2" />
     <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.5.2" />
-    <PackageReference Include="AzureKeyVaultEmulator.Aspire.Hosting" Version="2.7.0" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="9.9.0" />
+    <PackageReference Include="AzureKeyVaultEmulator.Aspire.Hosting" Version="2.8.4" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Golang" Version="13.1.1" />
     <PackageReference Include="CommunityToolkit.Aspire.Hosting.NodeJS.Extensions" Version="9.9.0" />
-    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="9.9.0" />
+    <PackageReference Include="CommunityToolkit.Aspire.Hosting.Ollama" Version="13.1.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 

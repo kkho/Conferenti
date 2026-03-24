@@ -4,5 +4,48 @@
         <name>Conferenti.Application</name>
     </assembly>
     <members>
+        <member name="T:Conferenti.Application.Abstractions.Authentication.IAuthenticationService">
+            <summary>
+            Service for handling authentication operations
+            </summary>
+        </member>
+        <member name="M:Conferenti.Application.Abstractions.Authentication.IAuthenticationService.GetServiceTokenAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets authentication token for AI service communication (M2M)
+            </summary>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Bearer token for service-to-service authentication</returns>
+        </member>
+        <member name="M:Conferenti.Application.Abstractions.Authentication.IAuthenticationService.GetCurrentUser">
+            <summary>
+            Gets the current authenticated user from HTTP context
+            Token validation is handled by JWT middleware
+            </summary>
+            <returns>User information if authenticated, null otherwise</returns>
+        </member>
+        <member name="M:Conferenti.Application.Abstractions.Authentication.IAuthenticationService.GetCurrentUserId">
+            <summary>
+            Gets the current authenticated user's identifier
+            </summary>
+            <returns>User ID from current HTTP context</returns>
+        </member>
+        <member name="T:Conferenti.Application.Abstractions.Authentication.AuthenticationResult">
+            <summary>
+            Result of authentication operation
+            </summary>
+        </member>
+        <member name="M:Conferenti.Application.Abstractions.Authentication.AuthenticationResult.#ctor(System.String,System.String,System.Collections.Generic.IReadOnlyDictionary{System.String,System.String})">
+            <summary>
+            Result of authentication operation
+            </summary>
+        </member>
+        <member name="M:Conferenti.Application.AiAgents.IAiAgentService.SendChatMessageAsync(Conferenti.Domain.AiAgents.AiChatRequest,System.Threading.CancellationToken)">
+            <summary>
+            Service for communicating with Ai Agent.
+            </summary>
+            <param name="request"></param>
+            <param name="cancellationToken"></param>
+            <returns></returns>
+        </member>
     </members>
 </doc>

@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Testcontainers.CosmosDb" Version="4.8.1" />
+    <PackageReference Include="Testcontainers.CosmosDb" Version="4.10.0" />
+    <PackageReference Include="Testcontainers.Ollama" Version="4.10.0" />
   </ItemGroup>
 
 </Project>

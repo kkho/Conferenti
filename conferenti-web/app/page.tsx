@@ -1,6 +1,5 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { Content } from '@/components/content-module';
 import SpeakerList from '@/app/speakers/speaker-list';
 import { useGetSpeakers } from '@/hooks/speakers';
@@ -9,7 +8,7 @@ import { useState, useEffect } from 'react';
 import { useGetSessions } from '@/hooks/sessions';
 import SessionList from './sessions/session-list';
 
-function HomeContent() {
+export default function HomePage() {
   const [speakers, setSpeakers] = useState<Speaker[]>([]);
   const [selectedSpeaker, setSelectedSpeaker] = useState<Speaker | null>(null);
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
@@ -128,17 +127,4 @@ function HomeContent() {
       </main>
     </div>
   );
-}
-
-const DynamicHomeContent = dynamic(() => Promise.resolve(HomeContent), {
-  ssr: false,
-  loading: () => (
-    <div className="flex justify-center items-center min-h-screen">
-      Loading page...
-    </div>
-  )
-});
-
-export default function HomePage() {
-  return <DynamicHomeContent />;
 }

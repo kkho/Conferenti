@@ -30,11 +30,11 @@ jobs:
         with:
           # We need to fetch all branches and commits so that Nx affected has a base to compare against.
           fetch-depth: 0
-      - name: Setup .NET 9.x
+      - name: Setup .NET 10.x
         id: setup-dotnet
         uses: kkho/workflows/setup-dotnet@main
         with:
-          dotnet-version: "9.x"
+          dotnet-version: "10.x"
           solution-path: "./Conferenti.sln"
   tests:
     needs: setup-dotnet
@@ -50,7 +50,7 @@ jobs:
         with:
           checkout: true
           collect-coverage: true
-          dotnet-version: "9.x"
+          dotnet-version: "10.x"
           working-directory: "."
           solution-path: "./Conferenti.sln"
           test-projects: "./conferenti-api/test/**/*Tests*csproj"

@@ -3,12 +3,11 @@
 import { FilterBarContent } from '@/components/filter-bar-content';
 import { useGetSessions } from '@/hooks/sessions';
 import { Session } from '@/types';
-import dynamic from 'next/dynamic';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import SessionList from './session-list';
 
-function SessionsContent() {
+export default function SessionsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [sessions, setSessions] = useState<Session[]>([]);
@@ -76,17 +75,4 @@ function SessionsContent() {
       </div>
     </>
   );
-}
-
-const DynamicSessionContent = dynamic(() => Promise.resolve(SessionsContent), {
-  ssr: false,
-  loading: () => (
-    <div className="flex justify-center items-center min-h-screen">
-      Loading sessions...
-    </div>
-  )
-});
-
-export default function SessionsPage() {
-  return <DynamicSessionContent />;
 }
