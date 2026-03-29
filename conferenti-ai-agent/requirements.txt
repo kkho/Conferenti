@@ -74,7 +74,7 @@ PyJWT==2.10.1
 python-jose[cryptography]>=3.3.0
 pyproject_hooks==1.2.0
 python-dotenv==1.2.1
-python-multipart==0.0.18
+python-multipart==0.0.22
 PyYAML==6.0.1
 regex==2025.11.3
 requests==2.32.3
